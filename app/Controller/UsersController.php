@@ -7,7 +7,12 @@ class UsersController extends AppController {
 	/**
 	* index
 	*/
-	function beforeFilter() {
+    public $uses = array(
+        'User',
+        'Lesson',
+        'Category',
+        );
+	public function beforeFilter() {
         $this->pageTitle = 'Home';
         $this->layout = 'template';
         $this->Auth->allow(array('index','sign_up'));
@@ -26,6 +31,14 @@ class UsersController extends AppController {
                 $this->redirect(array('controller'=>'admin','action' => 'home'));
             }
         };
+        $cat = $this->Category->getCategories();
+        $Category = array();
+        foreach ($cat as $key => $value) {
+            $Category[$key+1] = $value['Category']['CatName'];
+        }
+        $this->set('Category', $Category);
+        $allLessons = $this->Lesson->getAllLessons();
+        $this->set('allLessons', $allLessons);
 	}
 	public function login() {
 		$this->layout = 'default';

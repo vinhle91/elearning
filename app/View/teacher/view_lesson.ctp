@@ -101,7 +101,7 @@
                                     <div class="">
                                         <a href="/mrhieusd/newsfeed" title="mrhieusd" class="commenter">
                                           <?php echo $this->Html->image('icon/user-48x48.png',array('alt' =>'views','height'=>'48px')); ?>
-                                          <strong>Mac Hieu</strong>
+                                          <strong><?php echo $users_username['FullName'];?></strong>
                                         </a>
                                     </div>
                                     <textarea cols="40" rows="4" name="comment"></textarea>

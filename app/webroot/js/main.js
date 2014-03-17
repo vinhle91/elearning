@@ -1,15 +1,4 @@
 $(document).ready(function() {
-    // $('.fancybox').fancybox({
-    //     'autoDimensions': false,
-    //     'autoSize': false,
-    //     'height': 450,
-    //     'width': 600,
-    // });
-    // $('#sign_up').click(function(){
-    //     parent.$.fancybox.close();
-    //     var h = "sign_up";
-    //     top.location.href = h;
-    // });
     $(".left>ul>li>a").click(function(){
         $(".left>ul>li>a").removeClass('selected');
         $(this).addClass('selected');   

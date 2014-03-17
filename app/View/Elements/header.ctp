@@ -3,7 +3,7 @@
         <div id="logo"><h3> <?php echo $this->Html->link('E-learning',array('controller' => 'users','action' => 'index'),array('style'=>'color: #fff'));?></h3></div>
         <div id="search">
         <?php
-        echo $this->Form->create('Lesson', array('url'=>"http://localhost/elearning_hieumd/lessons/search"));
+        echo $this->Form->create('Lesson', array('url'=>"http://localhost/elearning/lessons/search"));
         echo $this->Form->input("keyWords",array("label"=>false,"class"=>"frm_search"));
         echo $this->Form->submit('検索',array("class"=>"btn_search"));
         echo $this->Form->end();
@@ -65,7 +65,7 @@
                 <?php if ($this->params['action'] != 'sign_up'): ?>
                 <span style="color:#fff">/</span>
                 <span>
-                    <?php echo $this->Html->link('Sign up',array('controller' => 'users','action' => 'sign_up'));?>
+                    <?php echo $this->Html->link('サインアップ',array('controller' => 'users','action' => 'sign_up'));?>
                 </span>
                 <?php endif?>
             </div>

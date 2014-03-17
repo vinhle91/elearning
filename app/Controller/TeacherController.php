@@ -7,7 +7,18 @@ class TeacherController extends AppController {
 	/**
 	* index
 	*/
-	public $uses = array('User', 'StudentHistory', 'Lesson','File','Tag','Category','Test','Question','Answer','Comment');
+	public $uses = array(
+		'User',
+		'StudentHistory',
+		'Lesson',
+		'File',
+		'Tag',
+		'Category',
+		'Test',
+		'Question',
+		'Answer',
+		'Comment'
+		);
 	function beforeFilter() {
         $this->pageTitle = 'Home Teacher';
         $this->layout = 'template';
@@ -40,10 +51,12 @@ class TeacherController extends AppController {
 	}
 	public function view_lesson($lesson_id = null) {
 		$this->pageTitle = '授業';
+		//top teacher
 		$allLessons = $this->Lesson->getAllLessons();
         $this->set('allLessons', $allLessons);
 		$userId = $this->Auth->user('UserId');
 		if(!isset($lesson_id)||empty($lesson_id)){
+			$this->Session->setFlash(__('Error. Please try it again'));
 			$this->redirect(array('controller'=>'Teacher','action' => 'index'));
 		}else{
 			if($this->request->is('post')){
@@ -56,11 +69,16 @@ class TeacherController extends AppController {
 		            $data['Comment']['LessonId'] = $lesson_id;
 		            $data['Comment']['Content']= $comment;
 		            if($this->Comment->save($data)){
-		            	$this->redirect(array('controller'=>'Teacher','action' => 'view_lesson',$lesson_id));
+		            	$this->Session->setFlash(__('Comments successful!'));
+		            	$this->redirect(array('controller'=>'teacher','action' => 'view_lesson',$lesson_id));
+		            }
+		            else{
+		            	$this->Session->setFlash(__('Error! Please try it again'));
+		            	$this->redirect(array('controller'=>'teacher','action' => 'view_lesson',$lesson_id));
 		            }
 	        	}else{
 	        		$this->Session->setFlash(__('Require is comment!.'));
-	        		$this->redirect(array('controller'=>'Teacher','action' => 'view_lesson',$lesson_id));
+	        		$this->redirect(array('controller'=>'teacher','action' => 'view_lesson',$lesson_id));
 	        	}
 	        }else{
 	        	$params = array(

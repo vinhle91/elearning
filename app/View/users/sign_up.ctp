@@ -1,5 +1,13 @@
 <div id="contents" style="padding:0px 150px;">
     <div id="content">
+        <?php 
+            $error = $this->Session->flash();
+            if(!empty($error)):
+        ?>
+        <div class="error">
+            <?php echo $error; ?>
+        </div>
+        <?php endif;?>
         <div class="title"><h3>アカウントを登録</h3></div>
         <div class="box">
             <div class="sign_up_box">                           
@@ -9,7 +17,7 @@
                         <tbody>
                             <tr>
                                 <td align="left"><div class="td_text"><h3>アカウントについて情報</div></h3></td>
-                                <td colspan="2" align="left"><div class="td_text"><h3 style="color:red"><?php echo $this->Session->flash(); ?></h3></h3></td>
+                                <td colspan="2" align="left"></td>
                             </tr>
                             <tr>
                                 <td style="width:230px"> 

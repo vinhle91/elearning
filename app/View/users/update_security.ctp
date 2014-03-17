@@ -50,6 +50,14 @@
 
 <div id="contents" style="padding:0px 150px">
     <div id="content">
+        <?php 
+            $error = $this->Session->flash();
+            if(!empty($error)):
+        ?>
+        <div class="error">
+            <?php echo $error; ?>
+        </div>
+        <?php endif;?>
         <div class="t_title">
             <div class="left">
                 <ul>
@@ -66,10 +74,8 @@
                 </ul>
             </div>
         </div>
-        <div class="box">
+        <div class="box" style="min-height:350px">
             <div class="sign_up_box">
-                <h3 style="color:red"><?php echo $this->Session->flash(); ?></h3>
-
                 <form action="" method="post" onsubmit="return validatePassword();" name="myForm">
                     <div class="input_error"></div>
                     <table id="change_pass" class="sign_up_tb">

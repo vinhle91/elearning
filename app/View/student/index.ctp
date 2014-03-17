@@ -1,6 +1,14 @@
 <div id="contents">
     <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
+        <?php 
+            $error = $this->Session->flash();
+            if(!empty($error)):
+        ?>
+        <div class="error">
+            <?php echo $error; ?>
+        </div>
+        <?php endif;?>
         <div class="t_title">
             <div class="left">
                 <ul>
@@ -21,14 +29,14 @@
             <div class="top" id="t_lesson">
                 <table border="1" align="center" id="mylesson">
                     <tbody>
-                        <tr>
-                            <td width="4%" style="background-color: #eee;">ID</td>
+                        <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
+                            <td width="5%" style="background-color: #eee;">番号</td>
                             <td width="25%" style="background-color: #eee;">タイトル</td>
-                            <td width="10%" style="background-color: #eee;">カテゴリィ</td>
+                            <td width="7%" style="background-color: #eee;">カテゴリィ</td>
                             <td width="5%" style="background-color: #eee;"> いいねと言う</td>
                             <td width="5%" style="background-color: #eee;">ビュー</td>
-                            <td width="7%" style="background-color: #eee;">パブリック時間</td>
-                            <td width="30%" style="background-color: #eee;">記述</td>
+                            <td width="13%" style="background-color: #eee;">パブリック時間</td>
+                            <td width="27%" style="background-color: #eee;">記述</td>
                             <td width="5%" style="background-color: #eee;">購入</td>
                             
                         </tr>
@@ -41,7 +49,7 @@
                             <td><?php echo $lesson['Lesson']['ViewNumber'];?></td>
                             <td><?php echo $lesson['Lesson']['modified'];?></td>
                             <td><?php echo $lesson['Lesson']['Abstract'];?></td>
-                            <td><?php echo $this->Html->link('購入',array('controller'=>'Student','action'=>'buy_lesson',$lesson['Lesson']['LessonId']),array('class'=>'buy_bt'));?></td>
+                            <td><?php echo $this->Html->link('購入',array('controller'=>'Student','action'=>'buy_lesson',$lesson['Lesson']['LessonId']),array('class'=>'buy_bt','id'=>$lesson['Lesson']['LessonId']));?></td>
                         </tr>
                         <?php endforeach;?>
                         <?php unset($lesson);?>   
@@ -52,212 +60,48 @@
                 </div>                       
             </div>
             <div class="top" id="t_teacher" style="display:none">
-                <div class="row">
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">Mac Hieu</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">11 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">10</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">1000</span>
-                        </div>
-                    </div>
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar_1.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">Ngo Thang</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">21 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">1042</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">10230</span>
-                        </div>
-                    </div>
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar_2.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">An Danh</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">8 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">102</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">1230</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">Mac Hieu</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">11 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">10</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">1000</span>
-                        </div>
-                    </div>
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar_1.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">Ngo Thang</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">21 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">1042</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">10230</span>
-                        </div>
-                    </div>
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar_2.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">An Danh</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">8 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">102</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">1230</span>
-                        </div>
-                    </div>
-                </div> 
-                <div class="row">
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">Mac Hieu</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">11 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">10</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">1000</span>
-                        </div>
-                    </div>
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar_1.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">Ngo Thang</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">21 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">1042</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">10230</span>
-                        </div>
-                    </div>
-                    <div class="teacher">
-                        <div class="imageThumbContainer">
-                            <img width="96" height="96" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/avatar_2.jpg" class="imageThumb">
-                        </div>
-                        <div class="ls_title">
-                            <a href="#">An Danh</a>      
-                        </div>
-                        <div class="stat_row">
-                            <span class="label">Uploads</span>
-                            <span class="value">8 lessons</span>
-                        </div>
-                        <div>
-                            <span class="label"><img src="images/icon/icon-like.png"/> Likes</span>
-                            <span class="value">102</span>
-                        </div>
-                        <div>
-                            <span class="label"> <img src="images/icon/icon-hits-12.png" /> Views</span>
-                            <span class="value">1230</span>
-                        </div>
-                    </div>
-                </div>                                     
+                 <table border="1" align="center" id="mylesson">
+                    <tbody>
+                        <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
+                            <td width="5%" style="background-color: #eee;">番号</td>
+                            <td width="10%" style="background-color: #eee;">アバター</td> 
+                            <td width="25%" style="background-color: #eee;">先生</td>
+                            <td width="10%" style="background-color: #eee;">授業</td>
+                            <td width="10%" style="background-color: #eee;"> いいねと言う</td>
+                            <td width="10%" style="background-color: #eee;">ビュー</td>
+                            <td width="30%" style="background-color: #eee;">メール</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><?php echo $this->Html->image('icon/avatar_2.jpg', array('alt' => 'Avatar', 'width'=>'65','height'=>'70')); ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>                                            
                 <div class="load_more load_more_btn" >
-                    <span class="normal_text">LOAD MORE</span>
+                    <span class="normal_text">もっと見る</span>
                 </div>                       
             </div>
         </div>
         <div class="title"><h3>勉強しているもの</h3></div>     
         <div class="box">
-            <div class="order">
+            <!-- <div class="order">
                 順序を決める : 
                 <?php echo $this->Html->link('時間', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'time'))); ?>
                 <span>-</span>
                 <?php echo $this->Html->link('Like', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'like'))); ?>
                 <span>-</span>
                 <?php echo $this->Html->link('見る事', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'view'))); ?>
-            </div>
+            </div> -->
             <div class="top">
                 <?php $paginator = $this->Paginator; ?>
                 <table border = "1" align = "center" id = "mylesson">
                     <tbody>
-                        <tr>
+                        <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
                             <td width = "8%" style = "background-color: #eee;">番号</td>
                             <td width = "25%" style = "background-color: #eee;"><?php echo $paginator->sort('Lesson.Title', 'タイトル'); ?></td>
                             <td width = "8%" style = "background-color: #eee;"><?php echo $paginator->sort('User.Username', '先生'); ?></td>
@@ -267,18 +111,19 @@
                         </tr>
                         <?php
                         $i = 0;
-                        foreach ($histories as $item) {
-                            echo "<tr>";
-                            $i++;
-                            echo "<td>{$i}</td>";
-                            echo "<td>{$item['Lesson']['Title']}</td>";
-                            echo "<td>{$item['User']['Username']}</td>";
-                            echo "<td>{$item['StudentHistory']['StartDate']}</td>";
-                            echo "<td>{$item['StudentHistory']['ExpiryDate']}</td>";
-                            echo "<td>" . $this->Html->link('勉強', array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId'])) . "</td>";
-                            echo "<td>" . $this->Html->link('テスト', array('controller' => 'student', 'action' => 'test', $item['Lesson']['LessonId'])) . "</td>";
-                        }
-                        ?>
+                        foreach ($histories as $item): 
+                             $i++;
+                         ?>
+                        <tr>
+                            <td><?php echo $i;?></td>
+                            <td><?php echo $this->Html->link($item['Lesson']['Title'], array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId']));?></td>
+                            <td><?php echo $item['User']['Username'];?></td>
+                            <td><?php echo $item['StudentHistory']['StartDate'];?></td>
+                            <td><?php echo $item['StudentHistory']['ExpiryDate'];?></td>
+                            <td><?php echo $this->Html->link('勉強', array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId']));?></td>
+                            <td><?php echo $this->Html->link('テスト', array('controller' => 'student', 'action' => 'test', $item['Lesson']['LessonId'])) ;?></td>
+                        </tr>
+                        <?php endforeach;?>
                     </tbody>
                 </table>
             </div>
@@ -307,3 +152,14 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+ $(".buy_bt").click(function(){
+    var r=confirm("Are you sure you want to buy this lesson?");
+    if (r==true)
+      {
+         window.location.pathname($(this).attr("href"));
+      }
+  })
+});
+</script>

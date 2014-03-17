@@ -1,13 +1,21 @@
 <div id="contents">
     <?php echo $this->Element('cat_menu');?>
         <div id="content">
+            <?php 
+                $error = $this->Session->flash();
+                if(!empty($error)):
+            ?>
+            <div class="error">
+                <?php echo $error; ?>
+            </div>
+            <?php endif;?>
             <div class="box1">
                 <div class="view_lesson"> 
                     <div class="actions">
                         <div class="left">
                             <ul class="tabs">
                                  <?php foreach ($lesson['File'] as $key => $value):?>
-                                <li <?php if($key==0){echo 'class="active"';}?>><a href="javacript:void(0)">File <?php echo $key+1;?></a></li>
+                                <li <?php if($key==0){echo 'class="active"';}?>><a href="javacript:void(0)">ファイル  <?php echo $key+1;?></a></li>
                                 <?php endforeach;?>
                             </ul>
                         </div>         
@@ -43,14 +51,11 @@
                     </div>
                     <div>
                         <div class="lesson_nav">                                
-                            <?php echo $this->Html->link('View Test',array('controller'=>'Teacher','action'=>'view_test',$lesson['Lesson']['LessonId']));?>          
+                            <?php echo $this->Html->link('テストをする',array('controller'=>'student','action'=>'test',$lesson['Lesson']['LessonId']));?>          
                         </div>
                         <div class="lesson_nav">        
-                            <?php echo $this->Html->link('Edit',array('controller'=>'Teacher','action'=>'edit_lesson',$lesson['Lesson']['LessonId']));?>
+                            <?php echo $this->Html->link('テストした結果をみる',array('controller'=>'student','action'=>'review_test',$lesson['Lesson']['LessonId']));?>
                         </div>
-                        <div class="lesson_nav">       
-                           <?php echo $this->Html->link('Delete Lsson',array('controller'=>'Teacher','action'=>'delete_lesson',$lesson['Lesson']['LessonId']));?>
-                        </div>     
                     </div>
                     <div class="articleCore ">
                             <div class="ls_title">
@@ -61,7 +66,7 @@
                                 <span><?php echo $this->Html->image('icon/icon-hits-12.png',array('alt' =>'views')); ?> <?php echo $lesson['Lesson']['ViewNumber'];?></span>
                                 <span><?php echo $this->Html->image('icon/icon-like.png',array('alt' =>'views')); ?><?php echo $lesson['Lesson']['LikeNumber'];?> </span>
                             </div>
-                            <div class="creat_author"><h3>発行 <a href="#"><?php echo $lesson['Teacher']['FullName']?></a></h3></div>
+                            <div class="creat_author"><h3>発行 <a href="#"><?php echo $lesson['User']['FullName']?></a></h3></div>
                             <div class="description" style="width:600px"><?php echo $lesson['Lesson']['Abstract'];?></div>
                     </div>
                      <div class="articleCore " style="margin-top:5px">
@@ -101,7 +106,7 @@
                                     <div class="">
                                         <a href="/mrhieusd/newsfeed" title="mrhieusd" class="commenter">
                                           <?php echo $this->Html->image('icon/user-48x48.png',array('alt' =>'views','height'=>'48px')); ?>
-                                          <strong>Mac Hieu</strong>
+                                          <strong><?php echo $users_username['FullName'];?></strong>
                                         </a>
                                     </div>
                                     <textarea cols="40" rows="4" name="comment"></textarea>
@@ -113,123 +118,36 @@
                         </div>
                     </div>          
                 </div>
-                <div class="relate_more_tab">
+                   <div class="relate_more_tab">
                     <div class="t_title" style="margin-right:0px">
                         <div class="left">
                             <ul>
                                 <li>                             
                                     <a href="javascript:void(0)" class="selected t_lesson">
-                                        <span>Top Lesson</span>
+                                        <span>トップ授業</span>
                                     </a>                          
                                 </li>
                                 <li>
                                    <a href="javascript:void(0)" class="t_teacher">
-                                        <span>Top Teacher</span>
+                                        <span>トップ先生</span>
                                    </a>                       
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <ul>
+                        <?php foreach ($allLessons as $lesson): ?>
                         <li>
                             <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
+                                <div class="ls_title"><a href="javascript:void(0)"><?php echo ($lesson['Lesson']['Title']);?></a></div>
                                 <div class="ls_rate">
-                                    <span>4500 views</span>
+                                    <div><?php echo $lesson['Lesson']['LikeNumber'];?>いいねと言う / <?php echo $lesson['Lesson']['ViewNumber'];?> ビュー </div>
+                                    <div><?php echo $lesson['Lesson']['Abstract'];?></div>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span>4500 views</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span> 4500 views</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span>4500 views</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span>4500 views </span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span>4500 views</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span>4500 views</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span> 4500 views</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="lesson">
-                                <div class="imageThumbContainer">
-                                    <img width="96" height="72" id="preview" title="mrhieusd" alt="mrhieusd" src="images/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                                </div>
-                                <div class="ls_title"><a href="#">The Dissident</a></div>
-                                <div class="ls_rate">
-                                    <span>4500 views</span>
-                                </div>
-                            </div>
-                        </li>
+                        <?php endforeach;?>
+                        <?php unset($lesson);?> 
                     </ul>
                 </div>
             </div>

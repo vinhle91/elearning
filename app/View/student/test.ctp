@@ -29,7 +29,7 @@
                         </tr>
                          <tr>
                             <td style="border:1px solid #333; width:18%;border-right:0"><h4>トータルの質問: <?php echo $data_test['Total']?></h4></td>
-                            <td colspan="2" style="border:1px solid #333"><h3 style="color:red;">トータルの点: <?php echo $data_test['TotalPoint']?></h3></td>
+                            <td colspan="2" style="border:1px solid #333"><h3 style="color:red;"></h3></td>
                         </tr>
                         <?php foreach ($data_test['Question'] as $key1 => $value1): ?>
                         <tr>
