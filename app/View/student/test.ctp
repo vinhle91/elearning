@@ -1,0 +1,68 @@
+<div id="contents">
+    <?php echo $this->Element('cat_menu');?>
+    <div id="content">
+        <div class="t_title">
+            <div class="left">
+                <ul>
+                    <li>                             
+                        <a href="javascript:void(0)" class="selected t_lesson">
+                            <span>テスト 1</span>
+                        </a>                          
+                    </li>
+                    <!-- <li>
+                       <a href="javascript:void(0)" class="t_teacher">
+                            <span>Test 2</span>
+                       </a>                       
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+        <div class="box">
+            <div class="top">  
+                <table class="sign_up_tb" border="0px">
+                      <tbody >
+                         <tr>
+                            <td colspan="3" style="border:1px solid #333; border-bottom:0"><h2><?php echo $data_test['Title']?></h2></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #333;border-bottom:0"><h4><?php echo $data_test['SubTitle']?></h4></td>
+                        </tr>
+                         <tr>
+                            <td style="border:1px solid #333; width:18%;border-right:0"><h4>トータルの質問: <?php echo $data_test['Total']?></h4></td>
+                            <td colspan="2" style="border:1px solid #333"><h3 style="color:red;">トータルの点: <?php echo $data_test['TotalPoint']?></h3></td>
+                        </tr>
+                        <?php foreach ($data_test['Question'] as $key1 => $value1): ?>
+                        <tr>
+                            <td width="13%" align="center" ><h3>質問 <?php echo $value1['QuesNum']?></h3></td>
+                            <td width="41%"><h3><?php echo $value1['Content']?></h3></td>
+                            <td width="46%" style="color:red"><h3><?php echo $value1['Point']?>ポイント</h3></td>
+                        </tr>
+                        <?php foreach ($value1['An'] as $key => $value): ?>
+                        <tr>
+                            <td align="right">
+                            </td>
+                            <td align="left">
+                              <div class="td_text">
+                                <label class="privacy-label" for="answer"><?php echo $value['Answer']['AnswerNumber']?>. <?php echo $value['Answer']['AnswerContent']?>
+                                </label>
+                            </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                         <?php endforeach;?>
+                        <?php endforeach;?>                     
+                        <tr>
+                            <td></td>
+                            <td>
+                                <?php echo $this->Html->link('編集',array('controller' => 'Teacher','action' => 'edit_lesson',$lesson_id),array('class'=>'flat_btn'));?>
+                                <?php echo $this->Html->link('戻る',array('controller' => 'Teacher','action' => 'view_lesson',$lesson_id),array('class'=>'btn_search','style'=>'float:none'));?>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>                  
+            </div>
+        </div>
+    </div>
+</div>
+</div>
