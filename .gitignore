@@ -6,6 +6,7 @@
 /app/tmp/cache/persistent/myapp_cake_core_default_en-us
 /app/tmp/cache/persistent/myapp_cake_core_file_map
 /app/tmp/cache/persistent/myapp_cake_core_object_map
+/app/tmp/logs/error.log
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors
