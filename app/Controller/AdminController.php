@@ -406,22 +406,50 @@ class AdminController extends AppController {
 		$this->log($configs);
 	}
 
-	public function setUserInfo() {
+	public function updateUserInfo($param) {
 		$this->layout = null;
+		$this->User->set($data);
+		$this->User->save();
+
+
 
 		if ($this->request->is('post') && !empty($this->request->data)) {
-
+			$data = $this->request->data;
+			$this->log($data);
 			$ret = array();
-			$update_data = $this->request->data;
-			$this->log($update_data);
 
-			//$this->User->save($update_data);
-			$this->User->updateAll($update_data, array('Username' => $update_data['Username']));
+			if ($param == "update") {
 
-			$ret['Status'] = "Success";
+				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
+					$ret['Status'] = "Success";
+				} else {
+					$ret['Status'] = "Fail";
+				}
+
+				$log = $this->User->getDataSource()->getLog(false, false);       
+				$this->log($log);
+			}
+
+			if ($param == "insert") {
+
+				$this->User->set($data);
+				if ($this->User->save() == 1) {
+					$ret['Status'] = "Success";
+				} else {
+					$ret['Status'] = "Fail";
+				}
+
+				$log = $this->User->getDataSource()->getLog(false, false);       
+				$this->log($log);
+			}
+
 			echo json_encode($ret);
 			die;
 		}
+	}
+
+	public function saveUserInfo() {
+
 	}
 
 }	

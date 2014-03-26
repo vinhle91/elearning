@@ -13,6 +13,22 @@
 /build
 /dist
 /tags
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_categories
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_configs
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_files
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_ips
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_lessons
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_list
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_student_histories
+/app/tmp/cache/models/myapp_cake_model_default_e-learning_users
+/app/tmp/cache/persistent/myapp_cake_core_cake_dev_en-us
+/app/tmp/cache/persistent/myapp_cake_core_cake_en-us
+/app/tmp/cache/persistent/myapp_cake_core_default_en-us
+/app/tmp/cache/persistent/myapp_cake_core_file_map
+/app/tmp/cache/persistent/myapp_cake_core_method_cache
+/app/tmp/cache/persistent/myapp_cake_core_object_map
+
+
 
 # OS generated files #
 ######################

@@ -32,7 +32,7 @@
 											<td><a href="/elearning/admin/teacher/<?php echo $new_teacher['User']['Username']?>"><?php echo $new_teacher['User']['FullName']?></a></td>
 											<td><a href="/elearning/admin/teacher/<?php echo $new_teacher['User']['Username']?>"><?php echo $new_teacher['User']['Username']?></a></td>
 											<td><?php echo $new_teacher['User']['created']?></td>
-											<td><span class="label label-sm label-<?php echo $status_label[$new_teacher['User']['Status']]?> line-height-6"><?php echo $status[$new_teacher['User']['Status']]?></span></td>
+											<td><span class="label label-sm label-<?php echo $status_label[$new_teacher['User']['Status']]?> line-6"><?php echo $status[$new_teacher['User']['Status']]?></span></td>
 										</tr>
 										<?php } ?>
 									</tbody>
@@ -146,7 +146,7 @@
 								<td><?php echo $teacher['User']['created']?></td>
 								<td><?php echo $teacher['User']['modified']?></td>
 								<td class="align-right"><?php echo $teacher['User']['Violated'] == 0 ? null : $teacher['User']['Violated']; ?></td>
-								<td><span class="label label-sm label-<?php echo $status_label[$teacher['User']['Status']]?> line-height-8" ><?php echo $status[$teacher['User']['Status']]?></span></td>
+								<td><span class="label label-sm label-<?php echo $status_label[$teacher['User']['Status']]?> line-8" ><?php echo $status[$teacher['User']['Status']]?></span></td>
 							</tr>
 							<?php } ?>							
 						</tbody>
@@ -262,7 +262,7 @@
 									<?php if ($teacherInfo['Status'] != 2 && $teacherInfo['Status'] != 0) { ?>
 									<tr>
 										<td>状態</td>
-										<td><section class="pull-left padding-5" id="Status"><span class="label label-<?php echo $status_label[$teacherInfo['Status']] ?> line-height-6"><?php echo $status[$teacherInfo['Status']] ?></span></section></td>
+										<td><section class="pull-left padding-5" id="Status"><span class="label label-<?php echo $status_label[$teacherInfo['Status']] ?> line-6"><?php echo $status[$teacherInfo['Status']] ?></span></section></td>
 									</tr>		
 									<?php } ?>							
 									<tr>

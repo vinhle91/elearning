@@ -545,3 +545,42 @@ Profile Page
   margin-right: 3px; 
   margin-top: -5px;
 }
+
+.user-info .phone {
+  display: inline-block; 
+  vertical-align: middle; 
+  margin-left: 10px; 
+  margin-right: 3px; 
+  margin-top: -5px;
+}
+
+.user-info .notif {
+  text-align: center;
+}
+
+.user-info .notif span {
+  font-style: italic;
+  font-size: 0.9em;
+  color: #ff0000;
+  text-align: center;
+}
+
+section.editable {
+  /*background-color: #fff;*/
+  /*border: 1px solid #dddddd;*/
+  max-width: 300px;
+  line-height: 2em;
+}
+
+.ajax-loader {
+  background-image: url('/elearning/img/ajax-loader.gif');
+  background-size: 100%;
+}
+
+.user-info .ajax-loader {
+  width: 15px;
+  height: 15px;
+  margin: auto;
+  display: none;
+  margin-left: 5px;
+}

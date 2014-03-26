@@ -238,5 +238,40 @@ class User extends AppModel {
         // fallback to our parent
         return parent::beforeSave($options);
     }
+
+    public function getUserInfo($username) {
+        $user = $this->find('first', array(
+            'conditions' => array(
+                'User.Username' => $username,
+            ),
+            'fields' => array(
+                'UserId',
+                'Username',
+                'Password',
+                'InitialPassword',
+                'UserType',
+                'FullName',
+                'Birthday',
+                'VerifyCodeQuestion',
+                'InitialCodeQuestion',
+                'VerifyCodeAnswer',
+                'InitialCodeAnswer',
+                'Gender',
+                'Address',
+                'Phone',
+                'Email',
+                'ImageProfile',
+                'IsOnline',
+                'created',
+                'modified',
+                'Status',
+                'Violated',
+                'BankInfo',
+                'CreditCard',
+            )
+        ));
+        return $user['User'];
+    }
+
  
 }?>

@@ -226,7 +226,7 @@ $transactions = array(
 										<tr>
 											<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['FullName']?></a></td>
 											<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['Username']?></a></td>
-											<td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']]?> line-height-6"><?php echo $status[$new_student['User']['Status']]?></span></td>
+											<td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']]?> line-6"><?php echo $status[$new_student['User']['Status']]?></span></td>
 										</tr>
 										<?php } ?>
 									</tbody>
