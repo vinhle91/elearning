@@ -79,9 +79,10 @@ class AdminController extends AppController {
 		$this->set(compact('CONFIG_SHARING_RATE'));
 		$today = $this->Transaction->getTransactions("Today");
 		$this->set(compact('today'));
-		$this->log($today);
 		$lastweek = $this->Transaction->getTransactions("LastWeek");
+
 		$total = $this->Transaction->getTransactions("All");
+
 		$overview = array(
 			'Today' => $today['Total'] * $CONFIG_COURSE_FEE,
 			'Lastweek' => $lastweek['Total'] * $CONFIG_COURSE_FEE,
@@ -89,6 +90,7 @@ class AdminController extends AppController {
 			'Earn' => $total['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100,
 			);
 		$this->set(compact('overview'));
+
 
 		$payment_summary = $this->Transaction->getTransactions("LastMonth");
 		$payment_summary['Earn'] = $payment_summary['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
@@ -408,10 +410,6 @@ class AdminController extends AppController {
 
 	public function updateUserInfo($param) {
 		$this->layout = null;
-		$this->User->set($data);
-		$this->User->save();
-
-
 
 		if ($this->request->is('post') && !empty($this->request->data)) {
 			$data = $this->request->data;
@@ -432,15 +430,37 @@ class AdminController extends AppController {
 
 			if ($param == "insert") {
 
-				$this->User->set($data);
-				if ($this->User->save() == 1) {
+				// $this->User->set($data);
+				// if ($this->User->save() == 1) {
+				// 	$ret['Status'] = "Success";
+				// } else {
+				// 	$ret['Status'] = "Fail";
+				// }
+
+				// $log = $this->User->getDataSource()->getLog(false, false);       
+				// $this->log($log);
+			}
+
+			if ($param == "block") {
+				$buff = array(
+					"Status" => "3",
+					);
+				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
 					$ret['Status'] = "Success";
 				} else {
 					$ret['Status'] = "Fail";
-				}
+				}				
+			}
 
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
+			if ($param == "delete") {
+				$buff = array(
+					"Status" => "0",
+					);
+				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+					$ret['Status'] = "Success";
+				} else {
+					$ret['Status'] = "Fail";
+				}				
 			}
 
 			echo json_encode($ret);
@@ -448,8 +468,55 @@ class AdminController extends AppController {
 		}
 	}
 
-	public function saveUserInfo() {
+	public function resetPassword() {
+		$this->layout = null;
 
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$data = $this->request->data;
+			$ret = array();
+			$userinfo = $this->User->getUserInfo($data['Username']);
+
+			$buff = array(
+				"Password" => "'".$userinfo["InitialPassword"]."'",
+				);
+			if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+				$ret['Status'] = "Success";
+			} else {
+				$ret['Status'] = "Fail";
+			}
+
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+
+			echo json_encode($ret);
+			die;
+		}
+	}
+
+	public function resetVerifyCode() {
+		$this->layout = null;
+
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$data = $this->request->data;
+			$ret = array();
+			$userinfo = $this->User->getUserInfo($data['Username']);
+
+			$buff = array(
+				"VerifyCodeQuestion" => "'".$userinfo["InitialCodeQuestion"]."'",
+				"VerifyCodeAnswer" => "'".$userinfo["InitialCodeAnswer"]."'",
+				);
+			if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+				$ret['Status'] = "Success";
+			} else {
+				$ret['Status'] = "Fail";
+			}
+
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+
+			echo json_encode($ret);
+			die;
+		}
 	}
 
 }	

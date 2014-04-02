@@ -85,6 +85,7 @@
 								</tr>
 							</thead>
 							<tbody>
+							<?php $this->log($payment_summary) ?>
 							<?php if (isset($payment_summary)) { ?>
 								<?php foreach ($payment_summary['Data'] as $key => $buff) { ?>
 								<tr>

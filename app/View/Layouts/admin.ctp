@@ -22,7 +22,6 @@
 			'jquery-1.9.0.min',
 			'jquery-migrate-1.2.1.min',
 			'bootstrap',
-			'jquery.slimscroll.min',
 			'jquery.blockui.min',
 			'jquery.cookie.min',
 			'app(1)',			

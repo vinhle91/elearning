@@ -202,7 +202,7 @@
 					<div class="caption"><i class="fa fa-reorder"></i><?php echo $studentInfo['FullName'] ?>'s 情報</div>
 					<?php if ($studentInfo['Status'] != 2) {?>
 					<div class="pull-right no-list-style">
-						<li class="dropdown menu-left" id="header_notification_bar">
+						<li class="dropdown menu-left" id="options">
 							<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>オプション</span>
 							<ul class="dropdown-menu extended" style="width: auto !important; margin-left: 77px; margin-top: -50px;">
 								<li>
@@ -212,27 +212,27 @@
 											<span class="label label-sm label-icon label-info"><i class="fa fa-pencil"></i></span>
                                                 基本データを編集
 											</a>
-										</li>												
+										</li>
 										<li>  
-											<a href="">
+											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success"><i class="fa fa-refresh"></i></span>
                                                 パスワードをリセット
 											</a>
 										</li>
 										<li>  
-											<a href="">
+											<a class="reset-ver-cod" href="">
 											<span class="label label-sm label-icon label-success"><i class="fa fa-refresh"></i></span>
                                                 verifycodeをリセット
 											</a>
 										</li>
 										<li>  
-											<a href="">
+											<a class="update-block" href="">
 											<span class="label label-sm label-icon label-danger"><i class="fa fa-ban"></i></span>
                                                 ユーザーを拒否
 											</a>
 										</li>
 										<li>  
-											<a href="">
+											<a class="update-delete" href="">
 											<span class="label label-sm label-icon label-default"><i class="fa fa-ban"></i></span>
 											    ユーザーを削除
 											</a>
@@ -313,9 +313,17 @@
 
 		});
 
-		$(".button-save").on("click", function(){
+		$(".button-save").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
 			var url = "/elearning/admin/updateUserInfo/update";
-			var submit_data = {UserId: "<?php echo $studentInfo['UserId']?>",Username: '\''+$('#Username').text()+'\'', Birthday: '\''+$('#Birthday').text()+'\'', BankInfo: '\''+$('#BankInfo').text()+'\'', Address: '\''+$('#Address').text()+'\''};
+			var submit_data = {
+				UserId: "<?php echo $studentInfo['UserId']?>",
+				Username: '\''+$('#Username').text()+'\'',
+				Birthday: '\''+$('#Birthday').text()+'\'',
+				BankInfo: '\''+$('#BankInfo').text()+'\'',
+				Address: '\''+$('#Address').text()+'\''
+			};
 			
 			$(".user-info .notif span").css("visibility", "visible");
 			$(".user-info .notif span").text("Updating infomation...");
@@ -351,6 +359,122 @@
 		         });
 		    return false;
 		});
+		
+
+		$(".reset-pw").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
+			if (confirm("Do you want to reset <?php echo $studentInfo['FullName']?>'s password?") == true) {
+				var url = "/elearning/admin/resetPassword";
+				var submit_data = {
+					UserId: "<?php echo $studentInfo['UserId']?>",
+					Username: "<?php echo $studentInfo['Username']?>",
+				};
+				$.ajax({
+			           type: "POST",
+			           url: url,
+			           data: submit_data, 
+			           success: function(data)
+			           {
+							data = $.parseJSON(data);
+			               	if (data.Status == "Success") {
+			               		alert("<?php echo $studentInfo['FullName']?>'s password has been reset to Initial password!");
+			               	} else if (data.Status == "Fail") {
+			               		alert("Reset password failed!");
+			               	}
+			           }
+			         });
+			    return false;
+
+			} 				
+		});
+
+		$(".reset-ver-cod").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
+			if (confirm("Do you want to reset <?php echo $studentInfo['FullName']?>'s verify code?") == true) {
+				var url = "/elearning/admin/resetVerifyCode";
+				var submit_data = {
+					UserId: "<?php echo $studentInfo['UserId']?>",
+					Username: "<?php echo $studentInfo['Username']?>",
+				};
+				$.ajax({
+			           type: "POST",
+			           url: url,
+			           data: submit_data, 
+			           success: function(data)
+			           {
+							data = $.parseJSON(data);
+			               	if (data.Status == "Success") {
+			               		alert("<?php echo $studentInfo['FullName']?>'s verify code has been reset!");
+			               	} else if (data.Status == "Fail") {
+			               		alert("Reset password failed!");
+			               	}
+			           }
+			         });
+			    return false;
+
+			} 				
+		});
+
+		$(".update-block").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
+			if (confirm("Do you want to block <?php echo $studentInfo['FullName']?>'s account?") == true) {
+				var url = "/elearning/admin/updateUserInfo/block";
+				var submit_data = {
+					UserId: "<?php echo $studentInfo['UserId']?>",
+					Username: "<?php echo $studentInfo['Username']?>",
+				};
+				$.ajax({
+			           type: "POST",
+			           url: url,
+			           data: submit_data, 
+			           success: function(data)
+			           {
+							data = $.parseJSON(data);
+			               	if (data.Status == "Success") {
+			               		alert("<?php echo $studentInfo['FullName']?>'s account has been blocked!");
+			               		location.reload();
+			               	} else if (data.Status == "Fail") {
+
+			               	}
+			           }
+			         });
+			    return false;
+
+			} 				
+		});
+
+		$(".update-delete").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
+			if (confirm("Do you want to delete <?php echo $studentInfo['FullName']?>'s account?") == true) {
+				var url = "/elearning/admin/updateUserInfo/delete";
+				var submit_data = {
+					UserId: "<?php echo $studentInfo['UserId']?>",
+					Username: "<?php echo $studentInfo['Username']?>",
+				};
+				$.ajax({
+			           type: "POST",
+			           url: url,
+			           data: submit_data, 
+			           success: function(data)
+			           {
+							data = $.parseJSON(data);
+			               	if (data.Status == "Success") {
+			               		alert("<?php echo $studentInfo['FullName']?>'s account has been delete!");
+			               		location.reload();
+			               	} else if (data.Status == "Fail") {
+
+			               	}
+			           }
+			         });
+			    return false;
+
+			} 				
+		});
+
 
 	});
 

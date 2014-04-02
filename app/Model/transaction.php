@@ -23,7 +23,7 @@ class Transaction extends AppModel {
 				'Student.Username',
 				'Student.Status',
 				)
-			)
+			),
 		);
 
 
