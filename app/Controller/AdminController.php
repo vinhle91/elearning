@@ -77,6 +77,8 @@ class AdminController extends AppController {
 	}
 
 	public function payment($param = null) {
+		$CONFIG_COURSE_FEE = $this->Config->getConfig("CourseFee") ?  $this->Config->getConfig("CourseFee") : 20000;
+		$CONFIG_SHARING_RATE = $this->Config->getConfig("SharingRate") ? $this->Config->getConfig("SharingRate") : 40;
 		if (!isset($param)) {
 			//title cho trang
 			$pageTitle = __('Payment Summary');
@@ -96,18 +98,21 @@ class AdminController extends AppController {
 		}
 
 		if ($param == "getTransInMonth") {
+			
 			$this->layout = null;
 			$ret = array();
 			if (!empty($this->request->data) && $this->request->is("post")) {
 				$data = $this->request->data;
-				$ret['data']  = $this->Transaction->getTransaction($data['Month'], $data['Year']);
-				if (!$ret['data']) {
-					$ret['result']  = "Fail";
-					$ret['data'] = null;
-				} else {
+				try {
+					$ret['data']  = $this->Transaction->getTransaction($data['Month'], $data['Year']);
 					$ret['result'] = "Success";
+					$ret['data']['Earn'] = $ret['data']['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
+				} catch (Exception $e) {
+					$ret['data'] = null;
+					$ret['result'] = "Fail";
+					$ret['error'] = $e->getMessage();
 				}
-
+	
 				echo json_encode($ret);
 			}
 			

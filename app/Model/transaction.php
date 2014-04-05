@@ -280,27 +280,60 @@ class Transaction extends AppModel {
 	}
 
 	public function getTransaction($month, $year) {
-		$options['conditions'] = array(
+		$condition = array(
 			'Blocked' => '0',
 			'MONTH(StartDate)' => $month,
 			'YEAR(StartDate)' => $year,
 			);
 
-		$_data = $this->find("all", $options);
 
-		$_amount = $this->find("count", $options);	
+		$_data = $this->find("all", array(
+			'recursive' => '2',
+			'conditions' => $condition,
+			));
+
+		$_amount = $this->find("count", array(
+			'conditions' => $condition,
+			));	
 
 		$_student = $this->find("count", array(
 				'fields' => 'DISTINCT Transaction.UserId',
-				'conditions' => $options['conditions'],
+				'conditions' => $condition,
 			));
 
 		$_teacher = $this->find("count", array(
 				'fields' => 'DISTINCT Lesson.UserId',
-				'conditions' => $options['conditions'],
+				'conditions' => $condition,
 			));
 
+		$_start = $this->find("all", array(
+				'conditions' => $condition,
+				'fields' => 'StartDate',
+				'order' => 'StartDate ASC',
+				'limit' => '1'
+			));
+
+		$_start = $this->find("all", array(
+				'conditions' => $condition,
+				'fields' => 'StartDate',
+				'order' => 'StartDate ASC',
+				'limit' => '1'
+			));
+		if ($_start) 
+			$_start = $_start[0]['Transaction']['StartDate'];
+
+		$_end = $this->find("all", array(
+				'conditions' => $condition,
+				'fields' => 'StartDate',
+				'order' => 'StartDate DESC',
+				'limit' => '1'
+			));
+		if ($_end) 
+			$_end = $_end[0]['Transaction']['StartDate'];
+
 		$buff = array(
+			'Start' => $_start,
+			'End' => $_end,
 			'Total' => $_amount,
 			'TotalStudent' => $_student,
 			'TotalTeacher' => $_teacher,

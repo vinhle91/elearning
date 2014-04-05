@@ -16,7 +16,7 @@
 			<div class="tab-pane active" id="tab_1_11">
 
 				<div class="nav portlet-title padding-top-8" style="padding:10px 10px 2px 10px;  height: 38px;">
-					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><?php echo date("M Y")?></div>
+					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><span id="payment-date"><?php echo date("M Y")?></span></div>
 					<div class="pull-right" id="date-picker">						
 						<span>年: </span>
 						<select class=" margin-right-3" id="payment-year">
@@ -49,32 +49,32 @@
 							<tbody>
 								<tr>
 									<td class="">First transaction </td>
-									<td class="col-md-5"><?php echo date_format(date_create($payment_summary['Start']), 'd M Y H:m:s')?></td>
+									<td class="col-md-5" id="payment-first"><?php echo date_format(date_create($payment_summary['Start']), 'd M Y H:m:s')?></td>
 								</tr>
 								<tr>
 									<td>Last transaction </td>
-									<td><?php echo date_format(date_create($payment_summary['End']), 'd M Y H:m:s')?></td>
+									<td id="payment-last"><?php echo date_format(date_create($payment_summary['End']), 'd M Y H:m:s')?></td>
 								</tr>
 								<tr>
 									<td>Total transactions</td>
-									<td><?php echo $payment_summary['Total'] ?></td>
+									<td id="payment-total"><?php echo $payment_summary['Total'] ?></td>
 								</tr>
 								<tr>
 									<td>すべての学生</td>
-									<td><?php echo $payment_summary['TotalStudent'] ?></td>
+									<td id="payment-total-teacher"><?php echo $payment_summary['TotalStudent'] ?></td>
 								</tr>
 								<tr>
 									<td>すべての先生</td>
-									<td><?php echo $payment_summary['TotalTeacher'] ?></td>
+									<td id="payment-total-student"><?php echo $payment_summary['TotalTeacher'] ?></td>
 								</tr>
 								<tr>
 									<td>Profits</td>
-									<td><?php echo $payment_summary['Earn'] ?> VND</td>
+									<td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
 								</tr>
 							</tbody>
 						</table>
 
-						<a type="reset" class="btn btn-sm btn-info cancel pull-right" style="margin-top: -50px; margin-right: 0px" onclick="alert($('#payment-data').table2TSV({output: 'raw'}))"><i class="fa fa-save margin-right-5"></i>
+						<a type="reset" class="btn btn-sm btn-info cancel pull-right" style="margin-top: -50px; margin-right: 0px" onclick="($('#payment-data').table2TSV({output: 'popup'}))"><i class="fa fa-save margin-right-5"></i>
 							<span>ファイルに保存</span>
 						</a>
 						<div class="clear-fix"></div>
@@ -217,14 +217,36 @@
 </div>
 <script>
 function getTransInMonth(year, month){
+	months = new Array();
+	months[0] = "January";
+	months[1] = "February";
+	months[2] = "March";
+	months[3] = "April";
+	months[4] = "May";
+	months[5] = "June";
+	months[6] = "July";
+	months[7] = "August";
+	months[8] = "September";
+	months[9] = "October";
+	months[10] = "November";
+	months[11] = "December";
 	$.ajax({
 		type: "POST",
 		url: "/elearning/admin/payment/getTransInMonth",
 		data: {Year: year, Month: month},
 		success: function(data) {
+			console.log(data);
+			window.abc = data;
 			data = $.parseJSON(data);
+
 			if (data.result == "Success") {
-				alert("Load success!");
+				$("#payment-date").html(months[month-1] + " " + year);	
+				$("#payment-first").html(data.data.Start);
+				$("#payment-last").html(data.data.End);
+				$("#payment-total").html(data.data.Total);
+				$("#payment-total-teacher").html(data.data.TotalTeacher);
+				$("#payment-total-student").html(data.data.TotalStudent);
+				$("#payment-earn").html(data.data.Earn);
 				fillData(data.data);
 			} else {
 				alert("Fail");
@@ -235,13 +257,39 @@ function getTransInMonth(year, month){
 }
 
 function fillData(data) {
-	console.log(data);
+	$("#payment-data tbody").html("");
+	date = new Date();
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+	var label = new Array();
+	$.each(data.Data, function(index, value){
+		console.log(index);
+		console.log(value);
+		if (value.Transaction.ExpiryDate > firstDay) {
+			label['style'] = "warning";
+			label['text'] = "Not paid";
+		} else {
+			label['style'] = "success";
+			label['text'] = "Paid";
+		}
+		$("#payment-data tbody").append(
+		"<tr>" + 
+			"<td>" + (index+1) + "</td>" + 
+			"<td>" + value.Transaction.StartDate + "</td>" + 
+			"<td>" + value.Lesson.Title + "</td>" + 
+			"<td><a href='/elearning/admin/student/" + value.Student.Username + "'>" + value.Student.Username + "</a></td>" + 
+			"<td><a href='/elearning/admin/teacher/" + value.Lesson.Author.Username + "'>" + value.Lesson.Author.Username + "</a></td>" + 
+			"<td class='align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" + 
+		"</tr>"
+
+		);
+	})
+
 
 }
 
 $(document).ready(function(){
 	now = new Date();
-	$("#payment-month").val(now.getMonth().toString());
+	$("#payment-month").val((now.getMonth()+1).toString());
 	$("#payment-year").val(now.getYear().toString());
 });
 

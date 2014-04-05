@@ -67,7 +67,7 @@ jQuery.fn.table2TSV = function(options) {
         var generator = window.open('', 'tsv', 'height=400,width=600');
         generator.document.write('<html><head><title>TSV</title>');
         generator.document.write('</head><body >');
-        generator.document.write('<textArea cols=70 rows=15 wrap="off" >');
+        generator.document.write('<textArea cols=100 rows=15 wrap="off" >');
         generator.document.write(data);
         generator.document.write('</textArea>');
         generator.document.write('</body></html>');
