@@ -138,8 +138,9 @@ class AdminController extends AppController {
 			);
 		$this->set(compact('overview'));
 
-		$payment_summary = $this->Transaction->getTransactions("LastWeek");
+		$payment_summary = $this->Transaction->getTransactions("LastMonth");
 		$payment_summary['Earn'] = $payment_summary['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
+		$this->log($payment_summary);
 		$this->set(compact('payment_summary'));
 
 	}

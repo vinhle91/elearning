@@ -46,14 +46,15 @@
 				<div class="portlet-body">
 					<div class="table-responsive">
 						<table class="table margin-top-10" style="width: 400px">
+						<?php $this->log($payment_summary)?>
 							<tbody>
 								<tr>
 									<td class="">First transaction </td>
-									<td class="col-md-5" id="payment-first"><?php echo date_format(date_create($payment_summary['Start']), 'd M Y H:m:s')?></td>
+									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>Last transaction </td>
-									<td id="payment-last"><?php echo date_format(date_create($payment_summary['End']), 'd M Y H:m:s')?></td>
+									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>Total transactions</td>
