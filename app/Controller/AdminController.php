@@ -56,7 +56,10 @@ class AdminController extends AppController {
 				'conditions' => array(
 					'AND' => array(
 						'created >' => date('Y-m-d',strtotime("-1 months")),
-						'UserType' => '1'
+						'UserType' => '1'						
+					),
+					'NOT' => array(
+						'Status' => '0',
 						)
 					)
 				)),
@@ -73,6 +76,46 @@ class AdminController extends AppController {
 		$this->log($new_students);
 	}
 
+	public function payment($param = null) {
+		if (!isset($param)) {
+			//title cho trang
+			$pageTitle = __('Payment Summary');
+			$this->set(compact('pageTitle'));
+
+			//breadcrumb cho trang
+			$page_breadcrumb = array();
+			$page_breadcrumb['title'] = __('Payment Summary');
+			$page_breadcrumb['direct'] = array('Home', 'Payment');
+			$this->set(compact('page_breadcrumb'));
+			//end breadcrumb cho trang
+
+			//sidebar
+			$this->set('sidebar', array('payment'));
+
+			$this->getPaymentInfo();
+		}
+
+		if ($param == "getTransInMonth") {
+			$this->layout = null;
+			$ret = array();
+			if (!empty($this->request->data) && $this->request->is("post")) {
+				$data = $this->request->data;
+				$ret['data']  = $this->Transaction->getTransaction($data['Month'], $data['Year']);
+				if (!$ret['data']) {
+					$ret['result']  = "Fail";
+					$ret['data'] = null;
+				} else {
+					$ret['result'] = "Success";
+				}
+
+				echo json_encode($ret);
+			}
+			
+			die;
+		}
+
+	}
+
 	public function getPaymentInfo(){
 		$CONFIG_COURSE_FEE = $this->Config->getConfig("CourseFee") ?  $this->Config->getConfig("CourseFee") : 20000;
 		$CONFIG_SHARING_RATE = $this->Config->getConfig("SharingRate") ? $this->Config->getConfig("SharingRate") : 40;
@@ -82,7 +125,6 @@ class AdminController extends AppController {
 		$lastweek = $this->Transaction->getTransactions("LastWeek");
 
 		$total = $this->Transaction->getTransactions("All");
-
 		$overview = array(
 			'Today' => $today['Total'] * $CONFIG_COURSE_FEE,
 			'Lastweek' => $lastweek['Total'] * $CONFIG_COURSE_FEE,
@@ -91,10 +133,10 @@ class AdminController extends AppController {
 			);
 		$this->set(compact('overview'));
 
-
-		$payment_summary = $this->Transaction->getTransactions("LastMonth");
+		$payment_summary = $this->Transaction->getTransactions("LastWeek");
 		$payment_summary['Earn'] = $payment_summary['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
 		$this->set(compact('payment_summary'));
+
 	}
 
 	public function lesson($lesson = null) {
@@ -363,27 +405,6 @@ class AdminController extends AppController {
 		}
 	}
 
-	public function payment() {
-		//title cho trang
-		$pageTitle = __('Payment Summary');
-		$this->set(compact('pageTitle'));
-
-		//breadcrumb cho trang
-		$page_breadcrumb = array();
-		$page_breadcrumb['title'] = __('Payment Summary');
-		$page_breadcrumb['direct'] = array('Home', 'Payment');
-		$this->set(compact('page_breadcrumb'));
-		//end breadcrumb cho trang
-
-		//sidebar
-		$this->set('sidebar', array('payment'));
-
-		//lay du lieu tu db 
-		
-		$this->getPaymentInfo();
-
-	}
-
 	public function config() {
 		//title cho trang
 		$pageTitle = __('システム設定');
@@ -409,9 +430,10 @@ class AdminController extends AppController {
 	}
 
 	public function updateUserInfo($param) {
-		$this->layout = null;
 
 		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+
 			$data = $this->request->data;
 			$this->log($data);
 			$ret = array();
@@ -419,26 +441,13 @@ class AdminController extends AppController {
 			if ($param == "update") {
 
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
-					$ret['Status'] = "Success";
+					$ret['result'] = "Success";
 				} else {
-					$ret['Status'] = "Fail";
+					$ret['result'] = "Fail";
 				}
 
 				$log = $this->User->getDataSource()->getLog(false, false);       
 				$this->log($log);
-			}
-
-			if ($param == "insert") {
-
-				// $this->User->set($data);
-				// if ($this->User->save() == 1) {
-				// 	$ret['Status'] = "Success";
-				// } else {
-				// 	$ret['Status'] = "Fail";
-				// }
-
-				// $log = $this->User->getDataSource()->getLog(false, false);       
-				// $this->log($log);
 			}
 
 			if ($param == "block") {
@@ -446,9 +455,9 @@ class AdminController extends AppController {
 					"Status" => "3",
 					);
 				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
-					$ret['Status'] = "Success";
+					$ret['result'] = "Success";
 				} else {
-					$ret['Status'] = "Fail";
+					$ret['result'] = "Fail";
 				}				
 			}
 
@@ -457,14 +466,71 @@ class AdminController extends AppController {
 					"Status" => "0",
 					);
 				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
-					$ret['Status'] = "Success";
+					$ret['result'] = "Success";
 				} else {
-					$ret['Status'] = "Fail";
+					$ret['result'] = "Fail";
 				}				
+			}
+
+			if ($param == "active") {
+				$buff = array(
+					"Status" => "1",
+					);
+				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}				
+			}
+
+			if ($param == "insert") {
+				$this->User->create();
+				$this->User->set($data);
+				if ($this->User->save()) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
+
+				$log = $this->User->getDataSource()->getLog(false, false);       
+				$this->log($log);
 			}
 
 			echo json_encode($ret);
 			die;
+		}
+
+		if ($param = "test") {
+			$this->layout = "default";
+			$this->User->create();
+			$data = array(
+				'User' => array(
+						"Username" => "fappy",
+						"Password" => "12345678",
+						"InitialPassword" => "12345678",
+						"UserType" => "1",
+						"FullName" => "Khuc Anh Minh Luong",
+						"Birthday" => "1991-10-12",
+						"VerifyCodeQuestion" => "ban sinh nam bao nhieu",
+						"InitialCodeQuestion" => "ban sinh nam bao nhieu",
+						"VerifyCodeAnswer" => "2323232",
+						"InitialCodeAnswer" => "1991",
+						"Gender" => "1",
+						"Address" => "No 19 204/174 Le Thanh Nghi Hai Ba Trung, Ha Noi",
+						"Phone" => "",
+						"Email" => "",
+						"ImageProfile" => "",
+						"IsOnline" => "",
+						"created" => "2014-03-03 03:03:31",
+						"modified" => "",
+						"Status" => "2",
+						"Violated" => "",
+						"BankInfo" => "Techcombank",
+						"CreditCard" => "",
+					)
+					
+				);
+			$this->User->save($data);
 		}
 	}
 
@@ -480,9 +546,9 @@ class AdminController extends AppController {
 				"Password" => "'".$userinfo["InitialPassword"]."'",
 				);
 			if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
-				$ret['Status'] = "Success";
+				$ret['result'] = "Success";
 			} else {
-				$ret['Status'] = "Fail";
+				$ret['result'] = "Fail";
 			}
 
 			$log = $this->User->getDataSource()->getLog(false, false);       
@@ -506,9 +572,9 @@ class AdminController extends AppController {
 				"VerifyCodeAnswer" => "'".$userinfo["InitialCodeAnswer"]."'",
 				);
 			if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
-				$ret['Status'] = "Success";
+				$ret['result'] = "Success";
 			} else {
-				$ret['Status'] = "Fail";
+				$ret['result'] = "Fail";
 			}
 
 			$log = $this->User->getDataSource()->getLog(false, false);       

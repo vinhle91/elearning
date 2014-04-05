@@ -42,32 +42,52 @@ class Transaction extends AppModel {
 				'StartDate >' => date('Y-m-d',strtotime("-1 days")),
 				'Blocked' => '0'
 				);
-			$data = $this->find("all", array(
+			$_data = $this->find("all", array(
 					'recursive' => '2',
 					'conditions' => $condition,
 				));
 
-			$tt_trans = $this->find("count", array(
+			$_amount = $this->find("count", array(
 					'conditions' => $condition,
 					));
 
 
-			$tt_student = $tt_student = $this->find("count", array(
+			$_student = $_student = $this->find("count", array(
 					'fields' => 'DISTINCT Transaction.UserId',
 					'conditions' => $condition,
 				));
+
+			$_start = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate ASC',
+					'limit' => '1'
+				));
+			if ($_start)
+				$_start = $_start[0]['Transaction']['StartDate'];
+
+			$_end = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate DESC',
+					'limit' => '1'
+				));
+			if ($_end) 
+				$_end = $_end[0]['Transaction']['StartDate'];
 
 			$options['conditions'] = $condition;
 
 			$options['fields'] = 'DISTINCT Lesson.UserId';
 
-			$tt_teacher = $this->find('count', $options);
+			$_teacher = $this->find('count', $options);
 
 			$buff = array(
-				'Total' => $tt_trans,
-				'TotalStudent' => $tt_student,
-				'TotalTeacher' => $tt_teacher,
-				'Data' => $data,
+				'Start' => $_start,
+				'End' => $_end,
+				'Total' => $_amount,
+				'TotalStudent' => $_student,
+				'TotalTeacher' => $_teacher,
+				'Data' => $_data,
 				);
 
 			return $buff;
@@ -76,35 +96,55 @@ class Transaction extends AppModel {
 
 		if ($param == "LastWeek") {
 			$condition = array(
-				'StartDate >' => date('Y-m-d',strtotime("-1 weeks")),
+				'StartDate >' => date('Y-m-d', strtotime('-'.date('w').' days')),
 				'Blocked' => '0'
 				);
-			$data = $this->find("all", array(
+			$_data = $this->find("all", array(
 					'recursive' => '2',
 					'conditions' => $condition,
 				));
 
-			$tt_trans = $this->find("count", array(
+			$_amount = $this->find("count", array(
 					'conditions' => $condition,
 					));
 
 
-			$tt_student = $tt_student = $this->find("count", array(
+			$_student = $_student = $this->find("count", array(
 					'fields' => 'DISTINCT Transaction.UserId',
 					'conditions' => $condition,
 				));
+
+			$_start = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate ASC',
+					'limit' => '1'
+				));
+			if ($_start)
+				$_start = $_start[0]['Transaction']['StartDate'];
+
+			$_end = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate DESC',
+					'limit' => '1'
+				));
+			if ($_end) 
+				$_end = $_end[0]['Transaction']['StartDate'];
 
 			$options['conditions'] = $condition;
 
 			$options['fields'] = 'DISTINCT Lesson.UserId';
 
-			$tt_teacher = $this->find('count', $options);
+			$_teacher = $this->find('count', $options);
 
 			$buff = array(
-				'Total' => $tt_trans,
-				'TotalStudent' => $tt_student,
-				'TotalTeacher' => $tt_teacher,
-				'Data' => $data,
+				'Start' => $_start,
+				'End' => $_end,
+				'Total' => $_amount,
+				'TotalStudent' => $_student,
+				'TotalTeacher' => $_teacher,
+				'Data' => $_data,
 				);
 
 			return $buff;
@@ -113,35 +153,55 @@ class Transaction extends AppModel {
 
 		if ($param == "LastMonth") {
 			$condition = array(
-				'StartDate >' => date('Y-m-d',strtotime("-1 months")),
+				'StartDate >=' => date('Y-m-01'),
 				'Blocked' => '0'
 				);
-			$data = $this->find("all", array(
+			$_data = $this->find("all", array(
 					'recursive' => '2',
 					'conditions' => $condition,
 				));
 
-			$tt_trans = $this->find("count", array(
+			$_amount = $this->find("count", array(
 					'conditions' => $condition,
 					));
 
 
-			$tt_student = $tt_student = $this->find("count", array(
+			$_student = $_student = $this->find("count", array(
 					'fields' => 'DISTINCT Transaction.UserId',
 					'conditions' => $condition,
 				));
+
+			$_start = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate ASC',
+					'limit' => '1'
+				));
+			if ($_start)
+				$_start = $_start[0]['Transaction']['StartDate'];
+
+			$_end = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate DESC',
+					'limit' => '1'
+				));
+			if ($_end) 
+				$_end = $_end[0]['Transaction']['StartDate'];
 
 			$options['conditions'] = $condition;
 
 			$options['fields'] = 'DISTINCT Lesson.UserId';
 
-			$tt_teacher = $this->find('count', $options);
+			$_teacher = $this->find('count', $options);
 
 			$buff = array(
-				'Total' => $tt_trans,
-				'TotalStudent' => $tt_student,
-				'TotalTeacher' => $tt_teacher,
-				'Data' => $data,
+				'Start' => $_start,
+				'End' => $_end,
+				'Total' => $_amount,
+				'TotalStudent' => $_student,
+				'TotalTeacher' => $_teacher,
+				'Data' => $_data,
 				);
 
 			return $buff;
@@ -152,32 +212,52 @@ class Transaction extends AppModel {
 			$condition = array(
 				'Blocked' => '0'
 				);
-			$data = $this->find("all", array(
+			$_data = $this->find("all", array(
 					'recursive' => '2',
 					'conditions' => $condition,
 				));
 
-			$tt_trans = $this->find("count", array(
+			$_amount = $this->find("count", array(
 					'conditions' => $condition,
 					));
 
 
-			$tt_student = $tt_student = $this->find("count", array(
+			$_student = $_student = $this->find("count", array(
 					'fields' => 'DISTINCT Transaction.UserId',
 					'conditions' => $condition,
 				));
+
+			$_start = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate ASC',
+					'limit' => '1'
+				));
+			if ($_start)
+				$_start = $_start[0]['Transaction']['StartDate'];
+
+			$_end = $this->find("all", array(
+					'conditions' => $condition,
+					'fields' => 'StartDate',
+					'order' => 'StartDate DESC',
+					'limit' => '1'
+				));
+			if ($_end) 
+				$_end = $_end[0]['Transaction']['StartDate'];
 
 			$options['conditions'] = $condition;
 
 			$options['fields'] = 'DISTINCT Lesson.UserId';
 
-			$tt_teacher = $this->find('count', $options);
+			$_teacher = $this->find('count', $options);
 
 			$buff = array(
-				'Total' => $tt_trans,
-				'TotalStudent' => $tt_student,
-				'TotalTeacher' => $tt_teacher,
-				'Data' => $data,
+				'Start' => $_start,
+				'End' => $_end,
+				'Total' => $_amount,
+				'TotalStudent' => $_student,
+				'TotalTeacher' => $_teacher,
+				'Data' => $_data,
 				);
 
 			return $buff;
@@ -206,25 +286,25 @@ class Transaction extends AppModel {
 			'YEAR(StartDate)' => $year,
 			);
 
-		$data = $this->find("all", $options);
+		$_data = $this->find("all", $options);
 
-		$tt_trans = $this->find("count", $options);	
+		$_amount = $this->find("count", $options);	
 
-		$tt_student = $this->find("count", array(
+		$_student = $this->find("count", array(
 				'fields' => 'DISTINCT Transaction.UserId',
 				'conditions' => $options['conditions'],
 			));
 
-		$tt_teacher = $this->find("count", array(
+		$_teacher = $this->find("count", array(
 				'fields' => 'DISTINCT Lesson.UserId',
 				'conditions' => $options['conditions'],
 			));
 
 		$buff = array(
-			'Total' => $tt_trans,
-			'TotalStudent' => $tt_student,
-			'TotalTeacher' => $tt_teacher,
-			'Data' => $data,
+			'Total' => $_amount,
+			'TotalStudent' => $_student,
+			'TotalTeacher' => $_teacher,
+			'Data' => $_data,
 			);
 
 		return $buff;

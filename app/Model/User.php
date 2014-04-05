@@ -15,7 +15,7 @@ class User extends AppModel {
             'foreignKey' => 'UserId',
             'conditions' => array('Comment.IsDeleted' => '0'),
             'order' => 'Comment.created DESC',
-            'dependent' => true
+            'dependent' => true,
         ),
     ); 
     // public $hasAndBelongsToMany = array(

@@ -97,7 +97,7 @@
 	           {
 					$(".ajax-loader").fadeOut(10);
 					data = $.parseJSON(data);
-	               	if (data.Status == "Success") {
+	               	if (data.result == "Success") {
                			$(".user-info .notif span").text("Updated successfully");
                			$("#mod-tbl tr:last td:eq(1)").html('<a href="">' + $("#mod-tbl tr:last td:eq(1) input").val() + '</a>');
 						$("#mod-tbl tr:last td:eq(2)").html(time);
@@ -106,7 +106,7 @@
                			setTimeout(function(){
                				$(".user-info .notif span").text("");
                			}, 2000);
-	               	} else if (data.Status == "Fail") {
+	               	} else if (data.result == "Fail") {
                			$(".user-info .notif span").text("Updated fail");
 	               		setTimeout(function(){
                				$(".user-info .notif span").text("");
@@ -114,6 +114,8 @@
 	               	}
 	           }
 	         });
+	         
+
 	    return false;
 	}
 

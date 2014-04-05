@@ -338,7 +338,7 @@
 		           {
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
-		               	if (data.Status == "Success") {
+		               	if (data.result == "Success") {
 	               			$(".user-info .notif span").text("Updated successfully");
 	               			setTimeout(function(){
 	               				//$(".user-info .notif span").text("");
@@ -346,7 +346,7 @@
 								  	$('.user-info .notif span').css("visibility", "hidden");   
 								});
 	               			}, 2000);
-		               	} else if (data.Status == "Fail") {
+		               	} else if (data.result == "Fail") {
 	               			$(".user-info .notif span").text("Updated fail");
 		               		setTimeout(function(){
 	               				//$(".user-info .notif span").text("");
@@ -377,9 +377,9 @@
 			           success: function(data)
 			           {
 							data = $.parseJSON(data);
-			               	if (data.Status == "Success") {
+			               	if (data.result == "Success") {
 			               		alert("<?php echo $teacherInfo['FullName']?>'s password has been reset to Initial password!");
-			               	} else if (data.Status == "Fail") {
+			               	} else if (data.result == "Fail") {
 			               		alert("Reset password failed!");
 			               	}
 			           }
@@ -405,9 +405,9 @@
 			           success: function(data)
 			           {
 							data = $.parseJSON(data);
-			               	if (data.Status == "Success") {
+			               	if (data.result == "Success") {
 			               		alert("<?php echo $teacherInfo['FullName']?>'s verify code has been reset!");
-			               	} else if (data.Status == "Fail") {
+			               	} else if (data.result == "Fail") {
 			               		alert("Reset password failed!");
 			               	}
 			           }

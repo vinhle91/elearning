@@ -177,12 +177,20 @@
 				</div>
 			</div>
 			<?php if ($studentInfo['Status'] == 2) { ?>
-			<button class="btn btn-sm btn-info pull-right">
-				<i class="fa fa-exclamation-triangle"></i>
-				<span>
-					 未確定
-				</span>
-			</button>
+			<div class = "handle-user pull-right">
+				<button class="btn btn-sm btn-info disabled pull-right" id = "notif-pending">
+					<i class='fa fa-exclamation-triangle margin-right-5'></i>
+					<span>
+						 未確定
+					</span>
+				</button>
+				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
+					
+					<span>
+						 Active
+					</span>
+				</button>
+			</div>			
 			<?php } ?>
 			<?php if ($studentInfo['Status'] == 0) { ?>
 			<label class="label label-xl label-default pull-right">
@@ -200,19 +208,19 @@
 			<div class="portlet">
 				<div class="nav portlet-title padding-top-8">
 					<div class="caption"><i class="fa fa-reorder"></i><?php echo $studentInfo['FullName'] ?>'s 情報</div>
-					<?php if ($studentInfo['Status'] != 2) {?>
+					<?php if ($studentInfo['Status'] != 2 && $studentInfo['Status']!=0) {?>
 					<div class="pull-right no-list-style">
 						<li class="dropdown menu-left" id="options">
 							<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>オプション</span>
 							<ul class="dropdown-menu extended" style="width: auto !important; margin-left: 77px; margin-top: -50px;">
 								<li>
 									<ul class="dropdown-menu-list no-space no-list-style">
-										<li>  
+										<!-- <li>  
 											<a href="">
 											<span class="label label-sm label-icon label-info"><i class="fa fa-pencil"></i></span>
                                                 基本データを編集
 											</a>
-										</li>
+										</li> -->
 										<li>  
 											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success"><i class="fa fa-refresh"></i></span>
@@ -225,18 +233,28 @@
                                                 verifycodeをリセット
 											</a>
 										</li>
+										<?php if ($studentInfo['Status'] == 1) { ?>
 										<li>  
 											<a class="update-block" href="">
 											<span class="label label-sm label-icon label-danger"><i class="fa fa-ban"></i></span>
                                                 ユーザーを拒否
 											</a>
 										</li>
+										<?php } ?>
 										<li>  
 											<a class="update-delete" href="">
 											<span class="label label-sm label-icon label-default"><i class="fa fa-ban"></i></span>
 											    ユーザーを削除
 											</a>
 										</li>
+										<?php if ($studentInfo['Status'] != 1) { ?>
+										<li>  
+											<a class="update-active" href="">
+											<span class="label label-sm label-icon label-info"><i class="fa fa-check"></i></span>
+											    ユーザーをActive
+											</a>
+										</li>
+										<?php } ?>
 									</ul>
 								</li>
 							</ul>
@@ -338,7 +356,7 @@
 		           {
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
-		               	if (data.Status == "Success") {
+		               	if (data.result == "Success") {
 	               			$(".user-info .notif span").text("Updated successfully");
 	               			setTimeout(function(){
 	               				//$(".user-info .notif span").text("");
@@ -346,7 +364,7 @@
 								  	$('.user-info .notif span').css("visibility", "hidden");   
 								});
 	               			}, 2000);
-		               	} else if (data.Status == "Fail") {
+		               	} else if (data.result == "Fail") {
 	               			$(".user-info .notif span").text("Updated fail");
 		               		setTimeout(function(){
 	               				//$(".user-info .notif span").text("");
@@ -377,9 +395,9 @@
 			           success: function(data)
 			           {
 							data = $.parseJSON(data);
-			               	if (data.Status == "Success") {
+			               	if (data.result == "Success") {
 			               		alert("<?php echo $studentInfo['FullName']?>'s password has been reset to Initial password!");
-			               	} else if (data.Status == "Fail") {
+			               	} else if (data.result == "Fail") {
 			               		alert("Reset password failed!");
 			               	}
 			           }
@@ -405,9 +423,9 @@
 			           success: function(data)
 			           {
 							data = $.parseJSON(data);
-			               	if (data.Status == "Success") {
+			               	if (data.result == "Success") {
 			               		alert("<?php echo $studentInfo['FullName']?>'s verify code has been reset!");
-			               	} else if (data.Status == "Fail") {
+			               	} else if (data.result == "Fail") {
 			               		alert("Reset password failed!");
 			               	}
 			           }
@@ -433,10 +451,10 @@
 			           success: function(data)
 			           {
 							data = $.parseJSON(data);
-			               	if (data.Status == "Success") {
+			               	if (data.result == "Success") {
 			               		alert("<?php echo $studentInfo['FullName']?>'s account has been blocked!");
 			               		location.reload();
-			               	} else if (data.Status == "Fail") {
+			               	} else if (data.result == "Fail") {
 
 			               	}
 			           }
@@ -462,10 +480,10 @@
 			           success: function(data)
 			           {
 							data = $.parseJSON(data);
-			               	if (data.Status == "Success") {
+			               	if (data.result == "Success") {
 			               		alert("<?php echo $studentInfo['FullName']?>'s account has been delete!");
 			               		location.reload();
-			               	} else if (data.Status == "Fail") {
+			               	} else if (data.result == "Fail") {
 
 			               	}
 			           }
@@ -475,6 +493,59 @@
 			} 				
 		});
 
+		$(".update-active").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
+			var url = "/elearning/admin/updateUserInfo/active";
+			var submit_data = {
+				UserId: "<?php echo $studentInfo['UserId']?>",
+				Username: "<?php echo $studentInfo['Username']?>",
+			};
+			$.ajax({
+		           type: "POST",
+		           url: url,
+		           data: submit_data, 
+		           success: function(data)
+		           {
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+
+		               		location.reload();
+		               	} else if (data.result == "Fail") {
+		               		alert("Reactive user fail!");
+		               	}
+		           }
+		         });
+		    return false;
+		});
+
+		$("#first-active").on("click", function(e){
+			e = $.event.fix(e);
+			e.preventDefault();
+			var url = "/elearning/admin/updateUserInfo/active";
+			var submit_data = {
+				UserId: "<?php echo $studentInfo['UserId']?>",
+				Username: "<?php echo $studentInfo['Username']?>",
+			};
+
+			$.ajax({
+		           type: "POST",
+		           url: url,
+		           data: submit_data, 
+		           success: function(data)
+		           {
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+		               		$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+							$(".handle-user #first-active").delay(1000).prepend('<i class="fa fa-check margin-right-5"></i>');
+		               	} else if (data.result == "Fail") {
+		               		alert("Reactive user fail!");
+		               	}
+		           }
+		         });
+
+		    return false;
+		});
 
 	});
 

@@ -315,7 +315,7 @@ Profile Page
   color:#169ef4;
 }
 
-/*sales summary*/
+/*payment summary*/
 
 .payment-summary ul {
   margin-top:-8px;
@@ -584,3 +584,4 @@ section.editable {
   display: none;
   margin-left: 5px;
 }
+
