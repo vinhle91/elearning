@@ -97,7 +97,7 @@ class AdminController extends AppController {
 			$this->getPaymentInfo();
 		}
 
-		if ($param == "getTransInMonth") {
+		else if ($param == "getTransInMonth") {
 			
 			$this->layout = null;
 			$ret = array();
@@ -116,6 +116,8 @@ class AdminController extends AppController {
 				echo json_encode($ret);
 			}
 			
+			die;
+		} else {
 			die;
 		}
 
