@@ -434,7 +434,6 @@ class AdminController extends AppController {
 
 		$configs = $this->Config->find('all');
 		$this->set(compact('configs'));
-		$this->log($configs);
 	}
 
 	public function updateUserInfo($param) {
@@ -592,6 +591,31 @@ class AdminController extends AppController {
 			die;
 		}
 	}
+
+	public function updateConfig($param = null) {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$this->log($data);
+			$ret = array();
+
+			if ($param == "ip") {
+				$this->Ip->create();
+				if ($this->Ip->save($data)) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
+				
+			}
+
+
+			echo json_encode($ret);
+			die;
+		}
+
+	}
+
 
 }	
 ?>

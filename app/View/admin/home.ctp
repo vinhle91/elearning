@@ -1,3 +1,5 @@
+<?php echo $this->html->script(array('createTsv'))?>
+
 <div class="row">
 	<div class="col-md-12">
 		<!-- BEGIN PAGE TITLE & BREADCRUMB-->
@@ -53,66 +55,70 @@ $transactions = array(
 		<div class="tab-pane active" id="tab_1_11">
 
 				<div class="nav portlet-title padding-top-8" style="padding:10px 10px 2px 10px;  height: 38px;">
-					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><?php echo date("M Y")?></div>
-					<div class="pull-right">
-						
+					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><span id="payment-date"><?php echo date("M Y")?></span></div>
+					<div class="pull-right" id="date-picker">						
 						<span>年: </span>
-						<select class=" margin-right-3">
+						<select class=" margin-right-3" id="payment-year">
 							<option>2014</option>
 							<option>2013</option>
 						</select>
 
-						<span>月: </span>
-						<select class=" margin-right-3">
-							<option>01</option>
-							<option>02</option>
-							<option>03</option>
-							<option>04</option>
-							<option>05</option>
-							<option>06</option>
-							<option>07</option>
-							<option>08</option>
-							<option>09</option>
+						<span class="margin-left-5">月: </span>
+						<select class="margin-right-3" id="payment-month" onchange="getTransInMonth($('#payment-year').val(), this.value)">
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option>5</option>
+							<option>6</option>
+							<option>7</option>
+							<option>8</option>
+							<option>9</option>
 							<option>10</option>
 							<option>11</option>
 							<option>12</option>
 						</select>
+
+						<a class="reload" href="javascript:;"></a>
 					</div>
 				</div>
 				<div class="portlet-body">
 					<div class="table-responsive">
-						<table class="table margin-top-10" style="width: 300px">
+						<table class="table margin-top-10" style="width: 400px">
+						<?php $this->log($payment_summary)?>
 							<tbody>
 								<tr>
-									<td class="">から </td>
-									<td class="col-md-5">01 Jan 2014</td>
+									<td class="">First transaction </td>
+									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
-									<td>まで </td>
-									<td>31 Jan 2014</td>
+									<td>Last transaction </td>
+									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>Total transactions</td>
-									<td><?php echo $payment_summary['Total'] ?></td>
+									<td id="payment-total"><?php echo $payment_summary['Total'] ?></td>
 								</tr>
 								<tr>
 									<td>すべての学生</td>
-									<td>4</td>
+									<td id="payment-total-teacher"><?php echo $payment_summary['TotalStudent'] ?></td>
 								</tr>
 								<tr>
 									<td>すべての先生</td>
-									<td>3</td>
+									<td id="payment-total-student"><?php echo $payment_summary['TotalTeacher'] ?></td>
 								</tr>
 								<tr>
 									<td>Profits</td>
-									<td><?php echo $payment_summary['Earn'] ?> VND</td>
+									<td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
 								</tr>
 							</tbody>
 						</table>
 
-						<a type="reset" class="btn btn-sm btn-info cancel pull-right" style="margin-top: -50px; margin-right: 0px"><i class="fa fa-save margin-right-5"></i><span>ファイルに保存</span></a>
-
-						<table class="table table-striped table-bordered table-advance table-hover">
+						<a type="reset" class="btn btn-sm btn-info cancel pull-right" style="margin-top: -50px; margin-right: 0px" onclick="$('#payment-data').table2TSV({output: 'popup'})"><i class="fa fa-save margin-right-5"></i>
+							<span>ファイルに保存</span>
+						</a>
+						<div class="clear-fix"></div>
+						<table class="table table-striped table-bordered table-advance table-hover" id = "payment-data">
 							<thead>
 								<tr>
 									<th>#</th>
@@ -123,8 +129,8 @@ $transactions = array(
 									<th><i class="fa fa-bookmark margin-right-5"></i>課金 (VND)</th>
 								</tr>
 							</thead>
+							<?php if (isset($payment_summary) && $payment_summary['Total'] != 0) { ?>
 							<tbody>
-							<?php if (isset($payment_summary)) { ?>
 								<?php foreach ($payment_summary['Data'] as $key => $buff) { ?>
 								<tr>
 									<td><?php echo $key + 1 ?></td>
@@ -134,9 +140,15 @@ $transactions = array(
 									<td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
 									<td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "Not paid" : "Paid"  ?></span></td>
 								</tr>
-								<?php } ?>
-							<?php } ?>
+								<?php } ?>							
 							</tbody>
+							<?php } else { ?>
+							<tbody>
+								<tr>
+									No transactions!
+								</tr>
+							</tbody>
+							<?php } ?>
 						</table>
 					</div>
 				</div>
@@ -204,39 +216,121 @@ $transactions = array(
 	<?php } ?>
 
 	<div class="portlet">
-						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-user"></i>今日中新しい学生</div>
-							<div class="tools">
-								<a href="javascript:;" class="reload"></a>
-							</div>
-						</div>
-						<?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
-						<div class="portlet-body">
-							<div class="table-responsive">
-								<table class="table table-hover">
-									<thead>
-										<tr>
-											<th>氏名</th>
-											<th>ユーザー名</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php foreach ($new_students['Data'] as $key => $new_student) { ?>
-										<tr>
-											<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['FullName']?></a></td>
-											<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['Username']?></a></td>
-											<td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']]?> line-6"><?php echo $status[$new_student['User']['Status']]?></span></td>
-										</tr>
-										<?php } ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<?php }  else { ?>
-						<div class="portlet-body">
-							今日は新しい学生がいません。
-						</div>
+		<div class="portlet-title">
+			<div class="caption"><i class="fa fa-user"></i>今日中新しい学生</div>
+			<div class="tools">
+				<a href="javascript:;" class="reload"></a>
+			</div>
+		</div>
+		<?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
+		<div class="portlet-body">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>氏名</th>
+							<th>ユーザー名</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($new_students['Data'] as $key => $new_student) { ?>
+						<tr>
+							<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['FullName']?></a></td>
+							<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['Username']?></a></td>
+							<td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']]?> line-6"><?php echo $status[$new_student['User']['Status']]?></span></td>
+						</tr>
 						<?php } ?>
-					</div>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php }  else { ?>
+		<div class="portlet-body">
+			今日は新しい学生がいません。
+		</div>
+		<?php } ?>
+	</div>
 </div>
+<script>
+function getTransInMonth(year, month){
+	months = new Array();
+	months[0] = "January";
+	months[1] = "February";
+	months[2] = "March";
+	months[3] = "April";
+	months[4] = "May";
+	months[5] = "June";
+	months[6] = "July";
+	months[7] = "August";
+	months[8] = "September";
+	months[9] = "October";
+	months[10] = "November";
+	months[11] = "December";
+	$.ajax({
+		type: "POST",
+		url: "/elearning/admin/payment/getTransInMonth",
+		data: {Year: year, Month: month},
+		success: function(data) {
+			console.log(data);
+			window.abc = data;
+			data = $.parseJSON(data);
+
+			if (data.result == "Success") {
+				$("#payment-date").html(months[month-1] + " " + year);	
+				$("#payment-first").html(data.data.Start);
+				$("#payment-last").html(data.data.End);
+				$("#payment-total").html(data.data.Total);
+				$("#payment-total-teacher").html(data.data.TotalTeacher);
+				$("#payment-total-student").html(data.data.TotalStudent);
+				$("#payment-earn").html(data.data.Earn);
+				fillData(data.data);
+			} else {
+				alert("Fail");
+			}
+
+		}
+	})
+}
+
+function fillData(data) {
+	$("#payment-data tbody").html("");
+	date = new Date();
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+	var label = new Array();
+	$.each(data.Data, function(index, value){
+		console.log(index);
+		console.log(value);
+		if (value.Transaction.ExpiryDate > firstDay) {
+			label['style'] = "warning";
+			label['text'] = "Not paid";
+		} else {
+			label['style'] = "success";
+			label['text'] = "Paid";
+		}
+		$("#payment-data tbody").append(
+		"<tr>" + 
+			"<td>" + (index+1) + "</td>" + 
+			"<td>" + value.Transaction.StartDate + "</td>" + 
+			"<td>" + value.Lesson.Title + "</td>" + 
+			"<td><a href='/elearning/admin/student/" + value.Student.Username + "'>" + value.Student.Username + "</a></td>" + 
+			"<td><a href='/elearning/admin/teacher/" + value.Lesson.Author.Username + "'>" + value.Lesson.Author.Username + "</a></td>" + 
+			"<td class='align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" + 
+		"</tr>"
+
+		);
+	})
+
+
+}
+
+$(document).ready(function(){
+	now = new Date();
+	$("#payment-month").val((now.getMonth()+1).toString());
+	$("#payment-year").val(now.getYear().toString());
+});
+
+
+
+
+</script>

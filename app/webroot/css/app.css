@@ -554,11 +554,11 @@ Profile Page
   margin-top: -5px;
 }
 
-.user-info .notif {
+.update-notif, .user-info .update-notif {
   text-align: center;
 }
 
-.user-info .notif span {
+.update-notif span, .user-info .update-notif span {
   font-style: italic;
   font-size: 0.9em;
   color: #ff0000;
@@ -577,7 +577,7 @@ section.editable {
   background-size: 100%;
 }
 
-.user-info .ajax-loader {
+.ajax-loader, .user-info .ajax-loader {
   width: 15px;
   height: 15px;
   margin: auto;
@@ -585,3 +585,16 @@ section.editable {
   margin-left: 5px;
 }
 
+/***
+Config Page
+***/
+
+#ip-table {
+  
+}
+#ip-table tbody td:nth-child(1) {
+  width: 10%;
+}
+#ip-table tbody td:nth-child(2) {
+  width: 30%;
+}

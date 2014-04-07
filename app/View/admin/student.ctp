@@ -298,7 +298,7 @@
 									</tr>							
 								</tbody>
 							</table>
-							<div class="notif">
+							<div class="update-notif">
 								<span></span>
 								<label class="ajax-loader"></label>
 							</div>
@@ -343,8 +343,8 @@
 				Address: '\''+$('#Address').text()+'\''
 			};
 			
-			$(".user-info .notif span").css("visibility", "visible");
-			$(".user-info .notif span").text("Updating infomation...");
+			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+			$(".user-info .update-notif span").text("Updating infomation...");
 			$(".ajax-loader").fadeIn(10);
 			$(".button-save").addClass("disabled");
 
@@ -357,19 +357,19 @@
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-	               			$(".user-info .notif span").text("Updated successfully");
+	               			$(".user-info .update-notif span").text("Updated successfully");
 	               			setTimeout(function(){
-	               				//$(".user-info .notif span").text("");
-	               				$('.user-info .notif span').fadeTo(500, 0, function(){
-								  	$('.user-info .notif span').css("visibility", "hidden");   
+	               				//$(".user-info .update-notif span").text("");
+	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
+								  	$('.user-info .update-notif span').css("visibility", "hidden");   
 								});
 	               			}, 2000);
 		               	} else if (data.result == "Fail") {
-	               			$(".user-info .notif span").text("Updated fail");
+	               			$(".user-info .update-notif span").text("Updated fail");
 		               		setTimeout(function(){
-	               				//$(".user-info .notif span").text("");
-	               				$('.user-info .notif span').fadeTo(500, 0, function(){
-								  	$('.user-info .notif span').css("visibility", "hidden");   
+	               				//$(".user-info .update-notif span").text("");
+	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
+								  	$('.user-info .update-notif span').css("visibility", "hidden");   
 								});
 	               			}, 2000);
 		               	}
