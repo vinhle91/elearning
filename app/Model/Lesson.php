@@ -54,13 +54,11 @@ class Lesson extends AppModel{
                 'Author.Status',
                 )
             ),
-        );
-    // public $belongsTo = array(
-    //     'User' => array('className' => 'users',
-    //         'conditions' => array('User.UserType' => 2,"`Lesson`.`UserId` = `User`.`UserId`"),
-    //         'foreignKey' => false
-    //     )
-    // );
+        'User' => array('className' => 'users',
+            'conditions' => array('User.UserType' => 2,"`Lesson`.`UserId` = `User`.`UserId`"),
+            'foreignKey' => false
+        )
+    );
     function getLessonsByTeacher($userId) {
         $this->contain('Comment');
         $lessons = $this->find('all', array(

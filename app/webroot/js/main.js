@@ -1,3 +1,10 @@
+function disableContextMenu()
+{
+    window.frames["fraDisabled"].document.oncontextmenu = function(){
+        alert("No way!"); 
+        return false;
+    };   
+} 
 $(document).ready(function() {
     $(".left>ul>li>a").click(function(){
         $(".left>ul>li>a").removeClass('selected');

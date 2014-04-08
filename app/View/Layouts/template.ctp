@@ -15,10 +15,12 @@
 			'jquery-1.9.0.min',
 			'main',
 			// 'jquery.fancybox.js?v=2.1.5'
+			//onLoad="disableContextMenu()"
 		)); 
 	?>
 </head>
-<body>
+
+<body >
 <!-- <?php echo $this->element('sql_dump'); ?>  -->
 	<div id="body">
 		<!--Start header-->

@@ -26,7 +26,7 @@
                                 <?php foreach ($lesson['File'] as $key => $value):?>
                                 <?php if($value['Extension'] == 'pdf'):?>
                                 <div class="<?php echo 'file'.$key ?> file_l">
-                                    <iframe width='725' height='704' src="<?php echo '/elearning'.$value['FileLink']?>"></iframe>
+                                    <iframe id="fraDisabled" width='725' height='704' src="<?php echo '/elearning'.$value['FileLink']?>"></iframe>
                                 </div>
                                 <?php endif;?>
                                 <?php if($value['Extension'] == 'mp4'):?>

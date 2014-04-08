@@ -654,6 +654,12 @@ payment_box{
 	width:180px;
 	position: relative;
 }
+.load_more:hover{
+	opacity: 0.7;
+}
+.load_more a{
+	color:#fff;
+} 
 /* top menu*/
 #content .t_title{
 	border-bottom: 1px solid #28a8e5;
@@ -935,6 +941,18 @@ ul.searchtype li {
 	border-radius: 5px;
 	text-align: center;
 	border: 1px solid;
+}
+.bought_bt{
+	height: 30px;
+	line-height: 30px;
+	font-size: 18px;
+	font-weight: normal;
+	width: 100px;
+	float: right;
+	color: blue;
+	border-radius: 5px;
+	text-align: center;
+	border: 0;
 }
 .error{
 	min-height: 40px;
