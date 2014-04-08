@@ -40,7 +40,7 @@
                             <td width="5%" style="background-color: #eee;">購入</td>
                             
                         </tr>
-                        <?php foreach ($allLessons as $lesson): ?>
+                        <?php foreach ($topLessons as $lesson): ?>
                         <tr>
                             <td><?php echo ($lesson['Lesson']['LessonId']);?></td>
                             <td><a href="javascript:void(0)"><?php echo ($lesson['Lesson']['Title']);?></a></td>
@@ -49,14 +49,20 @@
                             <td><?php echo $lesson['Lesson']['ViewNumber'];?></td>
                             <td><?php echo $lesson['Lesson']['modified'];?></td>
                             <td><?php echo $lesson['Lesson']['Abstract'];?></td>
-                            <td><?php echo $this->Html->link('購入',array('controller'=>'Student','action'=>'buy_lesson',$lesson['Lesson']['LessonId']),array('class'=>'buy_bt','id'=>$lesson['Lesson']['LessonId']));?></td>
+                            <td>
+                            <?php if($lesson['Lesson']['isStudying']):?>
+                                <span class="bought_bt"><?php echo $this->Html->image('icon/yes.png'); ?> 既婚入</span>              
+                            <?php else:?>
+                            <?php echo $this->Html->link('購入',array('controller'=>'Student','action'=>'buy_lesson',$lesson['Lesson']['LessonId']),array('class'=>'buy_bt','id'=>$lesson['Lesson']['LessonId']));?>
+                             <?php endif;?>
+                            </td>
                         </tr>
                         <?php endforeach;?>
                         <?php unset($lesson);?>   
                     </tbody>
                 </table>                                              
-                <div class="load_more load_more_btn" >
-                    <span class="normal_text">もっと見る</span>
+                <div class="load_more" >
+                    <a href="javascrip:void(0)">もっと見る</span>
                 </div>                       
             </div>
             <div class="top" id="t_teacher" style="display:none">
@@ -154,12 +160,30 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
- $(".buy_bt").click(function(){
-    var r=confirm("Are you sure you want to buy this lesson?");
-    if (r==true)
-      {
-         window.location.pathname($(this).attr("href"));
-      }
-  })
+    $(".buy_bt").click(function(){
+        var r=confirm("Are you sure you want to buy this lesson?");
+        if (r==true)
+        {
+            window.location.pathname($(this).attr("href"));
+        }
+    })
 });
+$(document).ready(function() {
+    $(".load_more").click(function(){
+        $.ajax({
+        url: '<?php echo $this->Html->url(array('controller'=> 'student','action' => 'view_schedule1',$id, strtotime("-1 day", $weekMondayTime)))?>',
+        //data: form.serialize(),
+        success: function(response) {
+            $("#table_double").html(response);
+            $("#button-add3").attr("disabled", false);
+            $("#button-add2").attr("disabled", false);
+            $("#button-add1").attr("disabled", false);
+            $("#loading-3").hide();
+        },
+        error : function(){
+            alert("error");
+        }
+    })
+});
+}
 </script>

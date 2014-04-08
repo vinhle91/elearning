@@ -23,10 +23,10 @@ class Category extends AppModel{
             'dependent' => true
         ),
     );
-  	public function getCategories() {
-    return $this->find('all',array(
-    	'conditions'=>array('IsDeleted'=>'0')
-    	));
+    public function getCategories() {
+        return $this->find('all',array(
+        'conditions'=>array('IsDeleted'=>'0')
+        ));
     }
 
     function getCategory($catId) {

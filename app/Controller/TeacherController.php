@@ -135,6 +135,12 @@ class TeacherController extends AppController {
 	}
 	public function make_lesson() {
 		$this->pageTitle = 'Make Lesson';
+		// Check UserId
+		if($userId != $this->Auth->user('UserId')){
+			$userId = $this->Auth->user('UserId');
+			$this->redirect(array('controller'=>'teacher','action' => 'make_lesson',$userId));
+		}
+		// Get list category 
 		$params = array(
 			'conditions' => array('Category.IsDeleted' => '0'),
 			'fields' => array('CatId','CatName'),
@@ -423,7 +429,7 @@ class TeacherController extends AppController {
 			$studentHistory = $studentHistories[0];
 
 			$studentBlocks = $this->StudentBlock->getStudentBlockByUserIdAndLessonId($userId, $lessonId);
-			debug($studentBlocks);
+			//debug($studentBlocks);
 			if (count($studentBlocks) <= 0) {
 				$this->StudentBlock->create();
 				$this->StudentBlock->set('UserId', $userId);

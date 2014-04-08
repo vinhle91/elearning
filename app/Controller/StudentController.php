@@ -35,7 +35,7 @@ class StudentController extends AppController {
 	public function index() {
 		$this->pageTitle = '学生';
         $this->StudentHistory->recursive = -1;
-        
+        $today = new DateTime();
         $userId = $this->Auth->user('UserId');
         if (isset($this->request->query['sortBy'])) {
             $sortBy = $this->request->query['sortBy'];
@@ -47,7 +47,6 @@ class StudentController extends AppController {
         $this->paginate = $options;
         $histories = $this->paginate('StudentHistory');
         $this->set('histories', $histories);
-         // debug($cat);
         $cat = $this->Category->getCategories();
         $Category = array();
         foreach ($cat as $key => $value) {
@@ -55,9 +54,27 @@ class StudentController extends AppController {
         }
         //debug($Category);
         $this->set('Category', $Category);
-        $allLessons = $this->Lesson->getAllLessons();
-//	    debug($allLessons);
-        $this->set('allLessons', $allLessons);
+        $topLessons = $this->Lesson->getTopLessons();
+		foreach ($topLessons as $key => $value) {
+			$isStudying = false;
+	        $study_history = $this->StudentHistory->find('first', array(
+	        	'conditions' => array(
+	        		'StudentHistory.LessonId' => $value['Lesson']['LessonId'],
+	        		'StudentHistory.UserId' => $userId
+	        		),
+	        	'order' => array('StudentHistory.StartDate' => 'DESC'),
+	        	)
+	        );
+	        if ($study_history) {
+	            $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
+	           if ($today < $expiryDay) {
+	                $isStudying = true;
+	            }
+	        }
+	        $topLessons[$key]['Lesson']['isStudying'] =  $isStudying;
+		}
+		// debug($topLessons);
+        $this->set('topLessons', $topLessons);
 	}
 	public function view_lesson($lesson_id = null) {
 		$this->pageTitle = '授業';
@@ -259,7 +276,7 @@ class StudentController extends AppController {
         $lessons = $this->paginate('Category');
         $this->set('lessons', $lessons);
     }
-	public function buy_lesson($lessonId = null) {
+    public function buy_lesson($lessonId = null) {
 		if(empty($lessonId)){
 			$this->Session->setFlash(__('Error. Please try it again'));
 	        $this->redirect(array('controller'=>'Student','action' => 'index'));
@@ -283,16 +300,20 @@ class StudentController extends AppController {
 	        $study_history = $this->StudentHistory->find('first', array(
 	        	'conditions' => array(
 	        		'StudentHistory.LessonId' => $lessonId,
-	        		'StudentHistory.UserId' => $userId)
+	        		'StudentHistory.UserId' => $userId
+	        		),
+	        	'order' => array('StudentHistory.StartDate' => 'DESC'),
 	        	)
 	        );
+	        // debug($study_history);
 	        //if the studying records the student has been studying this lesson
 	        if ($study_history) {
 	            $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
-	           if ($today < $expiryDay) {
+	           	if ($today < $expiryDay) {
 	                $isStudying = true;
 	            }
 	        }
+
 	        //the student hasn't been studying this lesson
 	        if (!$isStudying) {
 	            $config = $this->Config->find('first', array('conditions' => array('Config.ConfigName' => 'CourseFee')));
