@@ -269,11 +269,29 @@ class StudentController extends AppController {
     public function view_category($catId) {
         $category = $this->Category->getCategory($catId);
         $this->set('cat', $category);
-        
+        $userId = $this->Auth->user('UserId');
+        $today = new DateTime();
         $options = $this->Category->getPaginationOptions($catId);
-        
         $this->paginate = $options;
         $lessons = $this->paginate('Category');
+		foreach ($lessons as $key => $value) {
+			$isStudying = false;
+	        $study_history = $this->StudentHistory->find('first', array(
+	        	'conditions' => array(
+	        		'StudentHistory.LessonId' => $value['Lesson']['LessonId'],
+	        		'StudentHistory.UserId' => $userId
+	        		),
+	        	'order' => array('StudentHistory.StartDate' => 'DESC'),
+	        	)
+	        );
+	        if ($study_history) {
+	            $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
+	           if ($today < $expiryDay) {
+	                $isStudying = true;
+	            }
+	        }
+	        $lessons[$key]['Lesson']['isStudying'] =  $isStudying;
+		}
         $this->set('lessons', $lessons);
     }
     public function buy_lesson($lessonId = null) {
