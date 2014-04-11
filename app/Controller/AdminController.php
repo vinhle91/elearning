@@ -609,7 +609,16 @@ class AdminController extends AppController {
 				
 			}
 
-
+			if ($param == "removeIp") {
+				if ($this->Ip->removeIp($data['IpAddress']) == 1)
+					$ret['result'] = "Success";
+				else 
+					$ret['result'] = "Fail";
+				
+			}
+			
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
 			echo json_encode($ret);
 			die;
 		}
