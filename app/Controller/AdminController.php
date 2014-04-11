@@ -131,6 +131,13 @@ class AdminController extends AppController {
 		$this->set(compact('today'));
 		$lastweek = $this->Transaction->getTransactions("LastWeek");
 
+		$total = $this->Transaction->find("all", array(
+					'recursive' => '2',
+					'conditions' => array(
+						'Blocked' => '0'
+						),
+				));
+
 		$total = $this->Transaction->getTransactions("All");
 		$overview = array(
 			'Today' => $today['Total'] * $CONFIG_COURSE_FEE,

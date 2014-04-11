@@ -55,8 +55,10 @@ class Lesson extends AppModel{
                 )
             ),
         'User' => array('className' => 'users',
-            'conditions' => array('User.UserType' => 2,"`Lesson`.`UserId` = `User`.`UserId`"),
-            'foreignKey' => false
+            // 'conditions' => array('User.UserType' => 2,"`Lesson`.`UserId` = `User`.`UserId`"),
+            // 'foreignKey' => false
+            'className' => 'User',
+            'foreignKey' => 'UserId',
         )
     );
     function getLessonsByTeacher($userId) {
