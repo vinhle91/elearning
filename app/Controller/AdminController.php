@@ -499,53 +499,20 @@ class AdminController extends AppController {
 
 			if ($param == "insert") {
 				$this->User->create();
-				$this->User->set($data);
-				if ($this->User->save()) {
+				if ($this->User->save($data)) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
 				}
 
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
+				// $log = $this->User->getDataSource()->getLog(false, false);       
+				// $this->log($log);
 			}
 
 			echo json_encode($ret);
 			die;
 		}
 
-		if ($param = "test") {
-			$this->layout = "default";
-			$this->User->create();
-			$data = array(
-				'User' => array(
-						"Username" => "fappy",
-						"Password" => "12345678",
-						"InitialPassword" => "12345678",
-						"UserType" => "1",
-						"FullName" => "Khuc Anh Minh Luong",
-						"Birthday" => "1991-10-12",
-						"VerifyCodeQuestion" => "ban sinh nam bao nhieu",
-						"InitialCodeQuestion" => "ban sinh nam bao nhieu",
-						"VerifyCodeAnswer" => "2323232",
-						"InitialCodeAnswer" => "1991",
-						"Gender" => "1",
-						"Address" => "No 19 204/174 Le Thanh Nghi Hai Ba Trung, Ha Noi",
-						"Phone" => "",
-						"Email" => "",
-						"ImageProfile" => "",
-						"IsOnline" => "",
-						"created" => "2014-03-03 03:03:31",
-						"modified" => "",
-						"Status" => "2",
-						"Violated" => "",
-						"BankInfo" => "Techcombank",
-						"CreditCard" => "",
-					)
-					
-				);
-			$this->User->save($data);
-		}
 	}
 
 	public function resetPassword() {

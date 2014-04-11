@@ -1,6 +1,7 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
+    public $useTable = "users";
     public $primaryKey = 'UserId';
     public $hasMany = array(
         'Lesson' => array(
@@ -273,5 +274,9 @@ class User extends AppModel {
         return $user['User'];
     }
 
+    public function addUser($data) {
+        $this->create();
+        $this->save($data);
+    }
  
 }?>

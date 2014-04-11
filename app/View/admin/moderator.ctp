@@ -7,7 +7,7 @@
 				<div class="caption">すべての管理者</div>
 				<div class="pull-right">
 					<li class="dropdown" id="header_notification_bar">
-						<a href="#" class="btn btn-info btn-xs" id="add-mod" onclick="addModerator()"><i class="fa fa-plus"></i>追加</a>
+						<a href="#" class="btn btn-info btn-xs" id="add-mod" onclick="addModerator(event)"><i class="fa fa-plus"></i>追加</a>
 					</li>
 				</div>
 			</div>
@@ -31,14 +31,14 @@
 								<td><a href=""><?php echo $moderator['User']['Username']?></a></td>
 								<td><?php echo $moderator['User']['created']?></td>
 								<td><label class="line-8 label label-sm label-<?php echo $moderator['User']['IsOnline'] == 1 ? "success" : "default disabled"?>"><?php echo $moderator['User']['IsOnline'] == 1 ? "Online" : "Offline"?></label></td>
-							</tr>							
+							</tr>	
+							<?php } ?>
 						</tbody>
 					</table>
 					<div class="notif">
 						<span></span>
 						<label class="ajax-loader"></label>
 					</div>
-				<?php } ?>
 				<?php } else {?>
 				<div>
 					NO ADMIN!
@@ -53,13 +53,15 @@
 
 <script>
 
-	function addModerator() {
+	function addModerator(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
 		var next = parseInt($("#mod-tbl tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td>' + next + '</td>'
 						+ '<td><input type="textarea" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
 						+ '<td><input type="textarea" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
-						+ '<td><a href="#" class="btn btn-xs btn-success" onclick="submitNewMod()"><?php echo __("Save") ?></a><a href="#" class="btn btn-xs btn-warning margin-left-5" onclick="cancel()"><?php echo __("Cancel")?></a></td>'
+						+ '<td><a href="#" class="btn btn-xs btn-success" onclick="submitNewMod(event)"><?php echo __("Save") ?></a><a href="#" class="btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a></td>'
 						+ '</tr>';
 		$("#add-new-mod").addClass("disabled");
 		$("#mod-tbl tr:last").after(buff);
@@ -68,7 +70,9 @@
 
 	
 
-	function submitNewMod() {
+	function submitNewMod(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
 		$(".user-info .notif span").css("visibility", "visible");
 		$(".user-info .notif span").text("Updating infomation...");
 		$(".ajax-loader").fadeIn(10);
@@ -77,15 +81,14 @@
 		var time = now.toUTCString();
 		var url = "/elearning/admin/updateUserInfo/insert";
 		var submit_data = {
-			Username: '\''+$("input.name").val()+'\'', 
-			Password: '\''+$("input.password").val()+'\'', 
-			InitialPassword: '\''+$("input.password").val()+'\'', 
+			Username: $("input.name").val(), 
+			Password: $("input.password").val(), 
+			InitialPassword: $("input.password").val(), 
 			UserType: 3,
-            VerifyCodeQuestion: "",
-            InitialCodeQuestion: "",
-            VerifyCodeAnswer: "",
-            InitialCodeAnswer: "",
-            created: time,
+            VerifyCodeQuestion: "Default Question",
+            InitialCodeQuestion: "12345678",
+            VerifyCodeAnswer: "Default Answer",
+            InitialCodeAnswer: "12345678",
             Status: 1,
 		};
 
@@ -119,7 +122,9 @@
 	    return false;
 	}
 
-	function cancel() {
+	function cancel(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
 		$("#mod-tbl tr:last").remove();		
 		$("#add-new-mod").removeClass("disabled");
 	}

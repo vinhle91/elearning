@@ -43,7 +43,8 @@ class Lesson extends AppModel{
             'order' => 'Tag.created DESC',
             'dependent' => true
         )
-    );  
+    );
+    
     public $belongsTo = array(
         'Author' => array(
             'className' => 'User',
