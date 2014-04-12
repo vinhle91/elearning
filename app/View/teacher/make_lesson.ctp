@@ -1,5 +1,13 @@
 <div id="contents" style="padding:0px 150px;">
     <div id="content">
+        <?php 
+            $error = $this->Session->flash();
+            if(!empty($error)):
+        ?>
+        <div class="error">
+            <?php echo $error; ?>
+        </div>
+        <?php endif;?>
         <div class="title"><h3>授業 アップロード</h3></div>
         <div class="box">
             <div class="top">

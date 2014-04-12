@@ -1,19 +1,24 @@
 <div id="contents">
     <?php echo $this->Element('cat_menu');?>
     <div id="content">
+        <?php 
+            $error = $this->Session->flash();
+            if(!empty($error)):
+        ?>
+        <div class="error">
+            <?php echo $error; ?>
+        </div>
+        <?php endif;?>
         <div class="t_title">
             <div class="left">
                 <ul>
+                    <?php foreach ($list_test as $k => $v):?>
                     <li>                             
-                        <a href="javascript:void(0)" class="selected t_lesson">
-                            <span>テスト 1</span>
+                        <a href="/elearning/teacher/view_test/<?php echo $lesson_id?>/<?php echo $v['Test']['TestId']?>" <?php if($test_id == $v['Test']['TestId']){echo 'class="selected"';} ?>>
+                            <span>テスト <?php echo $k+1;?></span>
                         </a>                          
                     </li>
-                    <!-- <li>
-                       <a href="javascript:void(0)" class="t_teacher">
-                            <span>Test 2</span>
-                       </a>                       
-                    </li> -->
+                    <?php endforeach;?>
                 </ul>
             </div>
         </div>
@@ -33,9 +38,9 @@
                         </tr>
                         <?php foreach ($data_test['Question'] as $key1 => $value1): ?>
                         <tr>
-                            <td width="13%" align="center" ><h3>質問 <?php echo $value1['QuesNum']?></h3></td>
-                            <td width="41%"><h3><?php echo $value1['Content']?></h3></td>
-                            <td width="46%" style="color:red"><h3><?php echo $value1['Point']?>ポイント</h3></td>
+                            <td width="10%" align="center" ><h3>質問 <?php echo $value1['QuesNum']?></h3></td>
+                            <td width="65%"><h3><?php echo $value1['Content']?></h3></td>
+                            <td width="25%" style="color:red"><h3><?php echo $value1['Point']?>ポイント</h3></td>
                         </tr>
                         <?php foreach ($value1['An'] as $key => $value): ?>
                         <tr <?php 
@@ -55,7 +60,7 @@
                             </td>
                             <td></td>
                         </tr>
-                         <?php endforeach;?>
+                        <?php endforeach;?>
                         <?php endforeach;?>                     
                         <tr>
                             <td></td>

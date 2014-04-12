@@ -12,23 +12,20 @@
         <div class="t_title">
             <div class="left">
                 <ul>
+                    <?php foreach ($list_test as $k => $v):?>
                     <li>                             
-                        <a href="javascript:void(0)" class="selected t_lesson">
-                            <span>テスト 1</span>
+                        <a href="/elearning/student/test/<?php echo $lesson_id?>/<?php echo $v['Test']['TestId']?>" <?php if($test_id == $v['Test']['TestId']){echo 'class="selected"';} ?>>
+                            <span>テスト <?php echo $k+1;?></span>
                         </a>                          
                     </li>
-                    <!-- <li>
-                       <a href="javascript:void(0)" class="t_teacher">
-                            <span>Test 2</span>
-                       </a>                       
-                    </li> -->
+                    <?php endforeach;?>
                 </ul>
             </div>
         </div>
         <div class="box">
             <div class="top">
                 <?php echo $this->Form->create(null, array(
-                    'url' => array('controller' => 'student', 'action' => 'test',$lesson_id))
+                    'url' => array('controller' => 'student', 'action' => 'test',$lesson_id,$test_id))
                 );?>  
                 <table class="sign_up_tb" border="0px">
                       <tbody >
@@ -65,10 +62,12 @@
                             </td>
                             <td align="left">
                                 <div class="td_text">
-                                    <?php if(isset($test_result)):?>
+                                    <?php if(isset($test_result)&&isset($test_result[0])):?>
                                         <label for="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>"><?php echo $value['Answer']['AnswerNumber']?>.<input name="data[<?php echo $value1['QuesNum']?>]" id="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>" value="<?php echo $value['Answer']['AnswerNumber']?>" type="radio"  <?php if($test_result[$value1['QuesNum']] == $value['Answer']['AnswerNumber'] ){echo 'checked';}else{echo 'disabled';}?> /> <?php echo $value['Answer']['AnswerContent']?></label>
+                                    <?php elseif(isset($test_result)&&!isset($test_result[0])):?>
+                                        <label for="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>"><?php echo $value['Answer']['AnswerNumber']?>.<input name="data[<?php echo $value1['QuesNum']?>]" id="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>" value="<?php echo $value['Answer']['AnswerNumber']?>" type="radio"  <?php if($test_result[$value1['QuesNum']] == $value['Answer']['AnswerNumber'] ){echo 'checked';}?> /> <?php echo $value['Answer']['AnswerContent']?></label>   
                                     <?php else:?>
-                                         <label for="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>"><?php echo $value['Answer']['AnswerNumber']?>.<input name="data[<?php echo $value1['QuesNum']?>]" id="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>" value="<?php echo $value['Answer']['AnswerNumber']?>" type="radio" /> <?php echo $value['Answer']['AnswerContent']?></label>
+                                        <label for="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>"><?php echo $value['Answer']['AnswerNumber']?>.<input name="data[<?php echo $value1['QuesNum']?>]" id="answer<?php echo $value1['QuesNum'].$value['Answer']['AnswerNumber']?>" value="<?php echo $value['Answer']['AnswerNumber']?>" type="radio" /> <?php echo $value['Answer']['AnswerContent']?></label>
                                     <?php endif; ?>
                                 </div>
                             </td>
@@ -81,8 +80,8 @@
                             <td>
                                 <?php 
                                     if(isset($test_result[0])&&$test_result[0] ==1){
-                                        echo $this->Html->link('もう一度やる',array('controller' => 'student','action' => 'test',$lesson_id),array('class'=>'flat_btn'));
-                                        echo $this->Html->link('レビュー',array('controller' => 'student','action' => 'view_result',$lesson_id),array('class'=>'btn_search','style'=>'float:none'));
+                                        echo $this->Html->link('もう一度やる',array('controller' => 'student','action' => 'test',$lesson_id,$test_id),array('class'=>'flat_btn'));
+                                        echo $this->Html->link('レビュー',array('controller' => 'student','action' => 'view_result',$lesson_id,$test_id),array('class'=>'btn_search','style'=>'float:none'));
                                     }else{
                                       
                                         echo $this->Form->button('編集', array(
@@ -93,7 +92,8 @@
                                             'type' => 'reset',
                                             'class' => 'btn_search',
                                             'style' => 'float:none',
-                                            ));
+                                            )
+                                        );
                                     }
                                 ?>
                             </td>

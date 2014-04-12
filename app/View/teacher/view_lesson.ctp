@@ -1,6 +1,14 @@
 <div id="contents">
     <?php echo $this->Element('cat_menu');?>
         <div id="content">
+            <?php 
+                $error = $this->Session->flash();
+                if(!empty($error)):
+            ?>
+            <div class="error">
+                <?php echo $error; ?>
+            </div>
+            <?php endif;?>
             <div class="box1">
                 <div class="view_lesson"> 
                     <div class="actions">
@@ -43,7 +51,7 @@
                     </div>
                     <div>
                         <div class="lesson_nav">                                
-                            <?php echo $this->Html->link('テストを見る',array('controller'=>'Teacher','action'=>'view_test',$lesson['Lesson']['LessonId']));?>          
+                            <?php echo $this->Html->link('テストを見る',array('controller'=>'Teacher','action'=>'view_test',$lesson['Lesson']['LessonId'],$test_id));?>          
                         </div>
                         <div class="lesson_nav">        
                             <?php echo $this->Html->link('修正',array('controller'=>'Teacher','action'=>'edit_lesson',$lesson['Lesson']['LessonId']));?>

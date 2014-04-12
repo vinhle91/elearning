@@ -45,7 +45,25 @@ class StudentController extends AppController {
         }
         $options = $this->StudentHistory->getPaginationOptions($userId, $sortBy);        
         $this->paginate = $options;
-        $histories = $this->paginate('StudentHistory');
+        $histories = $this->paginate('StudentHistory');      
+        foreach ($histories as $key => $value) {
+        	$test = $this->Test->find('first', array(
+					'conditions'=>array(
+						'Test.LessonId'=>$value['Lesson']['LessonId'],
+						'IsDeleted'=>'0',
+						),
+					'contain'=> false,
+					'order' => array('Test.TestId' => 'Asc'),
+					
+					)
+				);
+        	if(!empty($test)){
+        		$histories[$key]['TestId'] = $test['Test']['TestId'];
+        	}else{
+        		$histories[$key]['TestId'] = 0;
+        	}
+        	
+        }
         $this->set('histories', $histories);
         //Get category
         $cat = $this->Category->getCategories();
@@ -95,7 +113,6 @@ class StudentController extends AppController {
 		//top lesson
 		$allLessons = $this->Lesson->getAllLessons();
         $this->set('allLessons', $allLessons);
-
 		if(!isset($lesson_id)||empty($lesson_id)){
 			$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 			$this->redirect(array('controller'=>'student','action' => 'index'));
@@ -121,6 +138,23 @@ class StudentController extends AppController {
 	        		$this->redirect(array('controller'=>'student','action' => 'view_lesson',$lesson_id));
 	        	}
 	        }else{
+	        	 //Get test of lesson
+		        $test = $this->Test->find('first', array(
+						'conditions'=>array(
+							'Test.LessonId'=>$lesson_id,
+							'IsDeleted'=>'0',
+							),
+						'contain'=> false,
+						'order' => array('Test.TestId' => 'Asc'),
+						
+						)
+					);
+		    	if(!empty($test)){
+		    		$test_id = $test['Test']['TestId'];
+		    	}else{
+		    		$test_id  = 0;
+		    	}
+		    	$this->set(compact('test_id'));
 	        	$params = array(
 				'conditions' =>array(
 					'Lesson.LessonId' =>$lesson_id,
@@ -188,7 +222,7 @@ class StudentController extends AppController {
 	        }	
 		}
 	}
-	public function test($lesson_id =null) {
+	public function test($lesson_id =null,$test_id = null) {
 		$this->pageTitle = 'テスト';
 		$userId = $this->Auth->user('UserId');
 		$today = new DateTime();
@@ -215,23 +249,49 @@ class StudentController extends AppController {
 				$this->Session->setFlash(__('このテストを行うことはできません。'));
 				$this->redirect(array('controller'=>'student','action' => 'view_lesson',$lesson_id));
 			}else{
-				$this->set(compact('lesson_id'));
-				$test = $this->Test->find('all', array(
-					'conditions'=>array(
-						'Test.LessonId'=>$lesson_id,
-						'IsDeleted'=>'0',
-						),
-					'order' => array('Test.TestId' => 'Asc'),
-					)
-				);
-				$data_test = array();
-				foreach ($test as $key => $value) {
-					$data_test['Title'] = $value['Test']['Title'];
-					$data_test['SubTitle'] = $value['Test']['SubTitle'];
-					if(isset($value['Question'])&&!empty($value['Question'])){
+				if(!isset($test_id)){
+					$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
+					$this->redirect(array('controller'=>'student','action' => 'index'));
+				}elseif($test_id == 0 ){
+					$this->Session->setFlash(__('テストは存在しません。'));
+					$this->redirect(array('controller'=>'student','action' => 'view_lesson',$lesson_id));
+				}else{
+					$this->set(compact('lesson_id'));
+					$test = $this->Test->find('first', array(
+						'conditions'=>array(
+							'Test.TestId'=>$test_id,
+							'IsDeleted'=>'0',
+							),
+						'order' => array('Test.TestId' => 'Asc'),
+						)
+					);
+					if(empty($test)){
+						$this->Session->setFlash(__('ページにアクセスすることはできません'));
+						$this->redirect(array('controller'=>'Student','action' => 'index'));
+					}
+					if($test['Test']['LessonId']!= $lesson_id){
+						$this->Session->setFlash(__('ページにアクセスすることはできません'));
+						$this->redirect(array('controller'=>'Student','action' => 'index'));
+					}
+					// debug($test);
+					$this->set(compact('test_id'));
+					$list_test = $this->Test->find('all', array(
+						'conditions'=>array(
+							'Test.LessonId'=>$lesson_id,
+							'IsDeleted'=>'0',
+							),
+						'contain'=>false,
+						'order' => array('Test.TestId' => 'Asc'),
+						)
+					);
+					$this->set(compact('list_test'));
+					$data_test = array();
+					$data_test['Title'] = $test['Test']['Title'];
+					$data_test['SubTitle'] = $test['Test']['SubTitle'];
+					if(isset($test['Question'])&&!empty($test['Question'])){
 						$i=0;
 						$j=0;
-						foreach ($value['Question'] as $key => $value) {
+						foreach ($test['Question'] as $key => $value) {
 							$i++;
 							$data_test['Question'][$i]['Content'] = $value['QuesContent'];
 							$data_test['Question'][$i]['QuesNum'] = $value['QuesNumber'];
@@ -242,49 +302,96 @@ class StudentController extends AppController {
 							$data_test['Question'][$i]['Answer'] = $tmp;
 							$data_test['Question'][$i]['Point'] = $value['Point'];	
 							$data_test['Question'][$i]['An'] = $this->Answer->find('all',array(
-								'conditions' => array('Answer.QuesId' =>$value['QuesId']),
-								'order' => array('Answer.AnswerNumber' => 'Asc'),
-								)
-							);		
-						}
-						$data_test['Total'] = $i;
-						$data_test['TotalPoint'] = $j;
+									'conditions' => array('Answer.QuesId' =>$value['QuesId']),
+									'order' => array('Answer.AnswerNumber' => 'Asc'),
+									)
+								);		
+							}
+							$data_test['Total'] = $i;
+							$data_test['TotalPoint'] = $j;
 					}
-				}
-				$this->set(compact('data_test'));
-				// debug($data_test);
-				if($this->request->is('post')){
-					$test_result = $this->request->data;
-					$n = 0;
-					foreach ($test_result as $key => $value) {
-						if($value == 0){
-							$n++;
+					$this->set(compact('data_test'));
+					// debug($data_test);
+					if($this->request->is('post')){
+						$test_result = $this->request->data;
+						$n = 0;
+						foreach ($test_result as $key => $value) {
+							if($value == 0){
+								$n++;
+							}
 						}
-					}
-					if($n!=0){
-						$this->Session->setFlash(__('Ban chua hoan thanh het cac cau tra loi!'));					
-					}else{
-						$test_result['0'] = 1;
-						$total_ans_correct = 0;
-						$point = 0;
-						foreach ($data_test['Question'] as $key => $value) {
-							if($value['Answer'] == $test_result[$value['QuesNum']]){
-								$total_ans_correct++;
-								$point = $point + $value['Point'];
-							};
+						if($n!=0){
+							$this->Session->setFlash(__('Ban chua hoan thanh het cac cau tra loi!'));					
+						}else{
+							$test_result['0'] = 1;
+							$total_ans_correct = 0;
+							$point = 0;
+							$answer = '';
+							foreach ($data_test['Question'] as $key => $value) {
+								if($value['Answer'] == $test_result[$value['QuesNum']]){
+									$total_ans_correct++;
+									$point = $point + $value['Point'];
+								}
+								$answer = $answer.$value['Answer'] .',';
+							}
+							$this->set(compact('point','total_ans_correct'));
+							$data['StudentTest']['UserId'] = $userId;
+							$data['StudentTest']['TestId'] = $test_id;
+							$data['StudentTest']['Answer'] = $answer;
+							$data['StudentTest']['Point'] = $point;
 						}
-						$this->set(compact('point','total_ans_correct'));
+						$this->set(compact('test_result'));
 					}
-					$this->set(compact('test_result'));
+				
 				}
 			}
 		}
 	}
-	public function view_result() {
+	public function view_result($lesson_id =null) {
 		$this->pageTitle = 'View Test Result';
-	}
-	public function review_test() {
-		$this->pageTitle = 'Review Test';
+		$userId = $this->Auth->user('UserId');
+		if(!isset($lesson_id)||empty($lesson_id)){
+			$this->redirect(array('controller'=>'Teacher','action' => 'index'));
+		}else{
+			$this->set(compact('lesson_id'));
+			$test = $this->Test->find('all', array(
+				'conditions'=>array(
+					'Test.LessonId'=>$lesson_id,
+					'IsDeleted'=>'0',
+					),
+				'order' => array('Test.TestId' => 'Asc'),
+				)
+			);
+			// debug($test);
+			$data_test = array();
+			foreach ($test as $key => $value) {
+				$data_test['Title'] = $value['Test']['Title'];
+				$data_test['SubTitle'] = $value['Test']['SubTitle'];
+				if(isset($value['Question'])&&!empty($value['Question'])){
+					$i=0;
+					$j=0;
+					foreach ($value['Question'] as $key => $value) {
+						$i++;
+						$data_test['Question'][$i]['Content'] = $value['QuesContent'];
+						$data_test['Question'][$i]['QuesNum'] = $value['QuesNumber'];
+						$j = $j+$value['Point'];
+						$tmp = strstr($value['QuesAnswer'], ')', true);
+						$tmp = substr($tmp,2);
+						$tmp = (int)$tmp;
+						$data_test['Question'][$i]['Answer'] = $tmp;
+						$data_test['Question'][$i]['Point'] = $value['Point'];	
+						$data_test['Question'][$i]['An'] = $this->Answer->find('all',array(
+							'conditions' => array('Answer.QuesId' =>$value['QuesId']),
+							'order' => array('Answer.AnswerNumber' => 'Asc'),
+							)
+						);		
+					}
+					$data_test['Total'] = $i;
+					$data_test['TotalPoint'] = $j;
+				}
+			}
+			$this->set(compact('data_test'));
+		}
 	}
 	public function transaction_history($id = null) {        
         $this->pageTitle = 'Transaction History';

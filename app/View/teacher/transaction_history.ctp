@@ -1,6 +1,14 @@
 <div id="contents">
     <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
+        <?php 
+            $error = $this->Session->flash();
+            if(!empty($error)):
+        ?>
+        <div class="error">
+            <?php echo $error; ?>
+        </div>
+        <?php endif;?>
         <div class="t_title">
             <div class="left">
                 <ul>

@@ -51,7 +51,7 @@
                     </div>
                     <div>
                         <div class="lesson_nav">                                
-                            <?php echo $this->Html->link('テストをする',array('controller'=>'student','action'=>'test',$lesson['Lesson']['LessonId']));?>          
+                            <?php echo $this->Html->link('テストをする',array('controller'=>'student','action'=>'test',$lesson['Lesson']['LessonId'],$test_id));?>          
                         </div>
                         <div class="lesson_nav">        
                             <?php echo $this->Html->link('テストした結果をみる',array('controller'=>'student','action'=>'review_test',$lesson['Lesson']['LessonId']));?>
