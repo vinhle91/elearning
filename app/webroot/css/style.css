@@ -153,13 +153,12 @@
 }
 .sign_up_tb .flat_btn{
 	min-width: 100px;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: normal;
 	margin-right: 10px;
 	cursor: pointer;
 	-webkit-appearance: button;
 	border-radius: 3px;
-	border: 0;
 	background: #F68620;
 	color: white;
 	text-align: center;
@@ -167,6 +166,7 @@
 	height: 30px;
 	line-height: 30px;
 	margin-bottom:30px;
+	border: 0px;
 }
 .cclogo {
 	background: url(../images/icon/cclogo.png) no-repeat 0 0;

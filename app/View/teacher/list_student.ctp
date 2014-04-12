@@ -13,50 +13,21 @@
                             <td colspan="3" style="padding-bottom:5px;"><h2><a href="#">
                                 <?php echo $lessonTitle ?></a></h2></td>
                         </tr>
-                        <!-- <tr>
-                            <td>
-                                <h3>Month</h3>
-                            </td>
-                            <td>
-                                <select name="months">
-                                    <option value="1">January</option>
-                                    <option value="2">February</option>
-                                    <option value="3">March</option>
-                                    <option value="4">April</option>
-                                    <option value="5">May</option>
-                                    <option value="6">June</option>
-                                    <option value="7">July</option>
-                                    <option value="8" >August</option>
-                                    <option value="9">September</option>
-                                    <option value="10">October</option>
-                                    <option value="11">November</option>
-                                    <option value="12" selected="selected">December</option>
-                                </select>
-                            </td>
-                            <td>
-                                <h3>Year</h3>
-                            </td>
-                            <td>
-                                 <input class="input" name="year" style="width:92px" value="2013" type="text">
-                            </td>
-                        </tr>
-                    </tbody> -->
                 </table>
                 <table border="1" align="center" id="mylesson">
                     <tbody>
-                        <tr>
+                        <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
                             <td width="8%" style="background-color: #eee;">ID</td>
-                            <td width="30%" style="background-color: #eee;">学生</td>
+                            <td width="15%" style="background-color: #eee;">学生</td>
                             <td width="9%" style="background-color: #eee;">テスト</td>
                             <td width="9%" style="background-color: #eee;">テスト結果</td>
                             <td width="19%" style="background-color: #eee;"> スタート時点</td>
                             <td width="19%" style="background-color: #eee;">終わる時点</td>
-                            <td style="background-color: #eee;">終わる時点</td>
-                        </tr>
-
+                            <td width="15%"style="background-color: #eee;">終わる時点</td>
+                        </tr >
                         <?php $i = 0; ?>
                         <?php foreach ($studentHistories as $studentHistory): ?>
-                        <tr>                            
+                        <tr style="text-align:center">                            
                             <td><?php echo(++$i);?></td>
                             <td><a href="#"><?php echo ($studentHistory['User']['FullName']);?></a></td>
                             <td>Test 1</td>
@@ -70,8 +41,6 @@
 
                                 <input type="button" value="ブロックする" onclick="confirm_alert(this, <?= ($studentHistory['StudentHistory']['UserId']);?>,<?= ($studentHistory['StudentHistory']['LessonId']);?>)">
                                 <?php }?>
-
-
                             </td>
                         </tr>
                         <?php endforeach;?>

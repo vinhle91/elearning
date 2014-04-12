@@ -37,8 +37,7 @@
                             <td width="5%" style="background-color: #eee;">ビュー</td>
                             <td width="13%" style="background-color: #eee;">パブリック時間</td>
                             <td width="27%" style="background-color: #eee;">記述</td>
-                            <td width="5%" style="background-color: #eee;">購入</td>
-                            
+                            <td width="5%" style="background-color: #eee;">購入</td>          
                         </tr>
                         <?php foreach ($topLessons as $lesson): ?>
                         <tr>
@@ -62,8 +61,8 @@
                         <?php unset($lesson);?>   
                     </tbody>
                 </table>                                              
-                <div class="load_more" >
-                    <a href="javascrip:void(0)">もっと見る</span>
+                <div class="load_more">
+                    <a href="javascrip:void(0)">もっと見る</a>
                 </div>                       
             </div>
             <div class="top" id="t_teacher" style="display:none">
@@ -96,7 +95,7 @@
         </div>
         <div class="title"><h3>勉強しているもの</h3></div>     
         <div class="box">
-            <!-- <div class="order">
+           <!--  <div class="order">
                 順序を決める : 
                 <?php echo $this->Html->link('時間', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'time'))); ?>
                 <span>-</span>
@@ -121,7 +120,7 @@
                         foreach ($histories as $item): 
                              $i++;
                          ?>
-                        <tr>
+                        <tr style="text-align:center">
                             <td><?php echo $i;?></td>
                             <td><?php echo $this->Html->link($item['Lesson']['Title'], array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId']));?></td>
                             <td><?php echo $item['User']['Username'];?></td>
@@ -134,26 +133,40 @@
                     </tbody>
                 </table>
             </div>
-            <div class="paging" style="text-align: center">
+                
+               <!--  <ul>
+                   <a href="#">← Previous</a></li>
+                    <li class="active"><a rel="start" href="#">1</a></li>
+                    <li><a rel="next" href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li class="next next_page "><a rel="next" href="#">Next →</a></li>
+                </ul>
+            </div>  -->
+            <div class="pager" style="text-align: center">
                 <ul>
-                    <?php echo $paginator->first('最初'); ?>
+                    <li>
+                        <?php echo $paginator->first('最初'); ?>
+                    </li>
                     <?php
-                    if ($paginator->hasPrev()) {
-                        echo $paginator->prev('前の');
-                    }
+                    if ($paginator->hasPrev()): ?>
+                    <li>
+                        <?php echo $paginator->prev('前の');?>
+                    </li>
+                    <?php endif;?>
+                    <?php
+                        echo $paginator->numbers(array(
+                            'separator' => ' | ',
+                        ));
                     ?>
                     <?php
-                    echo $paginator->numbers(array(
-                        'separator' => ' | ',
-                    ));
-                    ?>
-
-                    <?php
-                    if ($paginator->hasNext()) {
-                        echo $paginator->next('次の');
-                    }
-                    ?>
-                    <?php echo $paginator->last('最後'); ?>
+                    if ($paginator->hasNext()) : ?>
+                    <li>
+                         <?php echo $paginator->next('次の'); ?>
+                    </li>
+                    <?php endif;?>
+                    <li>
+                        <?php echo $paginator->last('最後'); ?>
+                    </li>
                 </ul>
             </div>
         </div>

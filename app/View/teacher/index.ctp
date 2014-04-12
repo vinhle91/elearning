@@ -22,15 +22,14 @@
                 <table border="1" align="center" id="mylesson">
                     <tbody>
                         <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
-                            <td width="4%" style="background-color: #eee;">ID</td>
+                            <td width="4%" style="background-color: #eee;">番号</td>
                             <td width="20%" style="background-color: #eee;">タイトル</td>
                             <td width="7%" style="background-color: #eee;">カテゴリィ</td>
                             <td width="5%" style="background-color: #eee;"> いいねと言う</td>
                             <td width="5%" style="background-color: #eee;">ビュー</td>
                             <td width="10%" style="background-color: #eee;">パブリック時間</td>
                             <td width="27%" style="background-color: #eee;">記述</td>
-                            <td width="8%" style="background-color: #eee;">報告</td>
-                            
+                            <td width="8%" style="background-color: #eee;">報告</td>    
                         </tr>
                         <?php foreach ($allLessons as $lesson): ?>
                         <tr style="text-align:center">
@@ -64,7 +63,7 @@
                 <table border="1" align="center" id="mylesson">
                     <tbody>
                         <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
-                            <td width="8%" style="background-color: #eee;">ID</td>
+                            <td width="5%" style="background-color: #eee;">ID</td>
                             <td width="30%" style="background-color: #eee;">タイトル</td>
                             <td width="7%" style="background-color: #eee;">ビュー</td>
                             <td width="5%" style="background-color: #eee;">いいねと言う</td>
@@ -75,7 +74,7 @@
 
                         <?php foreach ($lessons as $lesson): ?>
 
-                        <tr>
+                        <tr style="text-align:center">
                             <td><?php echo ($lesson['Lesson']['LessonId']);?></td>
                             <td><?php echo $this->Html->link($lesson['Lesson']['Title'],array('controller'=>'Teacher','action'=>'view_lesson',$lesson['Lesson']['LessonId']));?>
                             </td>
@@ -93,15 +92,6 @@
                     </tbody>
                 </table>
             </div>
-<!--             <div class="pager">
-                <ul>
-                    <li class="prev previous_page disabled"><a href="#">← Previous</a></li>
-                    <li class="active"><a rel="start" href="#">1</a></li>
-                    <li><a rel="next" href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li class="next next_page "><a rel="next" href="#">Next →</a></li>
-                </ul>
-            </div> -->
         </div>
     </div>
 </div>

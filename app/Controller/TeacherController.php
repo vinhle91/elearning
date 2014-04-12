@@ -19,8 +19,8 @@ class TeacherController extends AppController {
 		'Answer',
 		'Comment'
 		);
-	function beforeFilter() {
-        $this->pageTitle = 'Home Teacher';
+	public function beforeFilter() {
+        $this->pageTitle = '先生';
         $this->layout = 'template';
         $UserType = $this->Auth->user('UserType');
         if($UserType == 1){
@@ -33,20 +33,17 @@ class TeacherController extends AppController {
         return parent::beforeFilter();
     }
 	public function index() {
-		$this->pageTitle = 'Home of Teacher';
+		$this->pageTitle = 'ホームページ';
 		$userId = $this->Auth->user('UserId');
         $lessons = $this->Lesson->getLessonsByTeacher($userId);
         $this->set('lessons', $lessons);
         $cat = $this->Category->getCategories();
-   		 // debug($cat);
         $Category = array();
         foreach ($cat as $key => $value) {
         	$Category[$key+1] = $value['Category']['CatName'];
         }
-        //debug($Category);
         $this->set('Category', $Category);
         $allLessons = $this->Lesson->getAllLessons();
-//	    debug($allLessons);
         $this->set('allLessons', $allLessons);
 	}
 	public function view_lesson($lesson_id = null) {

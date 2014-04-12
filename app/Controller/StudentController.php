@@ -34,26 +34,27 @@ class StudentController extends AppController {
     }
 	public function index() {
 		$this->pageTitle = '学生';
-        $this->StudentHistory->recursive = -1;
-        $today = new DateTime();
         $userId = $this->Auth->user('UserId');
+        $today = new DateTime();
+        //Get history of student
+        $this->StudentHistory->recursive = -1;
         if (isset($this->request->query['sortBy'])) {
             $sortBy = $this->request->query['sortBy'];
         } else {
             $sortBy = 'time';
         }
-        $options = $this->StudentHistory->getPaginationOptions($userId, $sortBy);
-        
+        $options = $this->StudentHistory->getPaginationOptions($userId, $sortBy);        
         $this->paginate = $options;
         $histories = $this->paginate('StudentHistory');
         $this->set('histories', $histories);
+        //Get category
         $cat = $this->Category->getCategories();
         $Category = array();
         foreach ($cat as $key => $value) {
         	$Category[$key+1] = $value['Category']['CatName'];
         }
-        //debug($Category);
         $this->set('Category', $Category);
+        //Get top lesson
         $topLessons = $this->Lesson->getTopLessons();
 		foreach ($topLessons as $key => $value) {
 			$isStudying = false;
@@ -85,7 +86,6 @@ class StudentController extends AppController {
 	        }
 	        $topLessons[$key]['Lesson']['isStudying'] =  $isStudying;
 		}
-		// debug($topLessons);
         $this->set('topLessons', $topLessons);
 	}
 	public function view_lesson($lesson_id = null) {
@@ -97,7 +97,7 @@ class StudentController extends AppController {
         $this->set('allLessons', $allLessons);
 
 		if(!isset($lesson_id)||empty($lesson_id)){
-			$this->Session->setFlash(__('Error. Please try it again'));
+			$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 			$this->redirect(array('controller'=>'student','action' => 'index'));
 		}else{
 			if($this->request->is('post')){
@@ -110,10 +110,10 @@ class StudentController extends AppController {
 		            $data['Comment']['LessonId'] = $lesson_id;
 		            $data['Comment']['Content']= $comment;
 		            if($this->Comment->save($data)){
-		            	$this->Session->setFlash(__('Comments successful!'));
+		            	$this->Session->setFlash(__('コメント成功！'));
 		            	$this->redirect(array('controller'=>'student','action' => 'view_lesson',$lesson_id));
 		            }else{
-		            	$this->Session->setFlash(__('Error! Please try it again'));
+		            	$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 		            	$this->redirect(array('controller'=>'student','action' => 'view_lesson',$lesson_id));
 		            }
 	        	}else{
@@ -155,9 +155,12 @@ class StudentController extends AppController {
 			        $study_history = $this->StudentHistory->find('first', array(
 			        	'conditions' => array(
 			        		'StudentHistory.LessonId' => $lesson_id,
-			        		'StudentHistory.UserId' => $userId)
+			        		'StudentHistory.UserId' => $userId
+			        		),
+			        	'order' => array('StudentHistory.StartDate' => 'DESC'),
 			        	)
 			        );
+			        // debug($study_history);
 			        if ($study_history) {
 			            $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
 			           if ($today < $expiryDay) {
@@ -165,7 +168,7 @@ class StudentController extends AppController {
 			            }
 			        }
 					if(!$isStudying){
-						$this->Session->setFlash(__('You not allowed to acssess page.'));
+						$this->Session->setFlash(__('ページにアクセスすることはできません'));
 						$this->redirect(array('controller'=>'Student','action' => 'index'));
 					}else{
 						$this->set(compact('lesson'));
@@ -179,28 +182,27 @@ class StudentController extends AppController {
 						}
 					}
 				}else{
-					$this->Session->setFlash(__('Error! Please try it again'));
+					$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 					$this->redirect(array('controller'=>'teacher','action' => 'index'));
 				}
-	        }
-			
+	        }	
 		}
-
-
 	}
 	public function test($lesson_id =null) {
 		$this->pageTitle = 'テスト';
 		$userId = $this->Auth->user('UserId');
 		$today = new DateTime();
 		if(!isset($lesson_id)){
-			$this->Session->setFlash(__('Error.Please try it again'));
+			$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 			$this->redirect(array('controller'=>'student','action' => 'index'));
 		}else{
 			$isStudying = false;
 	        $study_history = $this->StudentHistory->find('first', array(
 	        	'conditions' => array(
 	        		'StudentHistory.LessonId' => $lesson_id,
-	        		'StudentHistory.UserId' => $userId)
+	        		'StudentHistory.UserId' => $userId
+	        		),
+	        	'order' => array('StudentHistory.StartDate' => 'DESC'),
 	        	)
 	        );
 	        if ($study_history) {
@@ -209,8 +211,8 @@ class StudentController extends AppController {
 	                $isStudying = true;
 	            }
 	        }
-			if(!$study_history){
-				$this->Session->setFlash(__('You not allowed to do this test.'));
+			if(!$isStudying){
+				$this->Session->setFlash(__('このテストを行うことはできません。'));
 				$this->redirect(array('controller'=>'student','action' => 'view_lesson',$lesson_id));
 			}else{
 				$this->set(compact('lesson_id'));
@@ -251,6 +253,30 @@ class StudentController extends AppController {
 				}
 				$this->set(compact('data_test'));
 				// debug($data_test);
+				if($this->request->is('post')){
+					$test_result = $this->request->data;
+					$n = 0;
+					foreach ($test_result as $key => $value) {
+						if($value == 0){
+							$n++;
+						}
+					}
+					if($n!=0){
+						$this->Session->setFlash(__('Ban chua hoan thanh het cac cau tra loi!'));					
+					}else{
+						$test_result['0'] = 1;
+						$total_ans_correct = 0;
+						$point = 0;
+						foreach ($data_test['Question'] as $key => $value) {
+							if($value['Answer'] == $test_result[$value['QuesNum']]){
+								$total_ans_correct++;
+								$point = $point + $value['Point'];
+							};
+						}
+						$this->set(compact('point','total_ans_correct'));
+					}
+					$this->set(compact('test_result'));
+				}
 			}
 		}
 	}

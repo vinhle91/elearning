@@ -34,7 +34,7 @@
 	border-radius: 3px;
 	height: 14px;
 	padding: 8px 8px 8px 8px;
-	font-size: 13px;
+	font-size: 14px;
 	width: 259px;
 	border: 0;
 	background: #F9F9F7;
@@ -43,15 +43,18 @@
 }
 .btn_search{
 	float:left;
-	height:30px;
 	border-radius: 3px;
-	margin-top:10px;
 	border:0;
+	-webkit-appearance: button;
 	background:#28a8e5;;
 	color:#fff;
 	font-size:14px;
-	padding: 6px 15px;
+	padding: 0px 15px;
+	height: 30px;
+	line-height: 30px;
+	margin-bottom:30px;
 	font-weight:700;
+	margin-top: 10px;
 }
 .btn_upload{
 	float:right;
