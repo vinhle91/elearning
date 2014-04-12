@@ -57,6 +57,18 @@ class StudentController extends AppController {
         $topLessons = $this->Lesson->getTopLessons();
 		foreach ($topLessons as $key => $value) {
 			$isStudying = false;
+			$isBlocked = $this->StudentBlock->find('first', array(
+	                'conditions' => array(
+	                    'StudentBlock.UserId' => $userId,
+	                    'StudentBlock.LessonId' => $value['Lesson']['LessonId'],
+	                )
+	            )
+	        );
+	        if ($isBlocked) {
+	        	 $topLessons[$key]['Lesson']['isBlocked'] =  1;
+	        }else{
+	        	 $topLessons[$key]['Lesson']['isBlocked'] =  0;
+	        }
 	        $study_history = $this->StudentHistory->find('first', array(
 	        	'conditions' => array(
 	        		'StudentHistory.LessonId' => $value['Lesson']['LessonId'],
@@ -276,6 +288,18 @@ class StudentController extends AppController {
         $lessons = $this->paginate('Category');
 		foreach ($lessons as $key => $value) {
 			$isStudying = false;
+			$isBlocked = $this->StudentBlock->find('first', array(
+	                'conditions' => array(
+	                    'StudentBlock.UserId' => $userId,
+	                    'StudentBlock.LessonId' => $value['Lesson']['LessonId'],
+	                )
+	            )
+	        );
+	        if ($isBlocked) {
+	        	 $lessons[$key]['Lesson']['isBlocked'] =  1;
+	        }else{
+	        	 $lessons[$key]['Lesson']['isBlocked'] =  0;
+	        }
 	        $study_history = $this->StudentHistory->find('first', array(
 	        	'conditions' => array(
 	        		'StudentHistory.LessonId' => $value['Lesson']['LessonId'],
@@ -296,7 +320,7 @@ class StudentController extends AppController {
     }
     public function buy_lesson($lessonId = null) {
 		if(empty($lessonId)){
-			$this->Session->setFlash(__('Error. Please try it again'));
+			$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 	        $this->redirect(array('controller'=>'Student','action' => 'index'));
 		}else{
 			$userInfo = $this->Auth->user();

@@ -50,11 +50,12 @@
                             <td><?php echo $lesson['Lesson']['modified'];?></td>
                             <td><?php echo $lesson['Lesson']['Abstract'];?></td>
                             <td>
-                            <?php if($lesson['Lesson']['isStudying']):?>
+                            <?php if($lesson['Lesson']['isStudying']&&$lesson['Lesson']['isBlocked'] == 0){?>
                                 <span class="bought_bt"><?php echo $this->Html->image('icon/yes.png'); ?> 既婚入</span>              
-                            <?php else:?>
+                            <?php }else if($lesson['Lesson']['isBlocked'] == 1){?>
+                            <?php }else{?>
                             <?php echo $this->Html->link('購入',array('controller'=>'Student','action'=>'buy_lesson',$lesson['Lesson']['LessonId']),array('class'=>'buy_bt','id'=>$lesson['Lesson']['LessonId']));?>
-                             <?php endif;?>
+                             <?php }?>
                             </td>
                         </tr>
                         <?php endforeach;?>

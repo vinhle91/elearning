@@ -13,42 +13,38 @@
 
         <div class="box">
             <?php $paginator = $this->Paginator; ?>
-            <div class="top" id="t_lesson">
+             <div class="top" id="t_lesson">
                 <?php
-                $i = 0;
-                if(sizeof($lessons)==0) {echo "このカテゴリは授業がありません";}
-                foreach ($lessons as $lesson) {
-                    ?>
-                    <?php
-                    if ($i % 2 == 0) {
-                        echo "<div class='row'>";
-                    }
-                    echo "<div class='lesson'>";
-                    echo "<div class='ls_title'>";
-                    echo "<a href='#'>{$lesson['Lesson']['Title']}</a>";
-                    echo "<span >";
-                    echo $this->Html->image('icon/icon-like.png',array('alt' =>'views'));
-                    echo  $lesson['Lesson']['LikeNumber'];
-                    echo "</span>";
-                    echo "<span >";
-                    echo $this->Html->image('icon/icon-hits-12.png',array('alt' =>'views'));
-                    echo  $lesson['Lesson']['ViewNumber'];
-                    echo "</span>";
-                    echo "</div>";
-                    ?>
-                    <div class="creat_author"><a href="#"> <?php echo $lesson['User']['Username']; ?></a>から作られた</div>
-                    <div class="description"><p><?php echo $lesson['Lesson']['Abstract']; ?></p></div>
-                    <?php echo "</div>"; //class=lesson ?>
-                    <?php
-                    if ($i % 2 == 1) {
-                        echo "</div>";
-                    }
-                    ?>
-                    <?php
-                    $i++;
-                }
-                ?>
-
+                if(sizeof($lessons)==0):?>
+                <h2>このカテゴリは授業がありません</h2>
+                <?php else :?>
+                <table border="1" align="center" id="mylesson">
+                    <tbody>
+                        <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
+                            <td width="5%" style="background-color: #eee;">番号</td>
+                            <td width="25%" style="background-color: #eee;">タイトル</td>
+                            <td width="5%" style="background-color: #eee;"> いいねと言う</td>
+                            <td width="5%" style="background-color: #eee;">ビュー</td>
+                            <td width="13%" style="background-color: #eee;">パブリック時間</td>
+                            <td width="27%" style="background-color: #eee;">記述</td>
+                            <td width="10%" style="background-color: #eee;">報告</td>
+                            
+                        </tr>
+                        <?php   foreach ($lessons as $lesson): ?>
+                        <tr>
+                            <td><?php echo ($lesson['Lesson']['LessonId']);?></td>
+                            <td><a href="javascript:void(0)"><?php echo ($lesson['Lesson']['Title']);?></a></td>
+                            <td><?php echo $lesson['Lesson']['LikeNumber'];?></td>
+                            <td><?php echo $lesson['Lesson']['ViewNumber'];?></td>
+                            <td><?php echo $lesson['Lesson']['modified'];?></td>
+                            <td><?php echo $lesson['Lesson']['Abstract'];?></td>
+                            <td> <div class="report_btn"> 報告</div> </td>
+                        </tr>
+                        <?php endforeach;?>
+                        <?php unset($lesson);?>   
+                    </tbody>
+                </table>
+                <?php endif;?>          
             </div>
             <div class="paging" style="text-align: center">
                 <ul>
