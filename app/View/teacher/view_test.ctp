@@ -66,7 +66,7 @@
                             <td></td>
                             <td>
                                 <?php echo $this->Html->link('編集',array('controller' => 'Teacher','action' => 'edit_lesson',$lesson_id),array('class'=>'flat_btn'));?>
-                                <?php echo $this->Html->link('戻る',array('controller' => 'Teacher','action' => 'view_lesson',$lesson_id),array('class'=>'btn_search','style'=>'float:none'));?>
+                                <?php echo $this->Html->link('戻る',array('controller' => 'Teacher','action' => 'index'),array('class'=>'btn_search','style'=>'float:none'));?>
                             </td>
                             <td></td>
                         </tr>

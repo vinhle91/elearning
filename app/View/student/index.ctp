@@ -122,11 +122,11 @@
                          ?>
                         <tr style="text-align:center">
                             <td><?php echo $i;?></td>
-                            <td><?php echo $this->Html->link($item['Lesson']['Title'], array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId']));?></td>
+                            <td><?php echo $this->Html->link($item['Lesson']['Title'], array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId'],$item['FileId']));?></td>
                             <td><?php echo $item['User']['Username'];?></td>
                             <td><?php echo $item['StudentHistory']['StartDate'];?></td>
                             <td><?php echo $item['StudentHistory']['ExpiryDate'];?></td>
-                            <td><?php echo $this->Html->link('勉強', array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId']));?></td>
+                            <td><?php echo $this->Html->link('勉強', array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId'],$item['FileId']));?></td>
                             <td><?php echo $this->Html->link('テスト', array('controller' => 'student', 'action' => 'test', $item['Lesson']['LessonId'],$item['TestId']));?></td>
                         </tr>
                         <?php endforeach;?>

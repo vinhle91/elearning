@@ -14,8 +14,12 @@
                     <div class="actions">
                         <div class="left">
                             <ul class="tabs">
-                                 <?php foreach ($lesson['File'] as $key => $value):?>
-                                <li <?php if($key==0){echo 'class="active"';}?>><a href="javacript:void(0)">ファイル <?php echo $key+1;?></a></li>
+                                <?php foreach ($list_file as $k => $v):?>
+                                <li <?php if($file_id == $v['File']['FileId']){echo 'class="active"';} ?> >                             
+                                    <a href="/elearning/teacher/view_lesson/<?php echo $lesson_id?>/<?php echo $v['File']['FileId']?>">
+                                        <span>ファイル <?php echo $k+1;?></span>
+                                    </a>                          
+                                </li>
                                 <?php endforeach;?>
                             </ul>
                         </div>         

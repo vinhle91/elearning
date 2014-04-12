@@ -84,7 +84,7 @@
 
                         <tr style="text-align:center">
                             <td><?php echo ($lesson['Lesson']['LessonId']);?></td>
-                            <td><?php echo $this->Html->link($lesson['Lesson']['Title'],array('controller'=>'Teacher','action'=>'view_lesson',$lesson['Lesson']['LessonId']));?>
+                            <td><?php echo $this->Html->link($lesson['Lesson']['Title'],array('controller'=>'Teacher','action'=>'view_lesson',$lesson['Lesson']['LessonId'],$lesson['FileId']));?>
                             </td>
                             <td><?php echo ($lesson['Lesson']['ViewNumber']);?></td>
                             <td><?php echo ($lesson['Lesson']['LikeNumber']);?></td>

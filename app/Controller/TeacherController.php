@@ -36,6 +36,25 @@ class TeacherController extends AppController {
 		$this->pageTitle = 'ホームページ';
 		$userId = $this->Auth->user('UserId');
         $lessons = $this->Lesson->getLessonsByTeacher($userId);
+        foreach ($lessons as $key => $value) {
+        	$file = $this->File->find('first', array(
+					'conditions'=>array(
+						'File.LessonId'=>$value['Lesson']['LessonId'],
+						'IsDeleted'=>'0',
+						'FileType' =>'1',
+						),
+					'contain'=> false,
+					'order' => array('File.FileId' => 'Asc'),
+					
+					)
+				);
+        	if(!empty($file)){
+        		$lessons[$key]['FileId'] = $file['File']['FileId'];
+        	}else{
+        		$lessons[$key]['FileId'] = 0;
+        	}
+        	
+        }
         $this->set('lessons', $lessons);
         $cat = $this->Category->getCategories();
         $Category = array();
@@ -46,7 +65,7 @@ class TeacherController extends AppController {
         $allLessons = $this->Lesson->getAllLessons();
         $this->set('allLessons', $allLessons);
 	}
-	public function view_lesson($lesson_id = null) {
+	public function view_lesson($lesson_id = null,$file_id = null) {
 		$this->pageTitle = '授業';
 		//top teacher
 		$allLessons = $this->Lesson->getAllLessons();
@@ -66,11 +85,11 @@ class TeacherController extends AppController {
 		            $data['Comment']['LessonId'] = $lesson_id;
 		            $data['Comment']['Content']= $comment;
 		            if($this->Comment->save($data)){
-		            	$this->Session->setFlash(__('Comments successful!'));
+		            	$this->Session->setFlash(__('コメント成功！'));
 		            	$this->redirect(array('controller'=>'teacher','action' => 'view_lesson',$lesson_id));
 		            }
 		            else{
-		            	$this->Session->setFlash(__('Error! Please try it again'));
+		            	$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 		            	$this->redirect(array('controller'=>'teacher','action' => 'view_lesson',$lesson_id));
 		            }
 	        	}else{
@@ -78,6 +97,7 @@ class TeacherController extends AppController {
 	        		$this->redirect(array('controller'=>'teacher','action' => 'view_lesson',$lesson_id));
 	        	}
 	        }else{
+	        	$this->set(compact('lesson_id'));
 	        	$test = $this->Test->find('first', array(
 					'conditions'=>array(
 						'Test.LessonId'=>$lesson_id,
@@ -93,52 +113,91 @@ class TeacherController extends AppController {
 	        		$test_id = 0;
 	        	}
 	        	$this->set(compact('test_id'));
-	        	$params = array(
-				'conditions' =>array(
-					'Lesson.LessonId' =>$lesson_id,
-					'IsDeleted'=>'0'
-					),
-				'contain'=>array(
-					'File' => array(
-						'conditions'=> array('File.FileType'=>'1','File.IsDeleted'=>'0')
-						),
-					'Tag',
-					'User',
-					)
-				);
-				$lesson = $this->Lesson->find('first',$params);
-				$com = $this->Comment->find('all', array(
-					'conditions'=>array(
+	        	if(!isset($file_id)){
+					$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
+					$this->redirect(array('controller'=>'teacher','action' => 'index'));
+				}elseif($file_id == 0 ){
+					$this->Session->setFlash(__('ファイルは存在しません。'));
+					$this->redirect(array('controller'=>'teacher','action' => 'index'));
+				}else{
+					$file = $this->File->find('first', array(
+						'conditions'=>array(
+							'File.FileId'=>$file_id,
+							'IsDeleted'=>'0',
+							'FileType'=>'1',
+							),
+						'order' => array('File.FileId' => 'Asc'),
+						)
+					);
+					if(empty($file)){
+						$this->Session->setFlash(__('ページにアクセスすることはできません'));
+						$this->redirect(array('controller'=>'teacher','action' => 'index'));
+					}
+					if($file['File']['LessonId']!= $lesson_id){
+						$this->Session->setFlash(__('ページにアクセスすることはできません'));
+						$this->redirect(array('controller'=>'teacher','action' => 'index'));
+					}
+					// debug($test);
+					$this->set(compact('file_id'));
+					$list_file = $this->File->find('all', array(
+						'conditions'=>array(
+							'File.LessonId'=>$lesson_id,
+							'IsDeleted'=>'0',
+							'FileType' => '1',
+							),
+						'contain'=>false,
+						'order' => array('File.FileId' => 'Asc'),
+						)
+					);
+					$this->set(compact('list_file'));
+		        	$params = array(
+					'conditions' =>array(
+						'Lesson.LessonId' =>$lesson_id,
 						'IsDeleted'=>'0'
 						),
 					'contain'=>array(
-						'User'=> array(
-							'conditions'=>array('$User.Status'=>'1'),
-							'fields' => 'User.FullName',
+						'File' => array(
+							'conditions'=> array('File.FileType'=>'1','File.IsDeleted'=>'0','FileId'=>$file_id)
+							),
+						'Tag',
+						'User',
 						)
-					)
-				));
-				if(!empty($com)){
-					$this->set(compact('com'));
-				}
-				// debug($com);
-				if(!empty($lesson)){
-					if($lesson['Lesson']['UserId']!= $userId){
-						$this->Session->setFlash(__('このページにアクセスすることはできません'));
-						$this->redirect(array('controller'=>'Teacher','action' => 'index'));
-					}else{
-						$this->set(compact('lesson'));
-						$cat = $this->Category->find('first', array(
-							'conditions' => array('Category.CatID'=>$lesson['Lesson']['Category'],'IsDeleted'=>'0'),
-							'fields'=> array('CatName'),
+					);
+					$lesson = $this->Lesson->find('first',$params);
+					$com = $this->Comment->find('all', array(
+						'conditions'=>array(
+							'IsDeleted'=>'0'
+							),
+						'order' => array('Comment.created' => 'Asc'),
+						'contain'=>array(
+							'User'=> array(
+								'conditions'=>array('$User.Status'=>'1'),
+								'fields' => 'User.FullName',
 							)
-						);
-						if(!empty($cat)){
-							$this->set(compact('cat'));
-						}
+						)
+					));
+					if(!empty($com)){
+						$this->set(compact('com'));
 					}
-				}else{
-					$this->redirect(array('controller'=>'Teacher','action' => 'index'));
+					// debug($com);
+					if(!empty($lesson)){
+						if($lesson['Lesson']['UserId']!= $userId){
+							$this->Session->setFlash(__('このページにアクセスすることはできません'));
+							$this->redirect(array('controller'=>'Teacher','action' => 'index'));
+						}else{
+							$this->set(compact('lesson'));
+							$cat = $this->Category->find('first', array(
+								'conditions' => array('Category.CatID'=>$lesson['Lesson']['Category'],'IsDeleted'=>'0'),
+								'fields'=> array('CatName'),
+								)
+							);
+							if(!empty($cat)){
+								$this->set(compact('cat'));
+							}
+						}
+					}else{
+						$this->redirect(array('controller'=>'Teacher','action' => 'index'));
+					}
 				}
 	        }
 			
@@ -412,7 +471,6 @@ class TeacherController extends AppController {
 							}
 							$data_test['Total'] = $i;
 							$data_test['TotalPoint'] = $j;
-							
 						}
 						$this->set(compact('data_test'));
 						// debug($data_test);
