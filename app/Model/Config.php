@@ -9,7 +9,7 @@ class Config extends AppModel {
 				),
 			'fields' => 'ConfigValue'
 			));
-		$ret = isset($buff[0]['config']['ConfigValue']) ? $buff[0]['config']['ConfigValue'] : null;
+		$ret = isset($buff[0]['Config']['ConfigValue']) ? $buff[0]['Config']['ConfigValue'] : null;
 		return $ret;
 	}
 }
