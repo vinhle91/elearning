@@ -175,29 +175,18 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $(".buy_bt").click(function(){
-        var r=confirm("Are you sure you want to buy this lesson?");
+        var r=confirm("このレッスンを購入してもよろしいですか？");
         if (r==true)
         {
             window.location.pathname($(this).attr("href"));
         }
     })
 });
-// $(document).ready(function() {
-//     $(".load_more").click(function(){
-//         $.ajax({
-//         url: '<?php echo $this->Html->url(array('controller'=> 'student','action' => 'view_schedule1',$id, strtotime("-1 day", $weekMondayTime)))?>',
-//         //data: form.serialize(),
-//         success: function(response) {
-//             $("#table_double").html(response);
-//             $("#button-add3").attr("disabled", false);
-//             $("#button-add2").attr("disabled", false);
-//             $("#button-add1").attr("disabled", false);
-//             $("#loading-3").hide();
-//         },
-//         error : function(){
-//             alert("error");
-//         }
-//     })
-// });
-// }
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".load_more").click(function(){
+        
+    });
+});
 </script>

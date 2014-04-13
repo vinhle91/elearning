@@ -522,7 +522,7 @@ class StudentController extends AppController {
 	            )
 	        );
 	        if ($isBlocked) {
-	        	$this->Session->setFlash(__('You are not allowed to view this lesson'));
+	        	$this->Session->setFlash(__('このレッスンを表示するには許可されていません'));
 	            $this->redirect(array('controller'=>'Student','action' => 'index'));
 	        }
 	        $isStudying = false;
@@ -548,7 +548,7 @@ class StudentController extends AppController {
 	            $config = $this->Config->find('first', array('conditions' => array('Config.ConfigName' => 'CourseFee')));
 	            $fee = $config['Config']['ConfigValue'];
 	            if (!is_numeric($fee)) {
-	                $this->Session->setFlash(__('You are not allowed to view this lesson'));
+	                $this->Session->setFlash(__('このレッスンを表示するには許可されていません'));
 	            	$this->redirect(array('controller'=>'Student','action' => 'index'));
 	            } else {
 	                $lesson= $this->Lesson->find('first',
@@ -564,9 +564,24 @@ class StudentController extends AppController {
 	                	$this->Session->setFlash(__('Error. Please try it again'));
 	            		$this->redirect(array('controller'=>'Student','action' => 'index'));
 	                }else{
-		                $updateViewNumber = $lesson['Lesson']['ViewNumber'] + 1;
+		                $file = $this->File->find('first', array(
+								'conditions'=>array(
+									'File.LessonId'=>$lessonId,
+									'IsDeleted'=>'0',
+									'FileType' =>'1',
+									),
+								'contain'=> false,
+								'order' => array('File.FileId' => 'Asc'),
+								
+								)
+							);
+			        	if(!empty($file)){
+			        		$file_id = $file['File']['FileId'];
+			        	}else{
+			        		$file_id = 0;
+			        	}
+			        	 $updateViewNumber = $lesson['Lesson']['ViewNumber'] + 1;
 		                //update view number
-
 		                $this->StudentHistory->create();
 		                $data['StudentHistory']['UserId'] = $userId;
 		                $data['StudentHistory']['LessonId'] = $lessonId;
@@ -575,17 +590,17 @@ class StudentController extends AppController {
 		                $data['StudentHistory']['CourseFee'] = $fee;
 		                if ($this->StudentHistory->save($data)) {
 		                	$this->Lesson->updateAll(array("ViewNumber" => $updateViewNumber), array('Lesson.LessonId' => $lessonId));
-		                	$this->Session->setFlash(__('You bought this lesson'));
-	            			$this->redirect(array('controller'=>'Student','action' => 'view_lesson',$lessonId));
+		                	$this->Session->setFlash(__('このレッスンを買った'));
+	            			$this->redirect(array('controller'=>'Student','action' => 'view_lesson',$lessonId,$file_id));
 		                } else {
-		                    $this->Session->setFlash(__('Error. Please try it again'));
+		                    $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
 	            			$this->redirect(array('controller'=>'Student','action' => 'index'));
 		                }
 		            }
 	            }
 	        }
 	        else {
-	        	$this->Session->setFlash(__('You have bought this lesson already'));
+	        	$this->Session->setFlash(__('すでにこのレッスンを購入した'));
 	            $this->redirect(array('controller'=>'Student','action' => 'index'));
 	        }
 		}

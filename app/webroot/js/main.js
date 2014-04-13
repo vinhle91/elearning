@@ -90,10 +90,10 @@ $(document).ready(function() {
     });
 });
 // // show file
-$(document).ready(function() { 
-    $(".tabs>li>a").click(function(){
-        $(".tabs>li>a").removeClass('active');
-        $(this).addClass('active');   
-        $('.file_l').hide();  
-    });
-});
+// $(document).ready(function() { 
+//     $(".tabs>li>a").click(function(){
+//         $(".tabs>li>a").removeClass('active');
+//         $(this).addClass('active');   
+//         $('.file_l').hide();  
+//     });
+// });
