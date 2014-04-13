@@ -72,7 +72,6 @@
 		<!--End	footer-->
 	<!--End	body-->
 </body>
-
 	<script>
 		jQuery(document).ready(function() {       
 		   App.init();
