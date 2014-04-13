@@ -934,13 +934,13 @@ ul.searchtype li {
 	line-height: 30px;
 	font-size: 18px;
 	font-weight: normal;
-	background: #e98325;
+	background: linear-gradient(#fcbe47,#d76c03);
 	width: 100px;
 	float: right;
 	color: #fff;
 	border-radius: 5px;
 	text-align: center;
-	border: 1px solid;
+	border: 1px solid #e8e7e6 ;
 }
 .bought_bt{
 	height: 30px;

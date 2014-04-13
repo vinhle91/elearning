@@ -204,7 +204,7 @@ class TeacherController extends AppController {
 		}
 
 	}
-	public function make_lesson() {
+	public function make_lesson($userId = null) {
 		$this->pageTitle = 'Make Lesson';
 		// Check UserId
 		if($userId != $this->Auth->user('UserId')){
