@@ -52,9 +52,7 @@
 				</ul>
 			</li>
 			<!-- END NOTIFICATION DROPDOWN -->
-			
-			<!-- BEGIN TODO DROPDOWN -->
-			<!-- END TODO DROPDOWN -->
+		
 			<li class="devider">&nbsp;</li>
 			<!-- BEGIN USER LOGIN DROPDOWN -->
 			<li class="dropdown user">

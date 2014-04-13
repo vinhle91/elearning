@@ -196,4 +196,5 @@ CakeLog::config('operation', array(
 //CakePlugin::load('Uploader');
 CakePlugin::loadAll();
 
+include(APP . 'Config' . DS . 'constants.php');
 
