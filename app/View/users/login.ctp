@@ -24,6 +24,14 @@
                             <div class="label_text">パスワード</div>
                            <?php echo $this->Form->input('Password', array('class'=>'input','type'=>'password','label'=>false));?>
                         </label>
+
+                        <?php if(!empty($allowVerifyCode)):?>
+                        <label>
+                            <div class="label_text">セキュリティ答え</div>
+                             <?php echo $this->Form->input('VerifyCodeAnswer', array('class'=>'input','type'=>'text','label'=>false));?>
+                        </label>
+                        <?php endif;?>
+
                         <label style="margin-top:10px;">
                             <input checked="checked" class="checkbox" id="remember" name="remember" type="checkbox" value="1"> ログイン状態を保つ
                         </label>       

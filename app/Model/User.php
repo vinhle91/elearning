@@ -278,5 +278,14 @@ class User extends AppModel {
         $this->create();
         $this->save($data);
     }
+
+    public function getUserByUsername($username) {
+        $options['conditions'] = array(
+            'User.Username' => $username
+        );
+   
+        $users = $this->find('all', $options);
+        return $users[0];
+    }
  
 }?>

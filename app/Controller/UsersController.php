@@ -51,21 +51,57 @@ class UsersController extends AppController {
             $data = $this->request->data;
             if(!empty($data['User']['Username']) && !empty($data['User']['Password']) )
             {
-                if ($this->Auth->login()) {
-                    $UserType = NULL;
-                    if($this->Auth->user()){            
-                        $UserType = $this->Auth->user('UserType');
-                        if($UserType == 1){
-                            $this->redirect(array('controller'=>'Student','action' => 'index'));
+                //ALTER TABLE users ADD COLUMN IpAddress varchar(20)
+                //get the current ip address
+                $currentIpAddress = $this->request->clientIp();
+                //for test
+                //$currentIpAddress = '123.1.1.124';
+                $username = $data['User']['Username'];
+                $user = $this->User->getUserByUsername($username);
+                
+                $ipAddress = $user['User']['IpAddress'];
+                // debug($data);
+                //if ip adress field is null, set the ip address
+                if (is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User'])) {
+                    if (is_null($ipAddress)) {
+                        $this->User->id = $user['User']['UserId'];
+                        $this->User->saveField('IpAddress', $currentIpAddress);
+                    }
+                    //if valid verifycode answer, allow to login
+                    if (!array_key_exists('VerifyCodeAnswer', $data['User']) ||
+                        (array_key_exists('VerifyCodeAnswer', $data['User']) && $data['User']['VerifyCodeAnswer'] == $user['User']['VerifyCodeAnswer'])) {
+                        //login here
+                        if ($this->Auth->login()) {
+                            //if login success, save the ip
+                            $this->User->id = $user['User']['UserId'];
+                            $this->User->saveField('IpAddress', $currentIpAddress);
+
+                            $UserType = NULL;
+                            if($this->Auth->user()){            
+                                $UserType = $this->Auth->user('UserType');
+                                if($UserType == 1){
+                                    $this->redirect(array('controller'=>'Student','action' => 'index'));
+                                }
+                                if($UserType == 2){
+                                    $this->redirect(array('controller'=>'Teacher','action' => 'index'));
+                                }
+                            };
+                        } else {
+                            $this->Session->setFlash($this->Auth->loginError);
                         }
-                        if($UserType == 2){
-                            $this->redirect(array('controller'=>'Teacher','action' => 'index'));
-                        }
-                    };
+                    } else {
+                        $this->Session->setFlash(__('Invalid verify code answer'));
+                        $this->set('allowVerifyCode', true);
+                        $this->set('user', $user);
+                    }
+
                 } else {
-                    $this->Session->setFlash($this->Auth->loginError);
+                    //else request user the verify code
+                    $this->set('allowVerifyCode', true);
+                    $this->set('user', $user);
+                    $this->Session->setFlash(__('You access from different ip address, please enter the verify code answer'));
                 }
-            }else{
+            } else {
                 $this->Session->setFlash(__('Username or Password not empty'));
             }
         } 
