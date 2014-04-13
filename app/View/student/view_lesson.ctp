@@ -60,6 +60,12 @@
                         <div class="lesson_nav">        
                             <?php echo $this->Html->link('テストした結果をみる',array('controller'=>'student','action'=>'review_test',$lesson['Lesson']['LessonId']));?>
                         </div>
+                        <div style="float:right" >
+                             <a href="javascript:void(0)">
+                             <?php echo $this->Html->image('like.png', array('alt' => 'like', 'width'=>'32','height'=>'32','class'=>'like')); ?>
+                             <h3 style="line-height:32px;display:block;float:right;height:32px;color:black;margin-top:5px">Like</h3>
+                             </a>
+                        </div>
                     </div>
                     <div class="articleCore ">
                             <div class="ls_title">

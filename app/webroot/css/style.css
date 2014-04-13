@@ -984,3 +984,10 @@ ul.searchtype li {
 	background: linear-gradient(#fcbe47,#d76c03);
 	color: #fff;
 }
+.like{
+	display: block;
+	height: 32px;
+	line-height: 32px;
+	margin: 5px 20px 0px 5px;
+	float: right;
+}
