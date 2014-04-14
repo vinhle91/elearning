@@ -53,9 +53,10 @@ class UsersController extends AppController {
             {
                 //ALTER TABLE users ADD COLUMN IpAddress varchar(20)
                 //get the current ip address
-                $currentIpAddress = $this->request->clientIp();
+                // $currentIpAddress = $this->request->clientIp();
+                // debug($currentIpAddress);
                 //for test
-                //$currentIpAddress = '123.1.1.124';
+                $currentIpAddress = '123.1.1.124';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
                 

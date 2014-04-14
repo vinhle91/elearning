@@ -62,7 +62,7 @@ class Lesson extends AppModel{
             'foreignKey' => 'UserId',
         )
     );
-    function getLessonsByTeacher($userId) {
+    public function getLessonsByTeacher($userId) {
         $this->contain('Comment');
         $lessons = $this->find('all', array(
            'conditions' => array('Lesson.UserId' => $userId,'Lesson.IsDeleted' => '0'), 
@@ -78,14 +78,14 @@ class Lesson extends AppModel{
         ));
         return $lessons;
     }
-    function getLessonById($lessonId) {
+    public function getLessonById($lessonId) {
         $lessons = $this->find('all', array(
            'conditions' => array('Lesson.LessonId' => $lessonId), 
         ));
 
         return $lessons[0];
     }
-    function getAllLessons() {
+    public function getAllLessons() {
         $lessons = $this->find('all',array(
             'limit' => 10,
             )

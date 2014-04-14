@@ -9,7 +9,7 @@ class User extends AppModel {
             'foreignKey' => 'UserId',
             'conditions' => array('Lesson.IsDeleted' => '0'),
             'order' => 'Lesson.created DESC',
-            'dependent' => true
+            'dependent' => true,
         ),
         'Comment' => array(
             'className' => 'Comment',

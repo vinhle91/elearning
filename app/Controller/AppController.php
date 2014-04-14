@@ -40,7 +40,7 @@ class AppController extends Controller {
 			'Form' => array(
 				'userModel' => 'User',
 				'fields' => array('username' => 'Username', 'password' => 'Password'),
-				'scope' => array('Status' => 1)
+				'scope' => array('Status' => 1),
 			)
 		);
 		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
