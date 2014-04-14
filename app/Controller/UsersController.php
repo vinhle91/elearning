@@ -58,6 +58,8 @@ class UsersController extends AppController {
                 // $currentIpAddress = $this->request->clientIp();
                 // debug($currentIpAddress);
                 //for test
+                $this->request->data['User']['Password']= $data['User']['Username']. $data['User']['Password'];
+                // debug($data['User']['Password']);
                 $currentIpAddress = '123.1.1.124';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
@@ -109,7 +111,7 @@ class UsersController extends AppController {
                             //if users enter invalid password m times, prevent them from logging in p minutes
                             $this->setNumberOfFailedLogin($this->getNumberOfFailedLogin($user['User']['Username']) + 1, $user['User']['Username']);
                             $numberFailedLogin = $this->getNumberOfFailedLogin($user['User']['Username']);
-                            debug($numberFailedLogin);
+                            //debug($numberFailedLogin);
                             $maxFailed = (int)$this->Config->getConfig('FailNumber');
 
                             if ($numberFailedLogin >= $maxFailed) {
@@ -151,10 +153,17 @@ class UsersController extends AppController {
                 $this->User->create();
                 $birthday = $data['User']['Birthday']['year'].'-'.$data['User']['Birthday']['month'].'-'.$data['User']['Birthday']['day'];
                 $data['User']['Birthday'] = $birthday;
-                $data['User']['InitialPassword'] =  $data['User']['Password'];
-                $data['User']['InitialCodeQuestion'] =  $data['User']['VerifyCodeQuestion'];
-                $data['User']['InitialCodeAnswer'] =  $data['User']['VerifyCodeAnswer'];
-                // debug($data);
+                $initialPassword = $data['User']['Username'] . $data['User']['Password'];
+                $initialCodeQuestion = $data['User']['Username'] . $data['User']['VerifyCodeQuestion'];
+                $initialCodeAnswer = $data['User']['Username'] . $data['User']['VerifyCodeAnswer'];
+                $data['User']['InitialPassword'] = $data['User']['Password'];
+
+                $data['User']['InitialCodeQuestion'] = Security::hash($initialCodeQuestion, 'sha1', true);
+                $data['User']['VerifyCodeQuestion'] = $data['User']['InitialCodeQuestion'];
+                $data['User']['InitialCodeAnswer'] = Security::hash($initialCodeAnswer, 'sha1', true);
+                $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer']; 
+                $data['User']['Status'] = 2;
+                 // debug($data);
                 if ($this->User->save($data)) {
                     $this->Session->setFlash(__('ユーザが登録されました'));
                     $this->redirect(array('action' => 'login'));
@@ -212,10 +221,12 @@ class UsersController extends AppController {
                         $isPassTab = true;
                         //ユーザ画使用しているパースワードを取り出す
                         $password = $userData['User']['Password'];
+                        $currentPassword = $userName . trim($this->request->data['currentPassword']);
                         //リクエストでの使用中のパースワードを取り出す
-                        $currentPassword = AuthComponent::password($this->request->data['currentPassword']);
+                        $currentPassword = Security::hash($currentPassword, 'sha1', true);
                         //リクエストでの新規のパースワードを取り出す
-                        $newPassword = AuthComponent::password($this->request->data('newPassword'));
+                        $newPassword = $userName . trim($this->request->data['newPassword']);
+                        $newPassword = Security::hash($newPassword, 'sha1', true);
                         //リクエストでの使用中パースワードとユーザのパースワードが合わせるかどうかチェック
                         if ($currentPassword==$password) {
                             //ユーザのパースワードを更新する
@@ -235,14 +246,16 @@ class UsersController extends AppController {
                     }
                     //リクエストのデータは4つのフィールドの場合
                     else if (sizeof($this->request->data) == 4) {
+                        $currentQuestion = Security::hash($userName . trim($this->request->data('currentQuestion')), 'sha1', true);
+                        $currentAnswer = Security::hash($userName . trim($this->request->data('currentAnswer')), 'sha1', true);
                         //ユーザの秘密の質問を取り出す
                         $verifyQuestion = $userData['User']['VerifyCodeQuestion'];
                         //ユーザの秘密の答えを取り出す
                         $verifyAnswer = $userData['User']['VerifyCodeAnswer'];
                         //ユーザの新規に秘密質問を取り出す
-                        $newQuestion = trim($this->request->data['newQuestion']);
+                        $newQuestion = Security::hash($userName . trim($this->request->data['newQuestion']), 'sha1', true);
                         //ユーザの新規に秘密答えを取り出す
-                        $newAnswer = trim($this->request->data['newAnswer']);
+                         $newAnswer = Security::hash($userName . trim($this->request->data['newAnswer']), 'sha1', true);
                         //新規の質問それとも新規の答えは使用中の質問と答えが合わせていない場合
                         if ($verifyQuestion != trim($this->request->data('currentQuestion')) || $verifyAnswer != trim($this->request->data('currentAnswer'))) {
 
@@ -332,7 +345,7 @@ class UsersController extends AppController {
     {
 //        echo "Id is ".$id;
         if ($id == null) {
-            throw new NotFoundException(__("Invalid Request"));
+            throw new NotFoundException(__("無効リクエスト"));
         } else {
             if ($this->request->is('post')) {
                 $userData = $this->User->find('first', array(
@@ -342,15 +355,17 @@ class UsersController extends AppController {
                     throw new NotFoundException('Could not find that User');
                 } else {
 //                    print_r($userData);
-                    $question = trim($this->request->data['質問']);
-                    $answer = trim($this->request->data['答え']);
+                    $question = Security::hash($userName.trim($this->request->data['質問']),'sha1',true);
+                    $answer =  Security::hash($userName.trim($this->request->data['答え']),'sha1',true);
                     if ($question != $userData['User']['VerifyCodeQuestion'] || $answer != $userData['User']['VerifyCodeAnswer']) {
-                        $this->Session->setFlash(__("Your current question and answer not match"));
+                        $this->Session->setFlash(__("使用中の秘密質問と答えが合わせていません"));
                     } else {
                         if ($this->User->updateAll(array('Status' => 0), array('UserId' => $id))) {
                             $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
 //                            return $this->redirect(array('action' => 'index'));
+                        }else {
+                            $this->Session->setFlash(__("エラーがあるので、あなたのアカウントが削除されていません"));
                         }
                     }
 

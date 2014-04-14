@@ -222,20 +222,25 @@ class User extends AppModel {
      * @param array $options
      * @return boolean
      */
-     public function beforeSave($options = array()) {
+    public function beforeSave($options = array())
+    {
+        $userName= $this->data[$this->alias]['Username'];
+        debug($userName);
         // hash our password
         if (isset($this->data[$this->alias]['Password'])) {
-            $this->data[$this->alias]['Password'] = AuthComponent::password($this->data[$this->alias]['Password']);
+
+            $this->data[$this->alias]['Password'] = AuthComponent::password($userName.$this->data[$this->alias]['Password']);
         }
+
         if (isset($this->data[$this->alias]['InitialPassword'])) {
-            $this->data[$this->alias]['InitialPassword'] = AuthComponent::password($this->data[$this->alias]['InitialPassword']);
+            $this->data[$this->alias]['InitialPassword'] = AuthComponent::password($userName.$this->data[$this->alias]['InitialPassword']);
         }
-         
+
         // // if we get a new password, hash it
         // if (isset($this->data[$this->alias]['password_update']) && !empty($this->data[$this->alias]['password_update'])) {
         //     $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password_update']);
         // }
-     
+
         // fallback to our parent
         return parent::beforeSave($options);
     }
