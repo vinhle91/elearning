@@ -533,24 +533,7 @@ class TeacherController extends AppController {
                     }
                     $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
                 } else {
-
-                    $file = $this->File->find('first', array(
-                        'conditions' => array(
-                            'File.LessonId' => $lesson_id,
-                            'IsDeleted' => '0',
-                            'FileType' => '1',
-                        ),
-                        'contain' => false,
-                        'order' => array('File.FileId' => 'Asc'),
-                            )
-                    );
-                    if (!empty($file)) {
-                        $file_id = $file['File']['FileId'];
-                        $this->redirect(array('controller' => 'Teacher', 'action' => 'view_lesson', $lesson_id, $file_id));
-                    } else {
-                        $file_id = 0;
-                        $this->redirect(array('controller' => 'Teacher', 'action' => 'view_lesson', $lesson_id, $file_id));
-                    }
+                    $this->redirect($this->Session->read('referer'));
                 }
             } else {
                 $this->Session->setFlash('授業削除失敗');
@@ -558,6 +541,7 @@ class TeacherController extends AppController {
             }
         } else {
             if ($lesson_id != null) {
+                $this->Session->write('referer', $this->referer());
                 $this->set('lesson_id', $lesson_id);
             } else {
                 $this->Session->setFlash('授業IDがありません。授業削除できない');

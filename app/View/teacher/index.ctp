@@ -93,7 +93,7 @@
                             <td width="10%"><?php echo $this->Html->link("学生のリスト",array('controller'=>'Teacher','action'=>'list_student',$lesson['Lesson']['LessonId']));?></td>
 
                             <td width="5%"><a href="#">更新</a></td>
-                            <td width="8%"><a href="#">削除</a></td>
+                            <td width="8%"><?php echo $this->Html->link("削除", array('controller'=>'Teacher','action'=>'delete_lesson',$lesson['Lesson']['LessonId']));?></td>
                         </tr>
                         <?php endforeach;?>
                         <?php unset($lesson);?>  
