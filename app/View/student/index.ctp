@@ -95,25 +95,28 @@
         </div>
         <div class="title"><h3>勉強しているもの</h3></div>     
         <div class="box">
-           <!--  <div class="order">
+           <div class="order">
                 順序を決める : 
                 <?php echo $this->Html->link('時間', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'time'))); ?>
                 <span>-</span>
                 <?php echo $this->Html->link('Like', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'like'))); ?>
                 <span>-</span>
                 <?php echo $this->Html->link('見る事', array('controller'=>'Student', 'action' => 'index', "?"=>array('sortBy'=>'view'))); ?>
-            </div> -->
+            </div>
             <div class="top">
                 <?php $paginator = $this->Paginator; ?>
                 <table border = "1" align = "center" id = "mylesson">
                     <tbody>
                         <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
-                            <td width = "8%" style = "background-color: #eee;">番号</td>
+                            <td width = "5%" style = "background-color: #eee;">番号</td>
                             <td width = "25%" style = "background-color: #eee;"><?php echo $paginator->sort('Lesson.Title', 'タイトル'); ?></td>
                             <td width = "8%" style = "background-color: #eee;"><?php echo $paginator->sort('User.Username', '先生'); ?></td>
+                            <td width = "5%" style = "background-color: #eee;"><?php echo $paginator->sort('Lesson.LikeNumber', 'いいね'); ?></td>
+                            <td width = "5%" style = "background-color: #eee;"><?php echo $paginator->sort('Lesson.ViewNumber', 'ビュー'); ?></td>
                             <td width = "19%" style = "background-color: #eee;"><?php echo $paginator->sort('StudentHistory.StartDate', '始め時間'); ?></td>
                             <td width = "19%" style = "background-color: #eee;"><?php echo $paginator->sort('StudentHistory.ExpiryDate', '終わり時間'); ?></td>
-                            <td colspan = "3" style = "background-color: #eee;">管理</td>
+                            <td colspan = "2" style = "background-color: #eee;">管理</td>
+                            
                         </tr>
                         <?php
                         $i = 0;
@@ -124,6 +127,8 @@
                             <td><?php echo $i;?></td>
                             <td><?php echo $this->Html->link($item['Lesson']['Title'], array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId'],$item['FileId']));?></td>
                             <td><?php echo $item['User']['Username'];?></td>
+                            <td><?php echo $item['Lesson']['LikeNumber'];?></td>
+                            <td><?php echo $item['Lesson']['ViewNumber'];?></td>
                             <td><?php echo $item['StudentHistory']['StartDate'];?></td>
                             <td><?php echo $item['StudentHistory']['ExpiryDate'];?></td>
                             <td><?php echo $this->Html->link('勉強', array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId'],$item['FileId']));?></td>
@@ -133,15 +138,6 @@
                     </tbody>
                 </table>
             </div>
-                
-               <!--  <ul>
-                   <a href="#">← Previous</a></li>
-                    <li class="active"><a rel="start" href="#">1</a></li>
-                    <li><a rel="next" href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li class="next next_page "><a rel="next" href="#">Next →</a></li>
-                </ul>
-            </div>  -->
             <div class="pager" style="text-align: center">
                 <ul>
                     <li>
@@ -155,7 +151,7 @@
                     <?php endif;?>
                     <?php
                         echo $paginator->numbers(array(
-                            'separator' => ' | ',
+                            'separator' => '',
                         ));
                     ?>
                     <?php

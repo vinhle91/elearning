@@ -14,17 +14,22 @@
 class StudentHistory extends AppModel {
 //put your code here
     public $name = 'StudentHistory';
-    // public $hasAndBelongsToMany = array(
-    //     'Lesson' => array(
-    //         'className' => 'Lesson',
-    //         'joinTable' => 'Transactions',
-    //         'foreignKey' => false,
-    //         'associationForeignKey' => false,
-    //         //'unique' => true,
-    //         'conditions' => 'Lesson.LessonId = StudentHistory.LessonId',
-    //     ),
-    // );
-
+    public $belongsTo = array(
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => false,
+            'conditions' => array(
+                'StudentHistory.UserId = User.UserId',
+            )
+        ),
+        'Lesson' => array(
+            'className' => 'Lesson',
+            'foreignKey' => false,
+            'conditions' => array(
+                'StudentHistory.LessonId = Lesson.LessonId',
+            )
+        )
+    );
     function getStudentTransactionHistory($userId, $month, $year) {
         $this->recursive = -1;
         if ($month != 0 && $year != 0) {
@@ -88,25 +93,10 @@ class StudentHistory extends AppModel {
     }
     function getPaginationOptions($userId, $sortBy) {
         $options = array();
-        $options['fields'] = array('Lesson.*', 'StudentHistory.*', 'User.*');
-        $options['joins'] = array(
-            array('table' => 'lessons',
-                'alias' => 'Lesson',
-                'foreignKey' => false,
-                'type' => 'inner',
-                'conditions' => array(
-                    'Lesson.LessonId = StudentHistory.LessonId'
-                )
-            ),
-            array('table' => 'users',
-                'alias' => 'User',
-                'foreignKey' => false,
-                'type' => 'inner',
-                'conditions' => array(
-                    'Lesson.UserId = User.UserId'
-                )
-            ),
-        );
+        $options['fields'] = array(
+            'StudentHistory.*',
+            'Lesson.*',
+            'User.*', );
         $options['conditions'] = array(
             'StudentHistory.UserId' => $userId,
             'CURDATE() BETWEEN DATE(StudentHistory.StartDate) AND DATE(StudentHistory.ExpiryDate)',
@@ -114,13 +104,13 @@ class StudentHistory extends AppModel {
         $options['limit'] = 5;
         switch ($sortBy) {
             case 'like':
-                $options['order'] = array('Lesson.LikeNumber' => 'DESC');
+                $options['order'] = array('StudentHistory.LikeNumber' => 'DESC');
                 break;
             case 'view':
-                $options['order'] = array('Lesson.ViewNumber' => 'DESC');
+                $options['order'] = array('StudentHistory.ViewNumber' => 'DESC');
                 break;
             default:
-                $options['order'] = array('StudentHistory.StartDate' => 'DESC');
+                $options['order'] = array('StudentHistory.ExpiryDate' => 'DESC');
                 break;
         }
         
@@ -132,16 +122,6 @@ class StudentHistory extends AppModel {
         $options['conditions'] = array(
                 'StudentHistory.LessonId' => $lessonId,
             );
-        $options['joins'] = array(
-            array('table' => 'users',
-                'alias' => 'User',
-                'type' => 'inner',
-                'conditions' => array(
-                    'User.UserId = StudentHistory.UserId'
-                )
-            )
-        );
-
         return $studentHistories = $studentHistories = $this->find('all', $options);
     }
 

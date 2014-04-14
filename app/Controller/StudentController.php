@@ -8,6 +8,7 @@ class StudentController extends AppController {
     /**
      * index
      */
+    public $components = array('Paginator');
     public $uses = array(
         'User',
         'StudentHistory',
@@ -41,15 +42,19 @@ class StudentController extends AppController {
         $userId = $this->Auth->user('UserId');
         $today = new DateTime();
         //Get history of student
-        $this->StudentHistory->recursive = -1;
         if (isset($this->request->query['sortBy'])) {
             $sortBy = $this->request->query['sortBy'];
         } else {
             $sortBy = 'time';
         }
+        $this->StudentHistory->virtualFields = array(
+                    'LikeNumber' => 'Lesson.LikeNumber',
+                    'ViewNumber' => 'Lesson.ViewNumber'
+        );
         $options = $this->StudentHistory->getPaginationOptions($userId, $sortBy);
         $this->paginate = $options;
         $histories = $this->paginate('StudentHistory');
+//        debug($histories);
         foreach ($histories as $key => $value) {
             $test = $this->Test->find('first', array(
                 'conditions' => array(

@@ -11,11 +11,12 @@
  *
  * @author anh
  */
-class Lesson extends AppModel{
+class Lesson extends AppModel {
+
     //put your code here
     public $primaryKey = 'LessonId';
     public $actsAs = array('Containable');
-	public $hasMany = array(
+    public $hasMany = array(
         'Comment' => array(
             'className' => 'Comment',
             'foreignKey' => 'LessonId',
@@ -42,9 +43,8 @@ class Lesson extends AppModel{
             'foreignKey' => 'LessonId',
             'order' => 'Tag.created DESC',
             'dependent' => true
-        )
+        ),
     );
-    
     public $belongsTo = array(
         'Author' => array(
             'className' => 'User',
@@ -53,9 +53,9 @@ class Lesson extends AppModel{
                 'Author.UserId',
                 'Author.Username',
                 'Author.Status',
-                )
-            ),
-        'User' => array('className' => 'users',
+            )
+        ),
+        'User' => array(
             // 'conditions' => array('User.UserType' => 2,"`Lesson`.`UserId` = `User`.`UserId`"),
             // 'foreignKey' => false
             'className' => 'User',
@@ -65,49 +65,52 @@ class Lesson extends AppModel{
     public function getLessonsByTeacher($userId) {
         $this->contain('Comment');
         $lessons = $this->find('all', array(
-           'conditions' => array('Lesson.UserId' => $userId,'Lesson.IsDeleted' => '0'), 
-           'contain' => array(
+            'conditions' => array('Lesson.UserId' => $userId, 'Lesson.IsDeleted' => '0'),
+            'contain' => array(
                 'Comment' => array(
-                    'fields' => array( 'COUNT(DISTINCT CommentId) as count'),
+                    'fields' => array('COUNT(DISTINCT CommentId) as count'),
                     'conditions' => array(
                         'Comment.IsDeleted' => '0',
                     ),
                 ),
             ),
-
         ));
         return $lessons;
     }
+
     public function getLessonById($lessonId) {
         $lessons = $this->find('all', array(
-           'conditions' => array('Lesson.LessonId' => $lessonId), 
+            'conditions' => array('Lesson.LessonId' => $lessonId),
         ));
 
         return $lessons[0];
     }
+
     public function getAllLessons() {
-        $lessons = $this->find('all',array(
+        $lessons = $this->find('all', array(
             'limit' => 10,
             'conditions' => array(
                 'IsDeleted' => '0'
             )
-            )
+                )
         );
 
         return $lessons;
     }
+
     function getTopLessons() {
-        $lessons = $this->find('all',array(
+        $lessons = $this->find('all', array(
             'limit' => 10,
             'conditions' => array(
                 'IsDeleted' => '0'
             ),
-            'contain'=> false,
-            )
+            'contain' => false,
+                )
         );
 
         return $lessons;
     }
+
     public $validate = array(
         'Title' => array(
             'required' => array(
@@ -134,12 +137,14 @@ class Lesson extends AppModel{
             ),
         )
     );
-	public function getLessonInfo($lessonId) {
+
+    public function getLessonInfo($lessonId) {
         $buff = $this->find('first', array(
             'conditions' => array(
                 'Lesson.LessonId' => $lessonId,
             ),
         ));
         return $buff['Lesson'];
-    }    
+    }
+
 }
