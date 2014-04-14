@@ -88,14 +88,14 @@ class TeacherController extends AppController {
                     $data['Comment']['Content'] = $comment;
                     if ($this->Comment->save($data)) {
                         $this->Session->setFlash(__('コメント成功！'));
-                        $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id));
+                        $this->redirect($this->referer());
                     } else {
                         $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
-                        $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id));
+                        $this->redirect($this->referer());
                     }
                 } else {
                     $this->Session->setFlash(__('Require is comment!.'));
-                    $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id));
+                    $this->redirect($this->referer());
                 }
             } else {
                 $this->set(compact('lesson_id'));
