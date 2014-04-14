@@ -88,6 +88,9 @@ class Lesson extends AppModel{
     public function getAllLessons() {
         $lessons = $this->find('all',array(
             'limit' => 10,
+            'conditions' => array(
+                'IsDeleted' => '0'
+            )
             )
         );
 
@@ -96,6 +99,9 @@ class Lesson extends AppModel{
     function getTopLessons() {
         $lessons = $this->find('all',array(
             'limit' => 10,
+            'conditions' => array(
+                'IsDeleted' => '0'
+            ),
             'contain'=> false,
             )
         );

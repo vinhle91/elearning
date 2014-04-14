@@ -11,6 +11,7 @@ class UsersController extends AppController {
         'User',
         'Lesson',
         'Category',
+        'Config'
         );
 	public function beforeFilter() {
         $this->pageTitle = 'Home';
@@ -18,6 +19,7 @@ class UsersController extends AppController {
         $this->Auth->allow(array('index','sign_up'));
         return parent::beforeFilter();
     }
+
 	public function index() {
         if($this->Auth->user()){            
             $UserType = $this->Auth->user('UserType');
@@ -62,8 +64,22 @@ class UsersController extends AppController {
                 
                 $ipAddress = $user['User']['IpAddress'];
                 // debug($data);
+
+                //check remaining blocking time
+                $remainBlockTime = $this->remainBlockTime($user['User']['Username']);
+
+                if ($remainBlockTime > 0) {
+                    $this->set('userIsBlocked', true);
+                } else {
+                    $this->set('userIsBlocked', false);
+                }
+
+                // debug($remainBlockTime);
+                // debug($this->getNumberOfFailedLogin($user['User']['Username']));
                 //if ip adress field is null, set the ip address
-                if (is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User'])) {
+                if ((is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User']))
+                    && $remainBlockTime <= 0)
+                {
                     if (is_null($ipAddress)) {
                         $this->User->id = $user['User']['UserId'];
                         $this->User->saveField('IpAddress', $currentIpAddress);
@@ -89,21 +105,41 @@ class UsersController extends AppController {
                             };
                         } else {
                             $this->Session->setFlash($this->Auth->loginError);
+
+                            //if users enter invalid password m times, prevent them from logging in p minutes
+                            $this->setNumberOfFailedLogin($this->getNumberOfFailedLogin($user['User']['Username']) + 1, $user['User']['Username']);
+                            $numberFailedLogin = $this->getNumberOfFailedLogin($user['User']['Username']);
+                            debug($numberFailedLogin);
+                            $maxFailed = (int)$this->Config->getConfig('FailNumber');
+
+                            if ($numberFailedLogin >= $maxFailed) {
+                                //block user
+                                $this->setNumberOfFailedLogin(0, $user['User']['Username']);
+                                $this->blockUserLogin($user['User']['Username']);
+                            }
+
                         }
                     } else {
-                        $this->Session->setFlash(__('Invalid verify code answer'));
+                        $this->Session->setFlash(__('セキュリティコードが間違った。'));
+
                         $this->set('allowVerifyCode', true);
                         $this->set('user', $user);
                     }
 
                 } else {
-                    //else request user the verify code
-                    $this->set('allowVerifyCode', true);
-                    $this->set('user', $user);
-                    $this->Session->setFlash(__('You access from different ip address, please enter the verify code answer'));
+
+                    if ($remainBlockTime > 0) {
+                        $this->Session->setFlash(__('３回に間違ったパスワードが入力されます。１分間待ってログインします。'));
+
+                    } else {
+                        //else request user the verify code
+                        $this->set('allowVerifyCode', true);
+                        $this->set('user', $user);
+                        $this->Session->setFlash(__('異なる IP Address にアクセスして、セキュリティコードを入力してください。'));
+                    }
                 }
             } else {
-                $this->Session->setFlash(__('Username or Password not empty'));
+                $this->Session->setFlash(__('ユーザ名またはパスワードが空である。'));
             }
         } 
 	}
@@ -123,10 +159,10 @@ class UsersController extends AppController {
                     $this->Session->setFlash(__('ユーザが登録されました'));
                     $this->redirect(array('action' => 'login'));
                 } else {
-                    $this->Session->setFlash(__('The user could not be created. Please, try again.'));
+                    $this->Session->setFlash(__('ユーザーは作成できません。'));
                 }   
             }else{
-                $this->Session->setFlash(__('Please confirm terms of service'));
+                $this->Session->setFlash(__('サービス条件とプライバシー方針に賛成してください。'));
             }           
             
         }
@@ -312,7 +348,7 @@ class UsersController extends AppController {
                         $this->Session->setFlash(__("Your current question and answer not match"));
                     } else {
                         if ($this->User->updateAll(array('Status' => 0), array('UserId' => $id))) {
-                            $this->Session->setFlash(__("Your account has been deleted."));
+                            $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
 //                            return $this->redirect(array('action' => 'index'));
                         }
@@ -326,5 +362,39 @@ class UsersController extends AppController {
 	public function logout() {
 	    return $this->redirect($this->Auth->logout());
 	}
+
+
+    public function blockUserLogin($username) {
+        $today = new DateTime();
+        $blockTime = $today->add(new DateInterval('PT1M'));
+        $this->Session->write('Block'.$username, $blockTime);
+    }
+
+    public function remainBlockTime($username) {
+        $today = new DateTime();
+        $blockTime = $this->Session->read('Block'.$username);
+        if (is_null($blockTime) || $today > $blockTime) {
+            return 0;
+        }
+        $diff = $today->diff($blockTime);
+        return (int)$diff->s;
+    }
+
+    public function getNumberOfFailedLogin($username) {
+        $n = $this->Session->read('NumberOfFailedLogin'.$username);
+        if (is_null($n)) {
+            return 0;
+        }
+        return $n;
+    }
+
+    public function setNumberOfFailedLogin($number, $username) {
+        $n = $this->Session->read('NumberOfFailedLogin'.$username);
+        if (is_null($n)) {
+            $this->Session->write('NumberOfFailedLogin'.$username, 0);
+        } else {
+            $this->Session->write('NumberOfFailedLogin'.$username, $number);
+        }
+    }
 }	
 ?>
