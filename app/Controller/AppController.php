@@ -44,8 +44,8 @@ class AppController extends Controller {
 			)
 		);
 		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
-		$this->Auth->loginError = 'Invalid Username or Password entered, please try again.';
-		$this->Auth->authError = 'You must be logged in to view this page.';
+		$this->Auth->loginError = 'ユーザー名又はパスワードが間違った。';
+		$this->Auth->authError = 'このページを表示するために、ログインしてください。';
 		$this->set('categories', $this->Category->getCategories());
         $this->set('userType', $this->Auth->user('UserType'));
 
