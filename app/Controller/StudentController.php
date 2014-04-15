@@ -225,7 +225,8 @@ class StudentController extends AppController {
                     $lesson = $this->Lesson->find('first', $params);
                     $com = $this->Comment->find('all', array(
                         'conditions' => array(
-                            'IsDeleted' => '0'
+                            'IsDeleted' => '0',
+                            'LessonId' => $lesson_id,
                         ),
                         'contain' => array(
                             'User' => array(

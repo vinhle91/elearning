@@ -352,7 +352,7 @@ class UsersController extends AppController {
                     'conditions' => array('User.UserId' => $id)
                 ));
                 if ($userData == null) {
-                    throw new NotFoundException('Could not find that User');
+                    throw new NotFoundException('そのユーザーを見つけることができませんでした');
                 } else {
 //                    print_r($userData);
                     $question = Security::hash($userName.trim($this->request->data['質問']),'sha1',true);

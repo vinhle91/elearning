@@ -10,6 +10,7 @@ class File extends AppModel {
                 'overwrite' => false,
                 'uploadDir' => 'uploads/jugyou',
                 'finalPath' => '',
+                'size' => 'fileSize',
                 'dbColumn' => 'FileLink',
                 'metaColumns' => array(
                     'ext' => 'Extension',
@@ -20,6 +21,7 @@ class File extends AppModel {
                 'overwrite' => false,
                 'uploadDir' => 'uploads/tsv',
                 'finalPath' => '',
+                'size' => 'fileSize',
                 'dbColumn' => 'FileLink',
                 'metaColumns' => array(
                     'ext' => 'Extension',
@@ -29,12 +31,12 @@ class File extends AppModel {
         'Uploader.FileValidation' => array(
             'File' => array(
                 'extension' => array('gif', 'jpg', 'png', 'jpeg', 'pdf','mp3','mp4'),
-                'filesize' => 5242880,
+                'filesize' => 524288000,
                 'required' => true
             ),
             'TestFile' => array(
                 'extension' => array('tsv'),
-                'filesize' => 5242880,
+                'filesize' => 524288000,
                 'required' => true
             )
         )
