@@ -59,7 +59,7 @@ class StudentController extends AppController {
             $test = $this->Test->find('first', array(
                 'conditions' => array(
                     'Test.LessonId' => $value['Lesson']['LessonId'],
-                    'IsDeleted' => '0',
+                    'Test.IsDeleted' => '0',
                 ),
                 'contain' => false,
                 'order' => array('Test.TestId' => 'Asc'),
@@ -73,8 +73,8 @@ class StudentController extends AppController {
             $file = $this->File->find('first', array(
                 'conditions' => array(
                     'File.LessonId' => $value['Lesson']['LessonId'],
-                    'IsDeleted' => '0',
-                    'FileType' => '1',
+                    'File.IsDeleted' => '0',
+                    'File.FileType' => '1',
                 ),
                 'contain' => false,
                 'order' => array('File.FileId' => 'Asc'),
@@ -166,7 +166,7 @@ class StudentController extends AppController {
                 $test = $this->Test->find('first', array(
                     'conditions' => array(
                         'Test.LessonId' => $lesson_id,
-                        'IsDeleted' => '0',
+                        'Test.IsDeleted' => '0',
                     ),
                     'contain' => false,
                     'order' => array('Test.TestId' => 'Asc'),
@@ -188,8 +188,8 @@ class StudentController extends AppController {
                     $file = $this->File->find('first', array(
                         'conditions' => array(
                             'File.FileId' => $file_id,
-                            'IsDeleted' => '0',
-                            'FileType' => '1',
+                            'File.IsDeleted' => '0',
+                            'File.FileType' => '1',
                         ),
                         'order' => array('File.FileId' => 'Asc'),
                             )
@@ -206,8 +206,8 @@ class StudentController extends AppController {
                     $list_file = $this->File->find('all', array(
                         'conditions' => array(
                             'File.LessonId' => $lesson_id,
-                            'IsDeleted' => '0',
-                            'FileType' => '1',
+                            'File.IsDeleted' => '0',
+                            'File.FileType' => '1',
                         ),
                         'contain' => false,
                         'order' => array('File.FileId' => 'Asc'),
@@ -217,7 +217,7 @@ class StudentController extends AppController {
                     $params = array(
                         'conditions' => array(
                             'Lesson.LessonId' => $lesson_id,
-                            'IsDeleted' => '0'
+                            'Lesson.IsDeleted' => '0'
                         ),
                         'contain' => array(
                             'File' => array(
@@ -235,7 +235,7 @@ class StudentController extends AppController {
                         ),
                         'contain' => array(
                             'User' => array(
-                                'conditions' => array('$User.Status' => '1'),
+                                'conditions' => array('User.Status' => '1'),
                                 'fields' => 'User.FullName',
                             )
                         )
@@ -323,7 +323,7 @@ class StudentController extends AppController {
                     $test = $this->Test->find('first', array(
                         'conditions' => array(
                             'Test.TestId' => $test_id,
-                            'IsDeleted' => '0',
+                            'Test.IsDeleted' => '0',
                         ),
                         'order' => array('Test.TestId' => 'Asc'),
                             )
@@ -341,7 +341,7 @@ class StudentController extends AppController {
                     $list_test = $this->Test->find('all', array(
                         'conditions' => array(
                             'Test.LessonId' => $lesson_id,
-                            'IsDeleted' => '0',
+                            'Test.IsDeleted' => '0',
                         ),
                         'contain' => false,
                         'order' => array('Test.TestId' => 'Asc'),
@@ -384,7 +384,7 @@ class StudentController extends AppController {
                             }
                         }
                         if ($n != 0) {
-                            $this->Session->setFlash(__('Ban chua hoan thanh het cac cau tra loi!'));
+                            $this->Session->setFlash(__('あなたはすべての答えを完了していない！'));
                         } else {
                             $test_result['0'] = 1;
                             $total_ans_correct = 0;
@@ -420,7 +420,7 @@ class StudentController extends AppController {
             $test = $this->Test->find('all', array(
                 'conditions' => array(
                     'Test.LessonId' => $lesson_id,
-                    'IsDeleted' => '0',
+                    'Test.IsDeleted' => '0',
                 ),
                 'order' => array('Test.TestId' => 'Asc'),
                     )
@@ -578,8 +578,8 @@ class StudentController extends AppController {
                         $file = $this->File->find('first', array(
                             'conditions' => array(
                                 'File.LessonId' => $lessonId,
-                                'IsDeleted' => '0',
-                                'FileType' => '1',
+                                'File.IsDeleted' => '0',
+                                'File.FileType' => '1',
                             ),
                             'contain' => false,
                             'order' => array('File.FileId' => 'Asc'),

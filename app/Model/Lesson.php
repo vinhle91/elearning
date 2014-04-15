@@ -75,12 +75,6 @@ class Lesson extends AppModel {
                 'message' => 'タイトル空ではありません'
             ),
         ),
-        // 'Category' => array(
-        //     'required' => array(
-        //         'rule'    => 'numeric',
-        //         'message' => '何かを選択する'
-        //     )
-        // ),
         'Tag' => array(
             'required' => array(
                 'rule' => array('notEmpty'),

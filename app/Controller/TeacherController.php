@@ -43,12 +43,12 @@ class TeacherController extends AppController {
             $file = $this->File->find('first', array(
                 'conditions' => array(
                     'File.LessonId' => $value['Lesson']['LessonId'],
-                    'IsDeleted' => '0',
-                    'FileType' => '1',
+                    'File.IsDeleted' => '0',
+                    'File.FileType' => '1',
                 ),
                 'contain' => false,
                 'order' => array('File.FileId' => 'Asc'),
-                    )
+                )
             );
             if (!empty($file)) {
                 $lessons[$key]['FileId'] = $file['File']['FileId'];
@@ -124,8 +124,8 @@ class TeacherController extends AppController {
                     $file = $this->File->find('first', array(
                         'conditions' => array(
                             'File.FileId' => $file_id,
-                            'IsDeleted' => '0',
-                            'FileType' => '1',
+                            'File.IsDeleted' => '0',
+                            'File.FileType' => '1',
                         ),
                         'order' => array('File.FileId' => 'Asc'),
                             )
@@ -143,8 +143,8 @@ class TeacherController extends AppController {
                     $list_file = $this->File->find('all', array(
                         'conditions' => array(
                             'File.LessonId' => $lesson_id,
-                            'IsDeleted' => '0',
-                            'FileType' => '1',
+                            'File.IsDeleted' => '0',
+                            'File.FileType' => '1',
                         ),
                         'contain' => false,
                         'order' => array('File.FileId' => 'Asc'),
@@ -154,7 +154,7 @@ class TeacherController extends AppController {
                     $params = array(
                         'conditions' => array(
                             'Lesson.LessonId' => $lesson_id,
-                            'IsDeleted' => '0'
+                            'Lesson.IsDeleted' => '0'
                         ),
                         'contain' => array(
                             'File' => array(
@@ -173,7 +173,7 @@ class TeacherController extends AppController {
                         'order' => array('Comment.created' => 'Asc'),
                         'contain' => array(
                             'User' => array(
-                                'conditions' => array('$User.Status' => '1'),
+                                'conditions' => array('User.Status' => '1'),
                                 'fields' => 'User.FullName',
                             )
                         )
@@ -258,12 +258,43 @@ class TeacherController extends AppController {
                         }
                     }
                     // Save file of lesson
-                    if (isset($data['File'])) {
+                    $num_file = 0 ;
+                    foreach ($data['File'] as $key => $value) {
+		            	if(!empty($value['path']['name'])){
+		            		//check duplicate file name 
+		            		$options['conditions'] = array(
+				                'File.FileName' => $value['path']['name'],
+				                'File.IsDeleted' => '0',
+				  				'Lesson.IsDeleted' => '0',
+				  				'Lesson.UserId' =>$userId,
+				            );
+		            		$options['fields'] = array('Lesson.UserId', 'File.*');
+		            		$file_name = $this->File->find('all',$options);
+		            		// debug($file_name);
+		            		// die;
+		            		if(!empty($file_name)){
+		            			$this->Lesson->delete($lesson_id);
+		            			$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+		            			$this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
+                            	$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+		            		}
+		            		$data['File'][$key]['path']['old_name'] = $value['path']['name'];
+		            		$num_file ++;
+		            		$type =  explode("/", $value['path']['type']);
+		            		$type = $type['1'];
+		            		//formatName LessonId_FileNum_Size.Type
+		            		$name = 'File'.'_'.$lesson_id.'_'.$num_file.'_'.$value['path']['size'].'.'.$type;
+		            		$data['File'][$key]['path']['name'] = $name;
+		            	}            
+		            }
+		            // debug($data);
+                    if ($num_file!=0) {
                         foreach ($data['File'] as $key => $value) {
                             $this->File->create();
                             $param1['File']['File'] = $value['path'];
                             $param1['File']['LessonId'] = $lesson_id;
                             $param1['File']['FileType'] = '1';
+                            $param1['File']['FileName'] = $value['path']['old_name'];
                             // debug($param1);
                             if ($this->File->save($param1)) {
                                 $File = $this->File->find('first', array(
@@ -279,18 +310,41 @@ class TeacherController extends AppController {
                             	$this->Lesson->delete($lesson_id);
                             	$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                             	$this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
-                            	// $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                                
+                            	$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));         
                             }
                         }
                     }
                     // Save test of lesson
-                    if (isset($data['TestFile'])) {
+                    $num_test = 0 ;
+                    foreach ($data['TestFile'] as $key => $value) {
+		            	if(!empty($value['path']['name'])){
+		            		$file_name = $this->File->find('first',array(
+		            			'conditions' => array('File.LessonId' => $lesson_id,'File.FileName' => $value['path']['name']),
+	                            'fields' => array('File.FileId'),
+	                            'order' => array('File.created' => 'Asc'),
+	                            'contain' => False,
+		            			)
+		            		);
+		            		if(!empty($file_name)){
+		            			$this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
+                            	$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+		            		}
+		            		$data['TestFile'][$key]['path']['old_name'] = $value['path']['name'];
+		            		$num_test ++;
+		            		$type =  explode("/", $value['path']['type']);
+		            		$type = $type['1'];
+		            		//formatName LessonId_FileNum_Size_Type
+		            		$name = 'Test'.'_'.$lesson_id.'_'.$num_test.'_'.$value['path']['size'].'.'.$type;
+		            		$data['TestFile'][$key]['path']['name'] = $name;
+		            	}            
+		            }
+                    if ($num_test!=0) {
                         foreach ($data['TestFile'] as $key => $value) {
                             $this->File->create();
                             $param2['File']['TestFile'] = $value['path'];
                             $param2['File']['LessonId'] = $lesson_id;
                             $param2['File']['FileType'] = '2';
+                            $param2['File']['FileName'] = $value['path']['old_name'];
                             if ($this->File->save($param2)) {
                                 $test_tmp = $this->File->find('first', array(
                                     'conditions' => array('File.LessonId' => $lesson_id, 'File.FileType' => '2'),
@@ -405,7 +459,7 @@ class TeacherController extends AppController {
                         }
                     }
 
-                    // $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id,$file_id));
+                    $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id,$file_id));
                 } else {
                 	$this->Session->setFlash(__('レッスンを作ることができなかった。もう一度やり直してください。'));        
                 	// $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
@@ -427,7 +481,7 @@ class TeacherController extends AppController {
             $params = array(
                 'conditions' => array(
                     'Lesson.LessonId' => $lesson_id,
-                    'IsDeleted' => '0'
+                    'Lesson.IsDeleted' => '0'
                 ),
                 'contain' => array(
                     'User',
@@ -447,7 +501,7 @@ class TeacherController extends AppController {
                     	$file = $this->File->find('first', array(
 			                'conditions' => array(
 			                    'File.LessonId' => $lesson_id,
-			                    'IsDeleted' => '0',
+			                    'File.IsDeleted' => '0',
 			                    'FileType' => '1',
 			                ),
 			                'contain' => false,
@@ -459,7 +513,7 @@ class TeacherController extends AppController {
                         $test = $this->Test->find('first', array(
                             'conditions' => array(
                                 'Test.TestId' => $test_id,
-                                'IsDeleted' => '0',
+                                'Test.IsDeleted' => '0',
                             ),
                             'order' => array('Test.TestId' => 'Asc'),
                                 )
@@ -477,7 +531,7 @@ class TeacherController extends AppController {
                         $list_test = $this->Test->find('all', array(
                             'conditions' => array(
                                 'Test.LessonId' => $lesson_id,
-                                'IsDeleted' => '0',
+                                'Test.IsDeleted' => '0',
                             ),
                             'contain' => false,
                             'order' => array('Test.TestId' => 'Asc'),

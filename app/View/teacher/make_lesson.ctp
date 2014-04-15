@@ -75,7 +75,7 @@
                                     <?php
                                     echo $this->Form->checkbox('TermsOfService', array('checked' => false));
                                     ?>
-                                    アップロードする際に、 <a href="">システムの規約</a>　に合意する.
+                                    アップロードする際に、 <a href="">コピーライト規約</a>　に合意する.
                                     </td>
                                 </tr>
                                 <tr>
