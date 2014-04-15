@@ -35,7 +35,7 @@ class User extends AppModel {
     //         'deleteQuery' => '',
     //         'insertQuery' => ''
     //     )
-    // );            
+    // );     
    	public $validate = array(
         'Username' => array(
             'nonEmpty' => array(

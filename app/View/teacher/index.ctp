@@ -74,7 +74,7 @@
                             <td width="5%" style="background-color: #eee;">ID</td>
                             <td width="30%" style="background-color: #eee;">タイトル</td>
                             <td width="7%" style="background-color: #eee;">ビュー</td>
-                            <td width="5%" style="background-color: #eee;">いいねと言う</td>
+                            <td width="5%" style="background-color: #eee;">いいね</td>
                             <td width="7%" style="background-color: #eee;"> コメント</td>
                             <td width="19%" style="background-color: #eee;">更新時間</td>
                             <td colspan="3" style="background-color: #eee;">マネジメント</td>
