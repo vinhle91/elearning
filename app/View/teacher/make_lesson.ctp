@@ -13,8 +13,7 @@
             <div class="top">
                 <span class="title_text">授業を作る</span> 
                 <div class="upload_page">                          
-                    <?php echo $this->Form->create('Lesson', array('type' => 'file'));?>                        
-                    <div class="input_error"></div>
+                    <?php echo $this->Form->create('Lesson', array('type' => 'file'));?>
                         <table class="sign_up_tb">
                             <tbody>
                                 <tr>
@@ -28,21 +27,19 @@
                                 <tr>
                                     <td> <div class="td_text">カテゴリィ<span style="color:red">*</span></div></td>
                                     <td>
-                                        <select class="picker" name="data[Lesson][Category]">
-                                            <option value="" selected="selected">
-                                                Chosse one
-                                            </option>
+                                        <select  name="data[Lesson][Category]">
                                         <?php foreach ($cat as $value):?>
                                             <option value="<?php echo $value['Category']['CatId']?>">
                                                 <?php echo $value['Category']['CatName']; ?>
                                             </option>
                                         <?php endforeach;?>
                                         </select>
+                                     
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div class="td_text">記述<span style="color:red"></span></div>
+                                        <div class="td_text">記述<span style="color:red">*</span></div>
                                     </td>
                                     <td>
                                         <?php echo $this->Form->input('Abstract', array('class'=>'input','type'=>'textarea','label'=>false,'div'=>false));?>
@@ -50,7 +47,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> <div class="td_text">タグ</div></td>
+                                    <td> <div class="td_text">タグ<span style="color:red">*</span></div></td>
                                     <td>
                                         <?php echo $this->Form->input('Tag', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
                                     </td>
@@ -60,7 +57,7 @@
                                     <td>
                                         <input type="hidden" value="0" id="n_file">
                                         <?php echo $this->Form->input('File.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
-                                        <a href="javascript:void(0)" id="morefile">Add more files</a>
+                                        <a href="javascript:void(0)" id="morefile">さらにファイルを追加</a>
                                     </td>
                                 </tr>
                                 
@@ -69,10 +66,9 @@
                                     <td>
                                         <input type="hidden" value="0" id="n_testfile">
                                         <?php echo $this->Form->input('TestFile.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
-                                        <a href="javascript:void(0)" id="moretestfile">Add more files</a>
+                                        <a href="javascript:void(0)" id="moretestfile">さらにファイルを追加</a>
                                     </td>
-                                </tr> 
-                                
+                                </tr>    
                                 <tr>
                                     <td></td>
                                     <td>

@@ -222,8 +222,9 @@ class TeacherController extends AppController {
         $this->set(compact('cat'));
         if ($this->request->is('post')) {
             $data = $this->request->data;
+            // debug($data);
+            // die;
             if ($data['Lesson']['TermsOfService'] == 1) {
-            	// if($data[''])
                 $this->Lesson->create();
                 $userId = $this->Auth->user('UserId');
                 //make lesson
@@ -251,8 +252,8 @@ class TeacherController extends AppController {
                                 
                             } else {
                             	$this->Lesson->delete($lesson_id);
+                            	$this->Session->setFlash(__('タグは作成できませんでした。 、もう一度お試しください。'));
                             	$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                                $this->Session->setFlash(__('タグは作成できませんでした。 、もう一度お試しください。'));
                             }
                         }
                     }
@@ -277,8 +278,9 @@ class TeacherController extends AppController {
                             } else {
                             	$this->Lesson->delete($lesson_id);
                             	$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
-                            	$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                                $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
+                            	$this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
+                            	// $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+                                
                             }
                         }
                     }
@@ -372,8 +374,9 @@ class TeacherController extends AppController {
 		                            					$this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
 		                            					$this->Test->deleteAll(array('Test.LessonId' => $lesson_id), false);
 		                            					$this->Question->deleteAll(array('Question.TestId' => $test_id), false);
+		                            					$this->Session->setFlash(__('答えは作成できませんでした。 、もう一度お試しください。'));
 		                            					$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-		                                                $this->Session->setFlash(__('答えは作成できませんでした。 、もう一度お試しください。'));
+		                                                
 		                                            }
 		                                            $h++;
 		                                        }
@@ -382,8 +385,9 @@ class TeacherController extends AppController {
                             					$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                             					$this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
                             					$this->Test->deleteAll(array('Test.LessonId' => $lesson_id), false);
+                            					$this->Session->setFlash(__('クエストは作成できませんでした。 、もう一度お試しください。'));
                             					$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-	                                            $this->Session->setFlash(__('クエストは作成できませんでした。 、もう一度お試しください。'));
+	                                            
 	                                        }
 	                                    }
 	                                }
@@ -391,8 +395,9 @@ class TeacherController extends AppController {
                                 	$this->Lesson->delete($lesson_id);
                             		$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                             		$this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                            		$this->Session->setFlash(__('テストは作成できませんでした。 、もう一度お試しください。'));
                             		$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                                    $this->Session->setFlash(__('テストは作成できませんでした。 、もう一度お試しください。'));
+                                    
                                 }
                             } else {
                                 $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
@@ -400,11 +405,12 @@ class TeacherController extends AppController {
                         }
                     }
 
-                    $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id,$file_id));
+                    // $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id,$file_id));
                 } else {
-                	$this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                    $this->Session->setFlash(__('レッスンを作ることができなかった。もう一度やり直してください。'));
+                	$this->Session->setFlash(__('レッスンを作ることができなかった。もう一度やり直してください。'));        
+                	// $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
                 }
+                    
             } else {
                 $this->Session->setFlash(__('利用規約をご確認ください'));
             }

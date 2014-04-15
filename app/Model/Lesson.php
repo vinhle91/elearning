@@ -68,6 +68,32 @@ class Lesson extends AppModel {
             'foreignKey' => 'UserId',
         )
     );
+    public $validate = array(
+        'Title' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'タイトル空ではありません'
+            ),
+        ),
+        // 'Category' => array(
+        //     'required' => array(
+        //         'rule'    => 'numeric',
+        //         'message' => '何かを選択する'
+        //     )
+        // ),
+        'Tag' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'タグが空ではありません'
+            ),
+        ),
+        'Abstract' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => '記述が空ではありません'
+            ),
+        ),        
+    );
     public function getLessonsByTeacher($userId) {
         $this->contain('Comment');
         $lessons = $this->find('all', array(
@@ -117,33 +143,7 @@ class Lesson extends AppModel {
         return $lessons;
     }
 
-    public $validate = array(
-        'Title' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'Title is required'
-            ),
-        ),
-        'Category' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'Category is required'
-            ),
-        ),
-        'File.name' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'This file is required'
-            ),
-        ),
-        'TestFile.name' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'This file is required'
-            ),
-        )
-    );
-
+   
     public function getLessonInfo($lessonId) {
         $buff = $this->find('first', array(
             'conditions' => array(
