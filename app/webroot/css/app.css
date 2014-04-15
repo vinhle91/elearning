@@ -598,3 +598,12 @@ Config Page
 #ip-table tbody td:nth-child(2) {
   width: 30%;
 }
+
+/*Admin Header*/
+.notification a.not-read {
+  background-color: #f5f5f5 !important;
+}
+
+.notification a.not-read:hover {
+  background-color: #F2F7F8 !important;
+}

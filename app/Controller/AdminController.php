@@ -4,7 +4,7 @@
 */
 class AdminController extends AppController {
 	
-	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File');
+	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg');
 
 	function beforeFilter() {
 		$UserType = $this->Auth->user('UserType');
@@ -17,10 +17,30 @@ class AdminController extends AppController {
         }
         $pageTitle = 'E-Learningシステム';
         $this->layout = 'admin';
+
         $status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
+		$fa_label = array('1' => 'plus', '2' => 'bell-o');
+		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/teacher/');
 		$this->set(compact('status'));
 		$this->set(compact('status_label'));
+		$this->set(compact('fa_label'));
+		$this->set(compact('msg_link'));
+
+		$msg = $this->Msg->find("all", array(
+			'conditions' => array(
+				'User.UserType' => 3
+				)
+			));
+		$nmsg = $this->Msg->find("count", array(
+			'conditions' => array(
+				'User.UserType' => 3,
+				'Msg.IsReaded' => 0
+				)
+			));
+		$this->set('nmsg', $nmsg);
+		$this->set('notifs', $msg);
+		$this->log($msg);
         return parent::beforeFilter();
 
     }
@@ -462,9 +482,6 @@ class AdminController extends AppController {
 				} else {
 					$ret['result'] = "Fail";
 				}
-
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
 			}
 
 			if ($param == "block") {
@@ -516,9 +533,20 @@ class AdminController extends AppController {
 					}
 				}
 
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
+				
 			}
+
+			if ($param == "msg") {
+				if ($this->Msg->updateAll(array("IsReaded" => "1"), array('MsgId' => $data)) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
+			}
+
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+
 			$this->log($ret);
 			echo json_encode($ret);
 			die;

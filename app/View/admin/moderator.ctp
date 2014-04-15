@@ -63,8 +63,8 @@
 		var next = parseInt($("#mod-tbl tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td>' + next + '</td>'
-						+ '<td><input type="textarea" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
-						+ '<td><input type="textarea" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
+						+ '<td><input type="text" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
+						+ '<td><input type="password" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
 						+ '<td><a href="#" class="btn btn-xs btn-success" onclick="submitNewMod(event)"><?php echo __("Save") ?></a><a href="#" class="btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a></td>'
 						+ '</tr>';
 		$("#add-new-mod").addClass("disabled");
