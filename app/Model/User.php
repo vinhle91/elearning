@@ -225,7 +225,7 @@ class User extends AppModel {
     public function beforeSave($options = array())
     {
         $userName= $this->data[$this->alias]['Username'];
-        debug($userName);
+        // debug($userName);
         // hash our password
         if (isset($this->data[$this->alias]['Password'])) {
 
