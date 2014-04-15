@@ -57,9 +57,9 @@
 			<!-- BEGIN USER LOGIN DROPDOWN -->
 			<li class="dropdown user">
 				<a href="//elearning/admin/student" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-				<?php echo $this->html->image('photo/no-avatar.jpg', array('class' => 'avatar'))?>
+				<?php echo $this->Session->read('User.ImageProfile') && $this->Session->read('User.ImageProfile')!="" ? $this->Session->read('User.ImageProfile') : $this->html->image('photo/no-avatar.jpg', array('class' => 'avatar'))?>
 
-				<span class="username">管理者</span>
+				<span class="username"><?php echo $this->Session->read('User.Username') ? $this->Session->read('User.Username') : null ?></span>
 				<i class="fa fa-angle-down"></i>
 				</a>
 				<ul class="dropdown-menu">

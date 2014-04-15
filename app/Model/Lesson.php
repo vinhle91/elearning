@@ -44,6 +44,12 @@ class Lesson extends AppModel {
             'order' => 'Tag.created DESC',
             'dependent' => true
         ),
+        'Report' => array(
+            'className' => 'Report',
+            'foreignKey' => 'LessonId',
+            'order' => 'Report.created DESC',
+            'dependent' => true
+        ),
     );
     public $belongsTo = array(
         'Author' => array(
@@ -145,6 +151,20 @@ class Lesson extends AppModel {
             ),
         ));
         return $buff['Lesson'];
+    }
+
+    public function blockLesson($lessons) {
+        foreach ($lessons as $key => $lessonId) {
+            $this->id = $lessonId;
+            $this->saveField('IsBlocked', '1');
+        }
+    }
+
+    public function activeLesson($lessons) {
+        foreach ($lessons as $key => $lessonId) {
+            $this->id = $lessonId;
+            $this->saveField('IsBlocked', '0');
+        }
     }
 
 }

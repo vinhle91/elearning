@@ -85,7 +85,6 @@ $transactions = array(
 				<div class="portlet-body">
 					<div class="table-responsive">
 						<table class="table margin-top-10" style="width: 400px">
-						<?php $this->log($payment_summary)?>
 							<tbody>
 								<tr>
 									<td class="">First transaction </td>

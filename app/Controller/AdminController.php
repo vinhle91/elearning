@@ -73,7 +73,7 @@ class AdminController extends AppController {
 				))
 			);
 		$this->set(compact('new_students'));
-		$this->log($new_students);
+		// $this->log($new_students);
 	}
 
 	public function payment($param = null) {
@@ -149,7 +149,7 @@ class AdminController extends AppController {
 
 		$payment_summary = $this->Transaction->getTransactions("LastMonth");
 		$payment_summary['Earn'] = $payment_summary['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
-		$this->log($payment_summary);
+		// $this->log($payment_summary);
 		$this->set(compact('payment_summary'));
 
 	}
@@ -183,6 +183,7 @@ class AdminController extends AppController {
 					))
 				);
 			$this->set(compact('all_lessons'));
+			$this->log($all_lessons);
 
 		} else {
 			$lessonInfo = $this->Lesson->getLessonInfo($lesson);
@@ -289,7 +290,7 @@ class AdminController extends AppController {
 			$this->set(compact('page_breadcrumb'));
 			//end breadcrumb cho trang
 
-			
+			$this->log($studentInfo);
 			$this->set('studentInfo', $studentInfo);
 		}
 	} 
@@ -367,7 +368,7 @@ class AdminController extends AppController {
 		}
 	}
 
-	public function moderator() {
+	public function moderator($username = null) {
 		$this->set('sidebar', array('user', 'moderator'));
 
 		if (!isset($username)) {
@@ -389,12 +390,14 @@ class AdminController extends AppController {
 				'Total' => $this->User->find("count", array(
 					'conditions' => array(
 						'UserType' => '3',
+						'Status <>' => '0'
 						),
 					)),
 				'Data' => $this->User->find('all', array(
 					'limit' => 10,
 					'conditions' => array(
-						'UserType' => '3'
+						'UserType' => '3',
+						'Status <>' => '0'
 						),
 					))
 				);
@@ -498,17 +501,25 @@ class AdminController extends AppController {
 			}
 
 			if ($param == "insert") {
-				$this->User->create();
-				if ($this->User->save($data)) {
-					$ret['result'] = "Success";
-				} else {
+				$conditions = array(
+					'User.Username' => $data['Username'],
+					);
+				if ($this->User->hasAny($conditions)) {
 					$ret['result'] = "Fail";
+					$ret['msg'] = "ユーザー '".$data['Username']."'' があった!!!";
+				} else {
+					$this->User->create();
+					if ($this->User->save($data)) {
+						$ret['result'] = "Success";
+					} else {
+						$ret['result'] = "Fail";
+					}
 				}
 
-				// $log = $this->User->getDataSource()->getLog(false, false);       
-				// $this->log($log);
+				$log = $this->User->getDataSource()->getLog(false, false);       
+				$this->log($log);
 			}
-
+			$this->log($ret);
 			echo json_encode($ret);
 			die;
 		}
@@ -597,6 +608,31 @@ class AdminController extends AppController {
 			die;
 		}
 
+	}
+
+	public function updateLesson($param = null) {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$ret = array();
+			
+
+			if ($param == "block") {
+				$this->Lesson->blockLesson($data);
+				$ret['result'] = "Success";
+			} 
+
+			if ($param == "active") {
+				$this->Lesson->activeLesson($data);
+				$ret['result'] = "Success";
+			}
+
+			
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+			echo json_encode($ret);
+			die;
+		}
 	}
 
 

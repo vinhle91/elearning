@@ -11,7 +11,7 @@ body {
 /***
 Page header
 ***/
-.header {
+body>.header {
   filter: none;
   background-image: none;
   background-color: #242527;
