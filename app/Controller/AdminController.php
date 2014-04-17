@@ -59,50 +59,40 @@ class AdminController extends AppController {
         // return parent::beforeFilter();
     }
 
-    public function checkLogin() {
-		// if ($this->request->is('post') && !empty($this->request->data)) {
-		// 	$this->layout = null;
-		// 	$data = $this->request->data;
-		// 	$ret = array();
-		// 	$user = $this->User->find('all', array(
-		// 		'conditions' => array(
-		// 			'User.Username' => $data['User']['Username'],
-		// 			'User.UserType' => 3,
-		// 			)
-		// 		));
-
-		// 	if (empty($user)) {
-		// 		$ret['result'] = "Fail";
-		// 		$ret['msg'] = "アカウントが存在しません";
-		// 	} else {
-		// 		if ($user[0]['User']['Password'] == Security::hash($data['User']['Password'], 'sha1', true)) {
-		// 			$ret['result'] = "Success";
-		// 		} else {
-		// 			$ret['result'] = "Fail";
-		// 			$ret['msg'] = "パスワードが正しくありません";
-		// 		}
-		// 	}
-		// 	$this->log($ret);
-		// 	$log = $this->User->getDataSource()->getLog(false, false);       
-		// 	$this->log($log);
-		// 	echo json_encode($ret);
-		// 	die;
-		// }
-	}
-
     public function login() {
 		$this->layout = null;
 		if ($this->request->is('post')) {
             $data = $this->request->data;
-			$this->log($data);
             if(!empty($data['User']['Username']) && !empty($data['User']['Password']) ) {
-            	if ($this->Auth->login()) 
-            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
-            	else {
+            	$currentIpAddress = $this->request->clientIp();
+            	$user = $this->User->find('first', array(
+            			"conditions" => array(
+            				"User.Username" => $data['User']['Username'],
+            				"User.Password" => Security::hash($data['User']['Password'], 'sha1', true),
+            				),
+            		));
+
+            	if (empty($user)) {
             		$this->Session->setFlash("パスワードが正しくありません");
+            	} else {
+            		$ip_tble = [];
+            		foreach ($user['Ip'] as $key => $ip) {
+            			array_push($ip_tble, $ip['IpAddress']);
+            		}
+            		if (in_array($currentIpAddress, $ip_tble)) {
+            			$this->Auth->login();
+            			$this->Session->write('User', $this->Auth->user());
+	            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
+            		} else {
+            			$this->Session->setFlash("IPアドレスが正しくありません");
+            		}
             	}
             }
         }
+	}
+
+	public function logout() {
+	    return $this->redirect($this->Auth->logout());
 	}
 
    	public function test() {
