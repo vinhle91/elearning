@@ -9,11 +9,6 @@
                             <span>テスト 1</span>
                         </a>                          
                     </li>
-                    <!-- <li>
-                       <a href="javascript:void(0)" class="t_teacher">
-                            <span>Test 2</span>
-                       </a>                       
-                    </li> -->
                 </ul>
             </div>
         </div>
@@ -29,7 +24,7 @@
                         </tr>
                          <tr>
                             <td style="border:1px solid #333; width:18%;border-right:0"><h4>トータルの質問: <?php echo $data_test['Total']?></h4></td>
-                            <td colspan="2" style="border:1px solid #333"><h3 style="color:red;">トータルの点: <?php echo $data_test['TotalPoint']?></h3></td>
+                            <td colspan="2" style="border:1px solid #333"><h3 style="color:red;"> <?php echo $test_result['StudentTest']['Point']?>点</h3></td>
                         </tr>
                         <?php foreach ($data_test['Question'] as $key1 => $value1): ?>
                         <tr>
@@ -41,10 +36,17 @@
                         <tr <?php 
                             if($value['Answer']['AnswerNumber'] == $value1['Answer']){
                                 echo 'style="background-color: #e8f8d2;"';
-                            }?>>
+                            }?>
+                            <?php if($value1['Answer']!=$an[$value1['QuesNum']-1] && $an[$value1['QuesNum']-1] == $value['Answer']['AnswerNumber']):?>
+                                    <?php  echo 'style="background-color: #fae3e4;"'; ?>
+                                <?php endif;?>
+                            >
                             <td align="right">
                                 <?php if($value['Answer']['AnswerNumber'] == $value1['Answer']):?>
                                     <?php echo $this->Html->image('icon/yes.png'); ?>
+                                <?php endif;?>
+                                <?php if($value1['Answer']!=$an[$value1['QuesNum']-1] && $an[$value1['QuesNum']-1] == $value['Answer']['AnswerNumber']):?>
+                                    <?php echo $this->Html->image('icon/onebit_33.png',array('width'=>'24px','height'=>'24px')); ?>
                                 <?php endif;?>
                             </td>
                             <td align="left">
