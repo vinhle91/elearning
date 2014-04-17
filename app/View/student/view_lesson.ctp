@@ -64,6 +64,9 @@
                     <div class="lesson_nav">        
                         <?php echo $this->Html->link('テストした結果をみる', array('controller' => 'student', 'action' => 'review_test', $lesson['Lesson']['LessonId'])); ?>
                     </div>
+                     <div class = "lesson_nav">
+                     <?php echo $this->Html->link("違反報告",array('controller'=>'student','action'=>'report',$lesson['Lesson']['LessonId'])); ?>
+                     </div>
                     <div style="float:right" >
                         <?php
                         if (isset($study_history)) {

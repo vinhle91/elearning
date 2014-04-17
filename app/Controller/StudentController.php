@@ -21,7 +21,8 @@ class StudentController extends AppController {
         'Quest',
         'Answer',
         'Config',
-        'File'
+        'File',
+        'Report'
     );
 
     function beforeFilter() {
@@ -731,6 +732,57 @@ class StudentController extends AppController {
             } else {
                 $this->Session->setFlash("あなたはこの授業を勉強していません。授業評価してはいけない");
             }
+        }
+    }
+    public function  report($lessonId = null)
+    {
+
+        $userId = $this->_usersUsername()['UserId'];
+
+        if ($lessonId == null || $userId == null) {
+            $this->Session->setFlash(__('あなたがその授業にアクセスできません'));
+            $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+        } else {
+
+            $today = new DateTime();
+            $isStudying = false;
+            $study_history = $this->StudentHistory->find('first', array(
+                    'conditions' => array(
+                        'StudentHistory.LessonId' => $lessonId,
+                        'StudentHistory.UserId' => $userId
+                    ),
+                    'order' => array('StudentHistory.StartDate' => 'DESC'),
+                )
+            );
+            // debug($study_history);
+            //if the studying records the student has been studying this lesson
+            if ($study_history) {
+                $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
+                if ($today < $expiryDay) {
+                    $isStudying = true;
+                }
+            }
+            if ($isStudying) {
+                $this->set("userId", $userId);
+                $this->set("lessonId", $lessonId);
+                if ($this->request->is('post')) {
+                    $data = $this->request->data;
+                    $this->Report->create();
+                    if($this->Report->save($data)){
+                        $this->Session->setFlash(__('ご協力ありがとうございます'));
+                        $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+                    }
+                    else{
+                        $this->Session->setFlash(__('エラーが発生しました。ちょっと待ってください'));
+                    }
+                    debug($data);
+                }
+            }
+            else{
+                $this->Session->setFlash(__('あなたがその授業にアクセスできません'));
+                $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+            }
+
         }
     }
 

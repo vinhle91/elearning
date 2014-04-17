@@ -85,32 +85,41 @@ class UsersController extends AppController {
     public function login() {
         $this->layout = 'default';
         //if already logged-in, redirect
-        if ($this->Session->check('Auth.User')) {
-            $this->redirect(array('action' => 'index'));
-        }
+        if($this->Session->check('Auth.User')){
+            $this->redirect(array('action' => 'index'));      
+        }        
         // if we get the post information, try to authenticate
         if ($this->request->is('post')) {
             $data = $this->request->data;
-            if (!empty($data['User']['Username']) && !empty($data['User']['Password'])) {
+            if(!empty($data['User']['Username']) && !empty($data['User']['Password']) )
+            {
                 //ALTER TABLE users ADD COLUMN IpAddress varchar(20)
                 //get the current ip address
                 // $currentIpAddress = $this->request->clientIp();
                 // debug($currentIpAddress);
                 //for test
-//                $this->request->data['User']['Password']= $data['User']['Username']. $data['User']['Password'];
+                $this->request->data['User']['Password']= $data['User']['Username']. $data['User']['Password'];
                 // debug($data['User']['Password']);
                 $currentIpAddress = '123.1.1.124';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
+                // debug($user);
+                // die;
+                if (empty($user)) {
+                    $this->Session->setFlash($this->Auth->loginError);
+                    return;
+                }
                 if(isset($user)&&$user['User']['Status'] ==2){
                     $this->Session->setFlash(__('このアカウントは、管理者が受け入れるために保留状態である。'));
                     $this->redirect(array('action' => 'login')); 
                 }               
                 $ipAddress = $user['User']['IpAddress'];
+                //debug($user);
+
                 //check remaining blocking time
                 $remainBlockTime = $this->remainBlockTime($user['User']['Username']);
 
-                if ($remainBlockTime > 0) {
+                if ($remainBlockTime > 0 && $user['User']['UserType'] == 2) {
                     $this->set('userIsBlocked', true);
                 } else {
                     $this->set('userIsBlocked', false);
@@ -119,15 +128,19 @@ class UsersController extends AppController {
                 // debug($remainBlockTime);
                 // debug($this->getNumberOfFailedLogin($user['User']['Username']));
                 //if ip adress field is null, set the ip address
-                if ((is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User'])) && $remainBlockTime <= 0) {
+                if ((is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User']))
+                    && $remainBlockTime <= 0 || $user['User']['UserType'] == 1)
+                {
                     if (is_null($ipAddress)) {
                         $this->User->id = $user['User']['UserId'];
                         $this->User->saveField('IpAddress', $currentIpAddress);
                     }
                     //if valid verifycode answer, allow to login
                     $isValidVerifyCode = false;
-                    if (!array_key_exists('VerifyCodeAnswer', $data['User'])) {
+                    $flag = false;
+                    if (!array_key_exists('VerifyCodeAnswer', $data['User']) || $user['User']['UserType'] == 1) {
                         $isValidVerifyCode = true;
+         
                     } else {
                         $username = $user['User']['Username'];
                         $verifyCodeQuestion = $username . $data['User']['VerifyCodeQuestion'];
@@ -142,25 +155,39 @@ class UsersController extends AppController {
                         if ($user['User']['VerifyCodeQuestion'] == $verifyCodeQuestionHash
                             && $user['User']['VerifyCodeAnswer'] == $verifyCodeAnswerHash) {
                             $isValidVerifyCode = true;
+                            $flag = true;
                         }
                     }
+
                     if ($isValidVerifyCode) {
                         //login here
                         if ($this->Auth->login()) {
                             //if login success, save the ip
+                            $notLogin = false;
+                            if ($this->isUserBlocked($user['User']['Username']) && $user['User']['UserType'] == 2) {
+                                // $this->Session->setFlash(__('セキュリティコードを入力してください。'));
+                                $this->set('allowVerifyCode', true);
+                                $this->set('user', $user);
+                                $notLogin = true;
+                            }
                             $this->User->id = $user['User']['UserId'];
                             $this->User->saveField('IpAddress', $currentIpAddress);
+                            $this->unBlockUser($user['User']['Username']);
+                            $this->setNumberOfFailedLogin(0, $user['User']['Username']);
+                            if (!$notLogin) {
+                                $UserType = NULL;
+                                if($this->Auth->user()){
 
-                            $UserType = NULL;
-                            if ($this->Auth->user()) {
-                                $UserType = $this->Auth->user('UserType');
-                                if ($UserType == 1) {
-                                    $this->redirect(array('controller' => 'Student', 'action' => 'index'));
-                                }
-                                if ($UserType == 2) {
-                                    $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
-                                }
-                            };
+                                    $UserType = $this->Auth->user('UserType');
+                                    if($UserType == 1){
+                                        $this->redirect(array('controller'=>'Student','action' => 'index'));
+                                    }
+                                    if($UserType == 2){
+                                        $this->redirect(array('controller'=>'Teacher','action' => 'index'));
+                                    }
+                                };
+                            }
+  
                         } else {
                             $this->Session->setFlash($this->Auth->loginError);
 
@@ -168,13 +195,15 @@ class UsersController extends AppController {
                             $this->setNumberOfFailedLogin($this->getNumberOfFailedLogin($user['User']['Username']) + 1, $user['User']['Username']);
                             $numberFailedLogin = $this->getNumberOfFailedLogin($user['User']['Username']);
                             //debug($numberFailedLogin);
-                            $maxFailed = (int) $this->Config->getConfig('FailNumber');
+                            $maxFailed = (int)$this->Config->getConfig('FailNumber');
 
-                            if ($numberFailedLogin >= $maxFailed) {
+                            if ($numberFailedLogin >= $maxFailed - 1) {
                                 //block user
                                 $this->setNumberOfFailedLogin(0, $user['User']['Username']);
                                 $this->blockUserLogin($user['User']['Username']);
+                                $this->blockUser($user['User']['Username']);
                             }
+
                         }
                     } else {
                         $this->Session->setFlash(__('セキュリティコードが間違った。'));
@@ -182,21 +211,27 @@ class UsersController extends AppController {
                         $this->set('allowVerifyCode', true);
                         $this->set('user', $user);
                     }
+
                 } else {
 
                     if ($remainBlockTime > 0) {
                         $this->Session->setFlash(__('３回に間違ったパスワードが入力されます。１分間待ってログインします。'));
+                        $this->blockUser($user['User']['Username']);
+
                     } else {
                         //else request user the verify code
-                        $this->set('allowVerifyCode', true);
-                        $this->set('user', $user);
-                        $this->Session->setFlash(__('異なる IP Address にアクセスして、セキュリティコードを入力してください。'));
+                        if ($user['User']['UserType'] == 2) {
+                            $this->set('allowVerifyCode', true);
+                            $this->set('user', $user);
+                            $this->Session->setFlash(__('異なる IP Address にアクセスして、セキュリティコードを入力してください。'));
+
+                        }
                     }
                 }
             } else {
                 $this->Session->setFlash(__('ユーザ名またはパスワードが空である。'));
             }
-        }
+        } 
     }
 
     public function sign_up($userType = null) {
@@ -467,7 +502,7 @@ class UsersController extends AppController {
     public function getNumberOfFailedLogin($username) {
         $n = $this->Session->read('NumberOfFailedLogin' . $username);
         if (is_null($n)) {
-            return 0;
+            return 1;
         }
         return $n;
     }
@@ -479,6 +514,21 @@ class UsersController extends AppController {
         } else {
             $this->Session->write('NumberOfFailedLogin' . $username, $number);
         }
+    }
+     public function isUserBlocked($username) {
+        $n = $this->Session->read('IsBlocked'.$username);
+        if (is_null($n) || $n == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function blockUser($username) {
+        $this->Session->write('IsBlocked'.$username, 1);
+    }
+
+    public function unBlockUser($username) {
+        $this->Session->write('IsBlocked'.$username, 0);
     }
 
 }

@@ -20,23 +20,6 @@ class User extends AppModel
             'dependent' => true,
         ),
     );
-    // public $hasAndBelongsToMany = array(
-    //     'StudentTest' =>array(
-    //         'className' => 'StudentTest',
-    //         'joinTable' => 'students_tests',
-    //         'foreignKey' => 'UserId',
-    //         'associationForeignKey' => 'TestId',
-    //         'unique' => true,
-    //         'conditions' => '',
-    //         'fields' => '',
-    //         'order' => '',
-    //         'limit' => '',
-    //         'offset' => '',
-    //         'finderQuery' => '',
-    //         'deleteQuery' => '',
-    //         'insertQuery' => ''
-    //     )
-    // );     
     public $validate = array(
         'Username' => array(
             'nonEmpty' => array(
@@ -80,18 +63,6 @@ class User extends AppModel
                 'message' => 'Both passwords must match.'
             )
         ),
-        // 'VerifyCodeQuestion' => array(
-        //     'required' => array(
-        //         'rule' => array('notEmpty'),
-        //         'message' => 'A verify code question is required'
-        //     ),
-        // ),
-        // 'VerifyCodeAnswer' => array(
-        //     'required' => array(
-        //         'rule' => array('notEmpty'),
-        //         'message' => 'A verify code answer is required'
-        //     ),
-        // ),
         'FullName' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
@@ -102,18 +73,6 @@ class User extends AppModel
                 'message' => 'Fullname must be between 6 to 60 characters'
             )
         ),
-        // 'BankInfo' => array(
-        //     'required' => array(
-        //         'rule' => array('notEmpty'),
-        //         'message' => 'A bank infor is required'
-        //     ),
-        // ),
-        // 'CreditCard' => array(
-        //     'required' => array(
-        //         'rule' => array('notEmpty'),
-        //         'message' => 'A CreditCard infor is required'
-        //     ),
-        // ),
     );
 
     /**
