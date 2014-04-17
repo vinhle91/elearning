@@ -333,6 +333,17 @@
 		</div>
 	</div>
 <script type="text/javascript">
+	function checkEmailValidate(str) {
+		var regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/;
+		if (str.match(regex)) return true;
+		else return false;
+	}
+
+	function checkDateValidate(str) {
+		var regex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		if (str.match(regex)) return true;
+		else return false;
+	}
 
 	$(document).ready(function(){
 		var origin = {};
@@ -380,6 +391,28 @@
 			}
 			if ($('#Address').text() != origin.Address) {
 				submit_data.Address = '\''+$('#Address').text()+'\'';
+			}
+
+			if (!checkEmailValidate($('#Email').text())) {
+				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+				$(".update-notif span").text("Invalid Email!");
+				setTimeout(function(){
+	   				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+	   			return;
+			}
+
+			if (!checkDateValidate($('#Birthday').text())) {
+				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+				$(".update-notif span").text("Invalid Birthday!");
+				setTimeout(function(){
+	   				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+	   			return;
 			}
 			
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
