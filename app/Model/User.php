@@ -109,16 +109,16 @@ class User extends AppModel {
             )
         ),
 
-        'Email' => array(
-            'required' => array(
-                'rule' => array('email', true),    
-                'message' => 'Please provide a valid email address.'   
-            ),
-             'unique' => array(
-                'rule'    => array('isUniqueEmail'),
-                'message' => 'This email is already in use',
-            ),
-        ),
+        // 'Email' => array(
+        //     'required' => array(
+        //         'rule' => array('email', true),    
+        //         'message' => 'Please provide a valid email address.'   
+        //     ),
+        //     // 'unique' => array(
+        //     //     'rule'    => array('isUniqueEmail'),
+        //     //     'message' => 'This email is already in use',
+        //     // ),
+        // ),
         // 'role' => array(
         //     'valid' => array(
         //         'rule' => array('inList', array('king', 'queen', 'bishop', 'rook', 'knight', 'pawn')),
@@ -232,7 +232,7 @@ class User extends AppModel {
     public function beforeSave($options = array())
     {
         $userName= $this->data[$this->alias]['Username'];
-        debug($userName);
+        // debug($userName);
         // hash our password
         if (isset($this->data[$this->alias]['Password'])) {
 
