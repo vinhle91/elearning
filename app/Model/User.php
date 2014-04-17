@@ -28,53 +28,53 @@ class User extends AppModel
         'Username' => array(
             'nonEmpty' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'A username is required',
+                'message' => 'ユーザー名が必要です',
                 'allowEmpty' => false
             ),
             'between' => array(
                 'rule' => array('between', 5, 15),
                 'required' => true,
-                'message' => 'Usernames must be between 5 to 15 characters'
+                'message' => 'ユーザー名は5から15文字の間でなければなりません'
             ),
             'unique' => array(
                 'rule' => array('isUniqueUsername'),
-                'message' => 'This username is already in use'
+                'message' => 'このユーザー名は既に使用されています'
             ),
             'alphaNumericDashUnderscore' => array(
                 'rule' => array('alphaNumericDashUnderscore'),
-                'message' => 'Username can only be letters, numbers and underscores'
+                'message' => 'ユーザー名には、文字、数字、および下線を使用でき'
             ),
         ),
 
         'Password' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'A password is required'
+                'message' => 'パスワードが必要です'
             ),
             'min_length' => array(
                 'rule' => array('minLength', '6'),
-                'message' => 'Password must have a mimimum of 6 characters'
+                'message' => 'パスワードは6文字以上を持っている必要があります'
             )
         ),
 
         'PasswordConfirm' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'Please confirm your password'
+                'message' => 'あなたのパスワードを確認してください'
             ),
             'equaltofield' => array(
                 'rule' => array('equaltofield', 'Password'),
-                'message' => 'Both passwords must match.'
+                'message' => '両方のパスワードが一致する必要があります'
             )
         ),
         'FullName' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'Please provide a full name.'
+                'message' => '名前が必要です'
             ),
             'between' => array(
                 'rule' => array('between', 6, 60),
-                'message' => 'Fullname must be between 6 to 60 characters'
+                'message' => '名前6から60文字の間でなければなりません'
             )
         ),
     );
