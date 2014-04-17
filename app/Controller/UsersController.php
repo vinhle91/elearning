@@ -184,8 +184,9 @@ class UsersController extends AppController
                             $this->setNumberOfFailedLogin(0, $user['User']['Username']);
                             if (!$notLogin) {
                                 $UserType = NULL;
-                                if ($this->Auth->user()) {
 
+
+                                if($this->Auth->user()){
                                     $UserType = $this->Auth->user('UserType');
                                     if ($UserType == 1) {
                                         $this->redirect(array('controller' => 'Student', 'action' => 'index'));
@@ -194,6 +195,8 @@ class UsersController extends AppController
                                         $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
                                     }
                                 };
+                            } else {
+                                $this->Auth->logout();
                             }
 
                         } else {
