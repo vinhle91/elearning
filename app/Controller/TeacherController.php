@@ -11,6 +11,7 @@ class TeacherController extends AppController {
     public $components = array('Paginator', 'RequestHandler');
     public $helpers = array('Js');
     public $uses = array(
+        'Config',
         'User',
         'StudentHistory',
         'Lesson',
@@ -623,18 +624,27 @@ class TeacherController extends AppController {
     public function transaction_history() {
         $this->pageTitle = 'Transaction History';
         $userId = $this->Auth->user('UserId');
-        if (isset($this->request->data['months']) && isset($this->request->data['year'])) {
-            $month = $this->request->data['months'];
-            $year = $this->request->data['year'];
+        if (isset($this->request->data['User'])) {
+            $month = $this->request->data['User']['months']+1;
+            $year = $this->request->data['User']['year'];
+            
         } else {
-            $month = 0;
-            $year = 0;
+            $today = getdate();
+            $month = $today['mon'];
+            $year = $today['year'];
+        }
+        $this->set('selectMonth',$month-1);
+            $this->set('selectYear',$year);
+        $rate = $this->Config->getConfig('SharingRate');
+        if($rate == null) {
+            $this->Session->setFlash('システム設定の定数が見つかれない');
+            $rate = 100;
         }
         $transactions = $this->StudentHistory->getTeacherTransactionHistory($userId, $month, $year);
         $this->set('transactions', $transactions);
         $total = 0;
         foreach ($transactions as $t) {
-            $total = $total + $t['StudentHistory']['fee'];
+            $total = $total + $rate/100*$t['StudentHistory']['fee'];
         }
         $this->set('total', $total);
     }
