@@ -2,7 +2,7 @@
     <div id="content">
         <h3 style="">この授業を削除しますか？</h3>
         <?php
-        echo $this->Form->create();
+        echo $this->Form->create('Teacher');
         echo $this->Form->hidden('lesson_id', array('value' => $lesson_id));
         ?>
         <div class="submit">

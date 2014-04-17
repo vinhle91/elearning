@@ -656,8 +656,8 @@ class TeacherController extends AppController {
         $this->pageTitle = '授業';
         $userId = $this->Auth->user('UserId');
         if ($this->request->is('post')) {
-            if (isset($this->request->data['submit']) && isset($this->request->data['User']['lesson_id'])) {
-                $lesson_id = $this->request->data['User']['lesson_id'];
+            if (isset($this->request->data['submit']) && isset($this->request->data['Teacher']['lesson_id'])) {
+                $lesson_id = $this->request->data['Teacher']['lesson_id'];
                 if ($this->request->data['submit'] == 'はい') {
                     $lesson = $this->Lesson->find('first', array(
                         'conditions' => array('LessonId' => $lesson_id),
@@ -665,7 +665,7 @@ class TeacherController extends AppController {
                     if ($lesson != null) {
                         if ($lesson['Lesson']['UserId'] == $userId) {
                             if ($lesson['Author']['Status'] == 1) {
-                                if($this->Lesson->updateAll(array('IsDeleted'=>'1'),array('LessonId'=>$lesson_id))){
+                                if($this->Lesson->delete($lesson_id, true)){
                                     $this->Session->setFlash('授業削除できました');
                                 } else {
                                     $this->Session->setFlash('エラーが発生された、授業削除できなかった。もう一度やってみてください');

@@ -40,6 +40,7 @@ class StudentController extends AppController {
     }
 
     public function index() {
+        
         $this->pageTitle = '学生';
         $userId = $this->Auth->user('UserId');
         $today = new DateTime();
@@ -119,17 +120,35 @@ class StudentController extends AppController {
         }
         $this->set('Category', $Category);
         //Get top lesson
-        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
-            $this->Lesson->virtualFields = array(
-                'Author' => 'User.Username'
-            );
-            $this->Paginator->settings = array(
-                'conditions' => array('IsDeleted' => '0'),
+        $this->Paginator->settings = array(
+            'Lesson' => array('conditions' => array('IsDeleted' => '0'),
                 'limit' => 15,
                 'fields' => array(
                     'Lesson.*', 'Lesson.Author'
                 ),
                 'contain' => array('User'),
+            ),
+            'User' => array(
+                'fields' => array(
+                    'User.*', 'User.totalLesson', 'User.totalLike', 'User.totalView',
+                    'Lesson.*'
+                ),
+                'conditions' => array('Status' => '1', 'UserType' => '2', 'Lesson.IsDeleted' => '0'),
+                'limit' => 15,
+                'group' => array('User.UserId'),
+                'contain' => array('User', 'Lesson'),
+                'joins' => array(
+                    array(
+                        'alias' => 'Lesson',
+                        'table' => 'lessons',
+                        'conditions' => array('User.UserId = Lesson.UserId')
+                    )
+                ),
+            )
+        );
+        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
+            $this->Lesson->virtualFields = array(
+                'Author' => 'User.Username'
             );
             $topLessons = $this->Paginator->paginate('Lesson');
             foreach ($topLessons as $key => $value) {
@@ -169,26 +188,10 @@ class StudentController extends AppController {
                 'totalLike' => 'Sum(Lesson.LikeNumber)',
                 'totalView' => 'Sum(Lesson.ViewNumber)'
             );
-            $this->Paginator->settings = array(
-                'fields' => array(
-                    'User.*', 'User.totalLesson', 'User.totalLike', 'User.totalView',
-                    'Lesson.*'
-                ),
-                'conditions' => array('Status' => '1', 'UserType' => '2', 'Lesson.IsDeleted' => '0'),
-                'limit' => 15,
-                'group' => array('User.UserId'),
-                'contain' => array('User', 'Lesson'),
-                'joins' => array(
-                    array(
-                        'alias' => 'Lesson',
-                        'table' => 'lessons',
-                        'conditions' => array('User.UserId = Lesson.UserId')
-                    )
-                ),
-            );
             $topTeachers = $this->Paginator->paginate('User');
             $this->set('topTeachers', $topTeachers);
         }
+        
     }
 
     public function view_lesson($lesson_id = null, $file_id = null) {
@@ -737,8 +740,8 @@ class StudentController extends AppController {
             }
         }
     }
-    public function  report($lessonId = null)
-    {
+
+    public function report($lessonId = null) {
 
         $userId = $this->_usersUsername()['UserId'];
 
@@ -750,12 +753,12 @@ class StudentController extends AppController {
             $today = new DateTime();
             $isStudying = false;
             $study_history = $this->StudentHistory->find('first', array(
-                    'conditions' => array(
-                        'StudentHistory.LessonId' => $lessonId,
-                        'StudentHistory.UserId' => $userId
-                    ),
-                    'order' => array('StudentHistory.StartDate' => 'DESC'),
-                )
+                'conditions' => array(
+                    'StudentHistory.LessonId' => $lessonId,
+                    'StudentHistory.UserId' => $userId
+                ),
+                'order' => array('StudentHistory.StartDate' => 'DESC'),
+                    )
             );
             // debug($study_history);
             //if the studying records the student has been studying this lesson
@@ -771,21 +774,18 @@ class StudentController extends AppController {
                 if ($this->request->is('post')) {
                     $data = $this->request->data;
                     $this->Report->create();
-                    if($this->Report->save($data)){
+                    if ($this->Report->save($data)) {
                         $this->Session->setFlash(__('ご協力ありがとうございます'));
                         $this->redirect(array('controller' => 'Student', 'action' => 'index'));
-                    }
-                    else{
+                    } else {
                         $this->Session->setFlash(__('エラーが発生しました。ちょっと待ってください'));
                     }
                     debug($data);
                 }
-            }
-            else{
+            } else {
                 $this->Session->setFlash(__('あなたがその授業にアクセスできません'));
                 $this->redirect(array('controller' => 'Student', 'action' => 'index'));
             }
-
         }
     }
 
