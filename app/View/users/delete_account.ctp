@@ -1,15 +1,14 @@
 <script type="text/javascript">
     function validatePassword() {
         var question = document.myForm.質問.value;
-        var answer = document.myForm.答え.value;
         if (question.toString() == "") {
-            alert("秘密の質問は空けばいけない");
+            alert("使用中のパスワードは空けばいけない");
             return false;
         }
-        if (answer == "") {
-            alert("秘密の答えは空けばいけない");
-            return false;
-        }
+//        if (answer == "") {
+//            alert("秘密の答えは空けばいけない");
+//            return false;
+//        }
         return( true );
     }
 </script>
@@ -31,15 +30,9 @@
                     <tbody>
                     <tr>
                         <td width="21%">
-                            <div class="td_text">秘密の質問</div>
+                            <div class="td_text">使用中のパスワード</div>
                         </td>
-                        <td width="79%"><input class="input" name="質問" size="20" type="text"></td>
-                    </tr>
-                    <tr>
-                        <td width="21%">
-                            <div class="td_text">秘密の質問に答え</div>
-                        </td>
-                        <td width="79%"><input class="input" name="答え" size="20" type="text"></td>
+                        <td width="79%"><input class="input" name="質問" size="20" type="password"></td>
                     </tr>
                     <tr>
                         <td></td>

@@ -623,7 +623,7 @@ class StudentController extends AppController {
             //the student hasn't been studying this lesson
             if (!$isStudying) {
                 $config = $this->Config->find('first', array('conditions' => array('Config.ConfigName' => 'CourseFee')));
-                $fee = $config['Config']['ConfigValue'];
+                $fee =  $this->Config->getLessonFee();
                 if (!is_numeric($fee)) {
                     $this->Session->setFlash(__('このレッスンを表示するには許可されていません'));
                     $this->redirect(array('controller' => 'Student', 'action' => 'index'));
