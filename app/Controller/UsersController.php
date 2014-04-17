@@ -1,72 +1,110 @@
 <?php
+
 /**
-*@copyright Copyright (c) 2013 mrhieusd
-*/
+ * @copyright Copyright (c) 2013 mrhieusd
+ */
 App::uses('AuthComponent', 'Controller/Component');
+
 class UsersController extends AppController {
-	/**
-	* index
-	*/
+
+    /**
+     * index
+     */
+    public $components = array('Paginator', 'RequestHandler');
+    public $helpers = array('Js');
     public $uses = array(
         'User',
         'Lesson',
         'Category',
         'Config'
-        );
-	public function beforeFilter() {
+    );
+
+    public function beforeFilter() {
         $this->pageTitle = 'Home';
         $this->layout = 'template';
-        $this->Auth->allow(array('index','sign_up'));
+        $this->Auth->allow(array('index', 'sign_up'));
         return parent::beforeFilter();
     }
 
-	public function index() {
-        if($this->Auth->user()){            
+    public function index() {
+        if ($this->Auth->user()) {
             $UserType = $this->Auth->user('UserType');
-            if($UserType == 1){
-                $this->redirect(array('controller'=>'Student','action' => 'index'));
+            if ($UserType == 1) {
+                $this->redirect(array('controller' => 'Student', 'action' => 'index'));
             }
-            if($UserType == 2){
-                $this->redirect(array('controller'=>'Teacher','action' => 'index'));
+            if ($UserType == 2) {
+                $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
             }
-			if($UserType == 3){
-                $this->redirect(array('controller'=>'admin','action' => 'home'));
+            if ($UserType == 3) {
+                $this->redirect(array('controller' => 'admin', 'action' => 'home'));
             }
         };
         $cat = $this->Category->getCategories();
         $Category = array();
         foreach ($cat as $key => $value) {
-            $Category[$key+1] = $value['Category']['CatName'];
+            $Category[$key + 1] = $value['Category']['CatName'];
         }
         $this->set('Category', $Category);
-        $allLessons = $this->Lesson->getAllLessons();
-        $this->set('allLessons', $allLessons);
-	}
-	public function login() {
-		$this->layout = 'default';
-		//if already logged-in, redirect
-        if($this->Session->check('Auth.User')){
-            $this->redirect(array('action' => 'index'));      
-        }        
+        //Get top lesson 
+        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
+            $this->Paginator->settings = array(
+                'conditions' => array('IsDeleted' => '0'),
+                'limit' => 15,
+            );
+            $topLessons = $this->Paginator->paginate('Lesson');
+            $this->set('topLessons', $topLessons);
+        } else {
+            //get top teacher
+            $this->User->virtualFields = array(
+                'totalLesson' => 'Count(Lesson.LessonId)',
+                'totalLike' => 'Sum(Lesson.LikeNumber)',
+                'totalView' => 'Sum(Lesson.ViewNumber)'
+            );
+            $this->Paginator->settings = array(
+                'fields' => array(
+                    'User.*', 'User.totalLesson', 'User.totalLike', 'User.totalView',
+                    'Lesson.*'
+                ),
+                'conditions' => array('Status' => '1', 'UserType' => '2', 'Lesson.IsDeleted' => '0'),
+                'limit' => 15,
+                'group' => array('User.UserId'),
+                'contain' => array('User', 'Lesson'),
+                'joins' => array(
+                    array(
+                        'alias' => 'Lesson',
+                        'table' => 'lessons',
+                        'conditions' => array('User.UserId = Lesson.UserId')
+                    )
+                ),
+            );
+            $topTeachers = $this->Paginator->paginate('User');
+            $this->set('topTeachers', $topTeachers);
+        }
+    }
+
+    public function login() {
+        $this->layout = 'default';
+        //if already logged-in, redirect
+        if ($this->Session->check('Auth.User')) {
+            $this->redirect(array('action' => 'index'));
+        }
         // if we get the post information, try to authenticate
         if ($this->request->is('post')) {
             $data = $this->request->data;
-            if(!empty($data['User']['Username']) && !empty($data['User']['Password']) )
-            {
+            if (!empty($data['User']['Username']) && !empty($data['User']['Password'])) {
                 //ALTER TABLE users ADD COLUMN IpAddress varchar(20)
                 //get the current ip address
                 // $currentIpAddress = $this->request->clientIp();
                 // debug($currentIpAddress);
                 //for test
-                $this->request->data['User']['Password']= $data['User']['Username']. $data['User']['Password'];
+//                $this->request->data['User']['Password']= $data['User']['Username']. $data['User']['Password'];
                 // debug($data['User']['Password']);
                 $currentIpAddress = '123.1.1.124';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
-                
+
                 $ipAddress = $user['User']['IpAddress'];
                 // debug($data);
-
                 //check remaining blocking time
                 $remainBlockTime = $this->remainBlockTime($user['User']['Username']);
 
@@ -79,16 +117,14 @@ class UsersController extends AppController {
                 // debug($remainBlockTime);
                 // debug($this->getNumberOfFailedLogin($user['User']['Username']));
                 //if ip adress field is null, set the ip address
-                if ((is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User']))
-                    && $remainBlockTime <= 0)
-                {
+                if ((is_null($ipAddress) || $ipAddress == $currentIpAddress || array_key_exists('VerifyCodeAnswer', $data['User'])) && $remainBlockTime <= 0) {
                     if (is_null($ipAddress)) {
                         $this->User->id = $user['User']['UserId'];
                         $this->User->saveField('IpAddress', $currentIpAddress);
                     }
                     //if valid verifycode answer, allow to login
                     if (!array_key_exists('VerifyCodeAnswer', $data['User']) ||
-                        (array_key_exists('VerifyCodeAnswer', $data['User']) && $data['User']['VerifyCodeAnswer'] == $user['User']['VerifyCodeAnswer'])) {
+                            (array_key_exists('VerifyCodeAnswer', $data['User']) && $data['User']['VerifyCodeAnswer'] == $user['User']['VerifyCodeAnswer'])) {
                         //login here
                         if ($this->Auth->login()) {
                             //if login success, save the ip
@@ -96,13 +132,13 @@ class UsersController extends AppController {
                             $this->User->saveField('IpAddress', $currentIpAddress);
 
                             $UserType = NULL;
-                            if($this->Auth->user()){            
+                            if ($this->Auth->user()) {
                                 $UserType = $this->Auth->user('UserType');
-                                if($UserType == 1){
-                                    $this->redirect(array('controller'=>'Student','action' => 'index'));
+                                if ($UserType == 1) {
+                                    $this->redirect(array('controller' => 'Student', 'action' => 'index'));
                                 }
-                                if($UserType == 2){
-                                    $this->redirect(array('controller'=>'Teacher','action' => 'index'));
+                                if ($UserType == 2) {
+                                    $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
                                 }
                             };
                         } else {
@@ -112,14 +148,13 @@ class UsersController extends AppController {
                             $this->setNumberOfFailedLogin($this->getNumberOfFailedLogin($user['User']['Username']) + 1, $user['User']['Username']);
                             $numberFailedLogin = $this->getNumberOfFailedLogin($user['User']['Username']);
                             //debug($numberFailedLogin);
-                            $maxFailed = (int)$this->Config->getConfig('FailNumber');
+                            $maxFailed = (int) $this->Config->getConfig('FailNumber');
 
                             if ($numberFailedLogin >= $maxFailed) {
                                 //block user
                                 $this->setNumberOfFailedLogin(0, $user['User']['Username']);
                                 $this->blockUserLogin($user['User']['Username']);
                             }
-
                         }
                     } else {
                         $this->Session->setFlash(__('セキュリティコードが間違った。'));
@@ -127,12 +162,10 @@ class UsersController extends AppController {
                         $this->set('allowVerifyCode', true);
                         $this->set('user', $user);
                     }
-
                 } else {
 
                     if ($remainBlockTime > 0) {
                         $this->Session->setFlash(__('３回に間違ったパスワードが入力されます。１分間待ってログインします。'));
-
                     } else {
                         //else request user the verify code
                         $this->set('allowVerifyCode', true);
@@ -143,15 +176,16 @@ class UsersController extends AppController {
             } else {
                 $this->Session->setFlash(__('ユーザ名またはパスワードが空である。'));
             }
-        } 
-	}
-	public function sign_up() {
+        }
+    }
+
+    public function sign_up() {
         $this->pageTitle = 'Sign up';
-       if ($this->request->is('post')) {
-            $data= $this->request->data;
-            if($data['User']['TermsOfService'] == 1){
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+            if ($data['User']['TermsOfService'] == 1) {
                 $this->User->create();
-                $birthday = $data['User']['Birthday']['year'].'-'.$data['User']['Birthday']['month'].'-'.$data['User']['Birthday']['day'];
+                $birthday = $data['User']['Birthday']['year'] . '-' . $data['User']['Birthday']['month'] . '-' . $data['User']['Birthday']['day'];
                 $data['User']['Birthday'] = $birthday;
                 $initialPassword = $data['User']['Username'] . $data['User']['Password'];
                 $initialCodeQuestion = $data['User']['Username'] . $data['User']['VerifyCodeQuestion'];
@@ -161,24 +195,22 @@ class UsersController extends AppController {
                 $data['User']['InitialCodeQuestion'] = Security::hash($initialCodeQuestion, 'sha1', true);
                 $data['User']['VerifyCodeQuestion'] = $data['User']['InitialCodeQuestion'];
                 $data['User']['InitialCodeAnswer'] = Security::hash($initialCodeAnswer, 'sha1', true);
-                $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer']; 
+                $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer'];
                 $data['User']['Status'] = 2;
-                 // debug($data);
+                // debug($data);
                 if ($this->User->save($data)) {
                     $this->Session->setFlash(__('ユーザが登録されました'));
                     $this->redirect(array('action' => 'login'));
                 } else {
                     $this->Session->setFlash(__('ユーザーは作成できません。'));
-                }   
-            }else{
+                }
+            } else {
                 $this->Session->setFlash(__('サービス条件とプライバシー方針に賛成してください。'));
-            }           
-            
+            }
         }
-		
-	}
-    public function view_profile($id = null)
-    {
+    }
+
+    public function view_profile($id = null) {
         if (!$id) {
             throw new NotFoundException(__("無効リクエスト"));
         } else {
@@ -196,8 +228,7 @@ class UsersController extends AppController {
         }
     }
 
-    public function update_security($id = null)
-    {
+    public function update_security($id = null) {
         //ユーザIdをデータベースから取り出す
         $id = $this->Auth->user();
         //ユーザIdは存在かどうかチェック
@@ -228,7 +259,7 @@ class UsersController extends AppController {
                         $newPassword = $userName . trim($this->request->data['newPassword']);
                         $newPassword = Security::hash($newPassword, 'sha1', true);
                         //リクエストでの使用中パースワードとユーザのパースワードが合わせるかどうかチェック
-                        if ($currentPassword==$password) {
+                        if ($currentPassword == $password) {
                             //ユーザのパースワードを更新する
                             if ($this->User->updateAll(array('Password' => "'$newPassword'"), array('UserId' => $id))) {
                                 $this->Session->setFlash(__("パースワード変更するのが成功です."));
@@ -236,7 +267,6 @@ class UsersController extends AppController {
                             } else {
                                 $this->Session->setFlash(__("パースワード変更できません"));
                             }
-
                         }
                         //パースワードは合わせていません
                         else {
@@ -255,12 +285,11 @@ class UsersController extends AppController {
                         //ユーザの新規に秘密質問を取り出す
                         $newQuestion = Security::hash($userName . trim($this->request->data['newQuestion']), 'sha1', true);
                         //ユーザの新規に秘密答えを取り出す
-                         $newAnswer = Security::hash($userName . trim($this->request->data['newAnswer']), 'sha1', true);
+                        $newAnswer = Security::hash($userName . trim($this->request->data['newAnswer']), 'sha1', true);
                         //新規の質問それとも新規の答えは使用中の質問と答えが合わせていない場合
                         if ($verifyQuestion != trim($this->request->data('currentQuestion')) || $verifyAnswer != trim($this->request->data('currentAnswer'))) {
 
                             $this->Session->setFlash(__("使用中の秘密質問と答えは合わせていません"));
-
                         } else {
                             //新規の質問それとも新規の答えは使用中の質問と答えが合わせる場合、新規の質問とか答えをデータベースに更新する
                             if ($this->User->updateAll(array('VerifyCodeQuestion' => "'$newQuestion'", 'VerifyCodeAnswer' => "'$newAnswer'"), array('UserId' => $id))) {
@@ -279,11 +308,9 @@ class UsersController extends AppController {
         }
     }
 
-    public function edit_profile($id = null)
-    {
+    public function edit_profile($id = null) {
         if (!$id) {
             throw new NotFoundException(__("無効リクエスト"));
-
         } else {
             $userData = $this->User->find('first', array(
                 'conditions' => array('User.UserId' => $id)
@@ -312,27 +339,27 @@ class UsersController extends AppController {
                 $day = $this->request->data['day'];
                 $year = $this->request->data['year'];
                 $month = $this->request->data['months'];
-                $profileInfo['Birthday']= $year."-".$month."-".$day;
+                $profileInfo['Birthday'] = $year . "-" . $month . "-" . $day;
                 $profileInfo['Gender'] = $this->request->data['gender'];
-                $profileInfo['Phone'] =  $this->request->data['phone'];
-                $profileInfo['Address'] =  $this->request->data['address'];
+                $profileInfo['Phone'] = $this->request->data['phone'];
+                $profileInfo['Address'] = $this->request->data['address'];
                 $profileInfo['CreditCard'] = $this->request->data['paymentInfo'];
                 $profileInfo['BankInfo'] = $this->request->data['paymentInfo'];
-                $profileInfo["Email"]=  $this->request->data['mail'];
+                $profileInfo["Email"] = $this->request->data['mail'];
                 $profileInfo['UserType'] = $userData['User']['UserType'];
-                $updateData = array('FullName'=> "'".$profileInfo['FullName']."'",
-                    'Birthday'=> "'".$profileInfo['Birthday']."'",
-                    'Gender'=> "'".$profileInfo['Gender']."'",
-                    'Phone'=>"'".$profileInfo['Phone']."'",
-                    'Address'=>"'".$profileInfo['Address']."'",
-                    'CreditCard'=>"'".$profileInfo['CreditCard']."'",
-                    'BankInfo'=> "'".$profileInfo['BankInfo']."'",
-                    'UserType'=>"'".$profileInfo['UserType']."'",
-                    'Email' => "'". $profileInfo["Email"]."'"
+                $updateData = array('FullName' => "'" . $profileInfo['FullName'] . "'",
+                    'Birthday' => "'" . $profileInfo['Birthday'] . "'",
+                    'Gender' => "'" . $profileInfo['Gender'] . "'",
+                    'Phone' => "'" . $profileInfo['Phone'] . "'",
+                    'Address' => "'" . $profileInfo['Address'] . "'",
+                    'CreditCard' => "'" . $profileInfo['CreditCard'] . "'",
+                    'BankInfo' => "'" . $profileInfo['BankInfo'] . "'",
+                    'UserType' => "'" . $profileInfo['UserType'] . "'",
+                    'Email' => "'" . $profileInfo["Email"] . "'"
                 );
                 if ($this->User->updateAll($updateData, array('UserId' => $id))) {
                     $this->Session->setFlash(__("あなたの個人情報が変更されてしまいました"));
-                }else{
+                } else {
                     $this->Session->setFlash(__("エラーがあるのであなたの個人情報が変更されていません"));
                 }
 //                $profileInfo['Email']
@@ -341,8 +368,7 @@ class UsersController extends AppController {
         }
     }
 
-    public function delete_account($id = null)
-    {
+    public function delete_account($id = null) {
 //        echo "Id is ".$id;
         if ($id == null) {
             throw new NotFoundException(__("無効リクエスト"));
@@ -355,8 +381,8 @@ class UsersController extends AppController {
                     throw new NotFoundException('Could not find that User');
                 } else {
 //                    print_r($userData);
-                    $question = Security::hash($userName.trim($this->request->data['質問']),'sha1',true);
-                    $answer =  Security::hash($userName.trim($this->request->data['答え']),'sha1',true);
+                    $question = Security::hash($userName . trim($this->request->data['質問']), 'sha1', true);
+                    $answer = Security::hash($userName . trim($this->request->data['答え']), 'sha1', true);
                     if ($question != $userData['User']['VerifyCodeQuestion'] || $answer != $userData['User']['VerifyCodeAnswer']) {
                         $this->Session->setFlash(__("使用中の秘密質問と答えが合わせていません"));
                     } else {
@@ -364,39 +390,37 @@ class UsersController extends AppController {
                             $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
 //                            return $this->redirect(array('action' => 'index'));
-                        }else {
+                        } else {
                             $this->Session->setFlash(__("エラーがあるので、あなたのアカウントが削除されていません"));
                         }
                     }
-
                 }
             }
-
         }
     }
-	public function logout() {
-	    return $this->redirect($this->Auth->logout());
-	}
 
+    public function logout() {
+        return $this->redirect($this->Auth->logout());
+    }
 
     public function blockUserLogin($username) {
         $today = new DateTime();
         $blockTime = $today->add(new DateInterval('PT1M'));
-        $this->Session->write('Block'.$username, $blockTime);
+        $this->Session->write('Block' . $username, $blockTime);
     }
 
     public function remainBlockTime($username) {
         $today = new DateTime();
-        $blockTime = $this->Session->read('Block'.$username);
+        $blockTime = $this->Session->read('Block' . $username);
         if (is_null($blockTime) || $today > $blockTime) {
             return 0;
         }
         $diff = $today->diff($blockTime);
-        return (int)$diff->s;
+        return (int) $diff->s;
     }
 
     public function getNumberOfFailedLogin($username) {
-        $n = $this->Session->read('NumberOfFailedLogin'.$username);
+        $n = $this->Session->read('NumberOfFailedLogin' . $username);
         if (is_null($n)) {
             return 0;
         }
@@ -404,12 +428,14 @@ class UsersController extends AppController {
     }
 
     public function setNumberOfFailedLogin($number, $username) {
-        $n = $this->Session->read('NumberOfFailedLogin'.$username);
+        $n = $this->Session->read('NumberOfFailedLogin' . $username);
         if (is_null($n)) {
-            $this->Session->write('NumberOfFailedLogin'.$username, 0);
+            $this->Session->write('NumberOfFailedLogin' . $username, 0);
         } else {
-            $this->Session->write('NumberOfFailedLogin'.$username, $number);
+            $this->Session->write('NumberOfFailedLogin' . $username, $number);
         }
     }
-}	
+
+}
+
 ?>

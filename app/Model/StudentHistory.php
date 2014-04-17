@@ -91,31 +91,6 @@ class StudentHistory extends AppModel {
 
         return $transactions = $this->find('all', $options);
     }
-    function getPaginationOptions($userId, $sortBy) {
-        $options = array();
-        $options['fields'] = array(
-            'StudentHistory.*',
-            'Lesson.*',
-            'User.*', );
-        $options['conditions'] = array(
-            'StudentHistory.UserId' => $userId,
-            'CURDATE() BETWEEN DATE(StudentHistory.StartDate) AND DATE(StudentHistory.ExpiryDate)',
-        );
-        $options['limit'] = 5;
-        switch ($sortBy) {
-            case 'like':
-                $options['order'] = array('StudentHistory.LikeNumber' => 'DESC');
-                break;
-            case 'view':
-                $options['order'] = array('StudentHistory.ViewNumber' => 'DESC');
-                break;
-            default:
-                $options['order'] = array('StudentHistory.ExpiryDate' => 'DESC');
-                break;
-        }
-        
-        return $options;
-    }
     function getStudentHistoryOfLesson($lessonId)
     {
         $options['fields'] = array('User.FullName', 'StudentHistory.*');

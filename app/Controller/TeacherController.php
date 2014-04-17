@@ -8,6 +8,8 @@ class TeacherController extends AppController {
     /**
      * index
      */
+    public $components = array('Paginator', 'RequestHandler');
+    public $helpers = array('Js');
     public $uses = array(
         'User',
         'StudentHistory',
@@ -63,8 +65,48 @@ class TeacherController extends AppController {
             $Category[$key + 1] = $value['Category']['CatName'];
         }
         $this->set('Category', $Category);
-        $allLessons = $this->Lesson->getAllLessons();
-        $this->set('allLessons', $allLessons);
+        
+        //Get top lesson
+        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
+            $this->Lesson->virtualFields = array(
+                'Author' => 'User.Username'
+            );
+            $this->Paginator->settings = array(
+                'conditions' => array('Lesson.IsDeleted' => '0','User.Status'=>'1'),
+                'limit' => 15,
+                'fields'=> array(
+                    'Lesson.*','Lesson.Author'
+                ),
+                'contain' => array('User'),
+            );
+            $topLessons = $this->Paginator->paginate('Lesson');
+            $this->set('topLessons', $topLessons);
+        } else {
+            $this->User->virtualFields = array(
+                'totalLesson' => 'Count(Lesson.LessonId)',
+                'totalLike' => 'Sum(Lesson.LikeNumber)',
+                'totalView' => 'Sum(Lesson.ViewNumber)'
+            );
+            $this->Paginator->settings = array(
+                'fields' => array(
+                    'User.*', 'User.totalLesson', 'User.totalLike', 'User.totalView',
+                    'Lesson.*'
+                ),
+                'conditions' => array('Status' => '1', 'UserType' => '2', 'Lesson.IsDeleted' => '0'),
+                'limit' => 15,
+                'group' => array('User.UserId'),
+                'contain' => array('Lesson'),
+                'joins' => array(
+                    array(
+                        'alias' => 'Lesson',
+                        'table' => 'lessons',
+                        'conditions' => array('User.UserId = Lesson.UserId')
+                    )
+                ),
+            );
+            $topTeachers = $this->Paginator->paginate('User');
+            $this->set('topTeachers', $topTeachers);
+        }
     }
 
     public function view_lesson($lesson_id = null, $file_id = null) {
