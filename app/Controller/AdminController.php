@@ -4,7 +4,7 @@
 */
 class AdminController extends AppController {
 	
-	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File');
+	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg');
 
 	function beforeFilter() {
 		$UserType = $this->Auth->user('UserType');
@@ -17,16 +17,45 @@ class AdminController extends AppController {
         }
         $pageTitle = 'E-Learningシステム';
         $this->layout = 'admin';
+
         $status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
+		$fa_label = array('1' => 'plus', '2' => 'bell-o');
+		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/teacher/');
 		$this->set(compact('status'));
 		$this->set(compact('status_label'));
+		$this->set(compact('fa_label'));
+		$this->set(compact('msg_link'));
+
+		$msg = $this->Msg->find("all", array(
+			'conditions' => array(
+				'OR' => array(
+					'Msg.UserId' => '',
+					'User.UserType' => 3,
+					)
+				)
+			));
+		$nmsg = $this->Msg->find("count", array(
+			'conditions' => array(
+				'OR' => array(
+					array(
+						'User.UserType' => 3,
+						'Msg.IsReaded' => 0,
+						),
+					'Msg.UserId' => ''
+
+					)
+					
+				)
+			));
+		$this->set('nmsg', $nmsg);
+		$this->set('notifs', $msg);
         return parent::beforeFilter();
 
     }
 
     public function img() {
-    	//khong biet tai sao luon co log bao thieu adminController::img(), them vao cho k bao loi
+
     }
 
    	public function test() {
@@ -456,15 +485,15 @@ class AdminController extends AppController {
 			$ret = array();
 
 			if ($param == "update") {
+				if (isset($data['Password'])) {
+                        $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
+				}
 
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
 				}
-
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
 			}
 
 			if ($param == "block") {
@@ -516,9 +545,20 @@ class AdminController extends AppController {
 					}
 				}
 
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
+				
 			}
+
+			if ($param == "msg") {
+				if ($this->Msg->updateAll(array("IsReaded" => "1"), array('MsgId' => $data)) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
+			}
+
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+
 			$this->log($ret);
 			echo json_encode($ret);
 			die;
@@ -624,6 +664,31 @@ class AdminController extends AppController {
 
 			if ($param == "active") {
 				$this->Lesson->activeLesson($data);
+				$ret['result'] = "Success";
+			}
+
+			
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+			echo json_encode($ret);
+			die;
+		}
+	}
+
+	public function updateFile($param = null) {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$ret = array();
+			
+
+			if ($param == "block") {
+				$this->File->blockFile($data);
+				$ret['result'] = "Success";
+			} 
+
+			if ($param == "active") {
+				$this->File->activeLesson($data);
 				$ret['result'] = "Success";
 			}
 

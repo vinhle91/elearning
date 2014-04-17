@@ -24,11 +24,12 @@
 			'bootstrap',
 			'jquery.blockui.min',
 			'jquery.cookie.min',
-			'app(1)',
+			'admin-layout',
 			'jquery-ui.min.js',
 			'jquery.metadata',
 			'jquery.tablesorter',
 			'jquery.tablesorter.min',
+			'jquery.slimscroll.min'
 		)); 
 	?>
 </head>

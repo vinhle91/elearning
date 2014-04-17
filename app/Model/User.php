@@ -18,6 +18,13 @@ class User extends AppModel {
             'order' => 'Comment.created DESC',
             'dependent' => true,
         ),
+        'Message' => array(
+            'className' => 'Msg',
+            'foreignKey' => 'UserId',
+            'conditions' => array('Message.IsReaded' => '0'),
+            'order' => 'Message.created DESC',
+            'dependent' => true,
+        ),
     ); 
     // public $hasAndBelongsToMany = array(
     //     'StudentTest' =>array(
@@ -102,16 +109,16 @@ class User extends AppModel {
             )
         ),
 
-        'Email' => array(
-            'required' => array(
-                'rule' => array('email', true),    
-                'message' => 'Please provide a valid email address.'   
-            ),
-             'unique' => array(
-                'rule'    => array('isUniqueEmail'),
-                'message' => 'This email is already in use',
-            ),
-        ),
+        // 'Email' => array(
+        //     'required' => array(
+        //         'rule' => array('email', true),    
+        //         'message' => 'Please provide a valid email address.'   
+        //     ),
+        //     // 'unique' => array(
+        //     //     'rule'    => array('isUniqueEmail'),
+        //     //     'message' => 'This email is already in use',
+        //     // ),
+        // ),
         // 'role' => array(
         //     'valid' => array(
         //         'rule' => array('inList', array('king', 'queen', 'bishop', 'rook', 'knight', 'pawn')),
@@ -250,31 +257,6 @@ class User extends AppModel {
             'conditions' => array(
                 'User.Username' => $username,
             ),
-            'fields' => array(
-                'UserId',
-                'Username',
-                'Password',
-                'InitialPassword',
-                'UserType',
-                'FullName',
-                'Birthday',
-                'VerifyCodeQuestion',
-                'InitialCodeQuestion',
-                'VerifyCodeAnswer',
-                'InitialCodeAnswer',
-                'Gender',
-                'Address',
-                'Phone',
-                'Email',
-                'ImageProfile',
-                'IsOnline',
-                'created',
-                'modified',
-                'Status',
-                'Violated',
-                'BankInfo',
-                'CreditCard',
-            )
         ));
         return $user['User'];
     }
