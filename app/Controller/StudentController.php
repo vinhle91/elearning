@@ -723,7 +723,7 @@ class StudentController extends AppController {
                     if ($this->StudentHistory->updateAll(array("IsLike" => 0), array("StudentHistory.LessonId" => $lesson_id, "StudentHistory.UserId" => $userId))) {
                         $likenumber = $lesson['Lesson']['LikeNumber'];
                         $likenumber -= 1;
-                        if ($likenumber > 0) {
+                        if ($likenumber >= 0) {
                             $this->Lesson->updateAll(array('LikeNumber' => $likenumber), array('LessonId' => $lesson_id));
                         }
                         echo "いいね";
