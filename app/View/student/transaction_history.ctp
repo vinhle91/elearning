@@ -14,6 +14,15 @@
         </div>
         <div class="box">
             <div class="history">
+                <?php
+                echo $this->Form->create('User', array(
+                    'type' => 'POST',
+                    'url' => array(
+                        'controller' => 'Student',
+                        'action' => 'transaction_history'
+                    )
+                ));
+                ?>
                 <table style="width:400px;padding:10px;">
                     <tbody>
                         <tr>
@@ -21,30 +30,35 @@
                                 <h3>月</h3>
                             </td>
                             <td>
-                                <select name="months">
-                                    <option value="1">１月</option>
-                                    <option value="2">２月</option>
-                                    <option value="3">３月</option>
-                                    <option value="4">４月</option>
-                                    <option value="5">５月</option>
-                                    <option value="6">６月</option>
-                                    <option value="7">７月</option>
-                                    <option value="8" >８月</option>
-                                    <option value="9">９月</option>
-                                    <option value="10">１０月</option>
-                                    <option value="11">１１月</option>
-                                    <option value="12" selected="selected">１２月</option>
-                                </select>
+                                <?php
+                                $today = getdate();
+                                echo $this->Form->input('months', array(
+                                    'options' => array(
+                                        '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'
+                                    ),
+                                    'selected' => $selectMonth,
+                                    'label' => false
+                                ));
+                                ?>
+
                             </td>
                             <td>
-                                <h3>年</h3>
+                                <?php
+                                echo $this->Form->input('year', array(
+                                    'value' => $selectYear,
+                                    'label' => false,
+                                ));
+                                ?>
                             </td>
                             <td>
-                                <input class="input" name="year" style="width:92px" value="2013" type="text">
+                                <?php
+                                echo $this->Form->submit('OK');
+                                ?>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <?php echo $this->Form->end(); ?>
                 <table  class="transaction_tb">
                     <thead>
                         <tr>
