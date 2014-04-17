@@ -312,10 +312,7 @@
 										<td>住所</td>
 										<td><section class="pull-left editable padding-5" id="Address"><?php echo $studentInfo['Address']  ? $studentInfo['Address'] : "<i></i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 									</tr>
-									<tr>
-										<td>IP Address</td>
-										<td><section class="pull-left editable padding-5" id="Address"><?php echo $studentInfo['IpAddress']  ? $studentInfo['IpAddress'] : ""?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
-									</tr>							
+									
 								</tbody>
 							</table>
 							<div class="update-notif">
