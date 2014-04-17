@@ -203,12 +203,10 @@
 		$.ajax({
            type: "POST",
            url: '/elearning/admin/updateLesson/report',
-           data: {'data':submit_data },
+           data: {'data':submit_data},
            success: function(data)
            {
-				data = $.parseJSON(data);
 				alert("Report lessons successful!")
-
            }
        	});
 	}

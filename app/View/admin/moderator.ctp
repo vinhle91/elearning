@@ -220,6 +220,7 @@
                                                 verifycodeをリセット
 											</a>
 										</li>
+										<?php if ($moderatorInfo['Username'] != $this->Session->read('User.Username')) { ?>
 										<?php if ($moderatorInfo['Status'] == 1) { ?>
 										<li>  
 											<a class="update-block" href="">
@@ -234,6 +235,7 @@
 											    ユーザーを削除
 											</a>
 										</li>
+										<?php } ?>
 										<?php if ($moderatorInfo['Status'] != 1) { ?>
 										<li>  
 											<a class="update-active" href="">

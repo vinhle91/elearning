@@ -67,9 +67,12 @@
 						<?php $this->log($configs)?>
 							<?php foreach ($configs as $key => $config) { ?>
 							<tr>
-								<td class=""><?php echo $config['Config']['ConfigName']?></td>
-								<td class="col-md-5 align-right">
-									<section class="pull-left editable padding-5" id="config<?php echo $config['Config']['ConfigId']?>"><?php echo $config['Config']['ConfigValue']  ? $config['Config']['ConfigValue'] : ""?></section><span style="line-height: 1.7; margin-left: 5px"><?php echo $config['Config']['ConfigUnit']?></span>
+								<td class="col-md-3"><?php echo $config['Config']['ConfigName']?></td>
+								<td class="col-md-7 align-right">
+									<section class="editable padding-5" id="config<?php echo $config['Config']['ConfigId']?>"><?php echo $config['Config']['ConfigValue']  ? $config['Config']['ConfigValue'] : ""?></section>
+								</td>
+								<td class="col-md-2">
+									<span style="line-height: 1.7; margin-left: 5px"><?php echo $config['Config']['ConfigUnit']?></span>
 								</td>
 							</tr>
 							<?php }?>
@@ -214,12 +217,6 @@
 		
 	});
 
-	var origin = {};
-	<?php foreach ($configs as $key => $config) { ?>
-		origin.config<?php echo $config['Config']['ConfigId'] ?> = $("#config<?php echo $config['Config']['ConfigId']')").text();
-	<?php } ?>
-
-
 	$(".editable").on("click", function(){
 		$(this).attr("contenteditable", "true");
 		$(this).css("background-color", "#fff");
@@ -233,11 +230,6 @@
 		$("li.dropdown#options").removeClass("open");
 		var url = "/elearning/admin/updateUserInfo/update";
 		var submit_data = {};
-
-		<?php foreach ($configs as $key => $config) { ?>
-			submit_data.config<?php echo $config['Config']['ConfigId'] ?> = '\''+$("#config<?php echo $config['Config']['ConfigId']')").text()+'\'';
-		<?php } ?>
-
 		console.log(submit_data);
 		
 		$(".update-notif span").css({"visibility": "visible", "opacity": 1});
@@ -256,7 +248,6 @@
 	               	if (data.result == "Success") {
 	           			$(".user-info .update-notif span").text("Updated successfully");
 	           			setTimeout(function(){
-	           				//$(".user-info .update-notif span").text("");
 	           				$('.user-info .update-notif span').fadeTo(500, 0, function(){
 							  	$('.user-info .update-notif span').css("visibility", "hidden");   
 							});

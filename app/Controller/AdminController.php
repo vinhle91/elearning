@@ -27,7 +27,7 @@ class AdminController extends AppController {
         $status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
 		$fa_label = array('1' => 'plus', '2' => 'bell-o');
-		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/teacher/');
+		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/lesson/');
 		$this->set(compact('status'));
 		$this->set(compact('status_label'));
 		$this->set(compact('fa_label'));
@@ -45,13 +45,11 @@ class AdminController extends AppController {
 		$nmsg = $this->Msg->find("count", array(
 			'conditions' => array(
 				'OR' => array(
-					array(
-						'User.UserType' => 3,
-						'Msg.IsReaded' => 0,
-						),
+					'User.UserType' => 3,
 					'Msg.UserId' => ''
-					)
-					
+					),
+				'Msg.IsReaded' => 0,
+				
 				)
 			));
 		$this->set('nmsg', $nmsg);
@@ -251,7 +249,6 @@ class AdminController extends AppController {
 					))
 				);
 			$this->set(compact('all_lessons'));
-			$this->log($all_lessons);
 
 		} else {
 			$lessonInfo = $this->Lesson->getLessonInfo($lesson);
@@ -558,6 +555,8 @@ class AdminController extends AppController {
 					"Status" => "1",
 					);
 				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+
+
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
@@ -715,8 +714,12 @@ class AdminController extends AppController {
 
 			if ($param == "report") {
 				foreach ($data as $key => $lesson) {
-		            $lesson_info = $this->Lesson->getLessonInfo($lesson);
-		            $this->log($lesson_info);
+		            $lesson_info = $this->Lesson->find(	'first', array(
+												            'recursive' => '2',
+												            'conditions' => array(
+												                'Lesson.LessonId' => $lesson,
+												            ),
+												        ));
 		            $submit_data = array();
 		            $submit_data['Content'] = "Lesson ".$lesson_info['Title']." has been reported!";
 		            $submit_data['UserId'] = $lesson_info['Author']['UserId'];
@@ -728,8 +731,8 @@ class AdminController extends AppController {
 			}
 
 			
-			$log = $this->User->getDataSource()->getLog(false, false);       
-			$this->log($log);
+			// $log = $this->User->getDataSource()->getLog(false, false);       
+			// $this->log($log);
 			echo json_encode($ret);
 			die;
 		}
