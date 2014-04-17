@@ -199,24 +199,49 @@ class UsersController extends AppController {
         }
     }
 
-    public function sign_up() {
+    public function sign_up($userType = null) {
         $this->pageTitle = 'Sign up';
+        if(isset($userType)){
+            $this->set(compact('userType'));
+        }
+        // debug($userType);
         if ($this->request->is('post')) {
             $data = $this->request->data;
+            $userType = $data['User']['UserType'];
+            // debug($data);
             if ($data['User']['TermsOfService'] == 1) {
                 $this->User->create();
                 $birthday = $data['User']['Birthday']['year'] . '-' . $data['User']['Birthday']['month'] . '-' . $data['User']['Birthday']['day'];
                 $data['User']['Birthday'] = $birthday;
                 $initialPassword = $data['User']['Username'] . $data['User']['Password'];
-                $initialCodeQuestion = $data['User']['Username'] . $data['User']['VerifyCodeQuestion'];
-                $initialCodeAnswer = $data['User']['Username'] . $data['User']['VerifyCodeAnswer'];
                 $data['User']['InitialPassword'] = $data['User']['Password'];
-
-                $data['User']['InitialCodeQuestion'] = Security::hash($initialCodeQuestion, 'sha1', true);
-                $data['User']['VerifyCodeQuestion'] = $data['User']['InitialCodeQuestion'];
-                $data['User']['InitialCodeAnswer'] = Security::hash($initialCodeAnswer, 'sha1', true);
-                $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer'];
                 $data['User']['Status'] = 2;
+
+                if($data['User']['UserType'] == 2){
+                    if(empty($data['User']['BankInfo'])){
+                        $this->Session->setFlash(__('A bank infor is required'));
+                        $this->redirect(array('action' => 'sign_up',$userType));
+                    }
+                    if(empty($data['User']['VerifyCodeAnswer'])){
+                        $this->Session->setFlash(__('A VerifyCodeAnswer infor is required'));
+                        $this->redirect(array('action' => 'sign_up',$userType));
+                    }
+                    if(empty($data['User']['VerifyCodeQuestion'])){
+                        $this->Session->setFlash(__('A VerifyCodeQuestion infor is required'));
+                        $this->redirect(array('action' => 'sign_up',$userType));
+                    }
+                    $initialCodeQuestion = $data['User']['Username'] . $data['User']['VerifyCodeQuestion'];
+                    $initialCodeAnswer = $data['User']['Username'] . $data['User']['VerifyCodeAnswer'];
+                    $data['User']['InitialCodeQuestion'] = Security::hash($initialCodeQuestion, 'sha1', true);
+                    $data['User']['VerifyCodeQuestion'] = $data['User']['InitialCodeQuestion'];
+                    $data['User']['InitialCodeAnswer'] = Security::hash($initialCodeAnswer, 'sha1', true);
+                    $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer'];
+                }else{
+                    if(empty($data['User']['CreditCard'])){
+                        $this->Session->setFlash(__('A CreditCard infor is required'));
+                        $this->redirect(array('action' => 'sign_up',$userType));
+                    }
+                }
                 // debug($data);
                 if ($this->User->save($data)) {
                     $this->Session->setFlash(__('ユーザが登録されました'));

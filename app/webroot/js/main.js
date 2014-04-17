@@ -32,20 +32,7 @@ $(document).ready(function() {
 $(document).click(function() {
     $('.profilenav').hide();
 });
-// select user type
-$(document).ready(function() {
 
-     $('#account_type').change(function(){
-        if( $('#account_type').val()==1)
-        {
-            $('.student_info').show();
-            $('.teacher_info').hide();
-        }else{
-            $('.teacher_info').show();
-            $('.student_info').hide();
-        }
-    });
-});
 // change security
 $(document).ready(function() {    
     $(".left>ul>li>a").click(function(){
