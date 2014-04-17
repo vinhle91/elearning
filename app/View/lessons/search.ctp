@@ -6,6 +6,7 @@
     <div id="content">
         <h3 style="color:red"><?php echo $this->Session->flash(); ?></h3>
 
+        <?php if(isset($results)): ?>
         <div class="t_title">
 
             <div class="left">
@@ -63,6 +64,7 @@
 <!--        </div>-->
     </div>
 </div>
+<?php endif; ?>
 </div>
 </div>
 </div>

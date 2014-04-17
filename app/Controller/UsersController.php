@@ -308,9 +308,14 @@ class UsersController extends AppController {
         }
     }
 
-    public function update_security($id = null) {
+    public function update_security()
+    {
         //ユーザIdをデータベースから取り出す
-        $id = $this->Auth->user();
+//        $id = $this->Auth->user();
+        $id = $this->_usersUsername()['UserId'];
+        $UserType = $this->Auth->user()['UserType'];
+        $this->set(compact('UserType'));
+        $userName = $this->_usersUsername()['Username'];
         //ユーザIdは存在かどうかチェック
         if ($id == null) {
             throw new NotFoundException(__("無効リクエスト"));
@@ -339,7 +344,7 @@ class UsersController extends AppController {
                         $newPassword = $userName . trim($this->request->data['newPassword']);
                         $newPassword = Security::hash($newPassword, 'sha1', true);
                         //リクエストでの使用中パースワードとユーザのパースワードが合わせるかどうかチェック
-                        if ($currentPassword == $password) {
+                        if ($currentPassword==$password) {
                             //ユーザのパースワードを更新する
                             if ($this->User->updateAll(array('Password' => "'$newPassword'"), array('UserId' => $id))) {
                                 $this->Session->setFlash(__("パースワード変更するのが成功です."));
@@ -347,6 +352,7 @@ class UsersController extends AppController {
                             } else {
                                 $this->Session->setFlash(__("パースワード変更できません"));
                             }
+
                         }
                         //パースワードは合わせていません
                         else {
@@ -365,11 +371,12 @@ class UsersController extends AppController {
                         //ユーザの新規に秘密質問を取り出す
                         $newQuestion = Security::hash($userName . trim($this->request->data['newQuestion']), 'sha1', true);
                         //ユーザの新規に秘密答えを取り出す
-                        $newAnswer = Security::hash($userName . trim($this->request->data['newAnswer']), 'sha1', true);
+                         $newAnswer = Security::hash($userName . trim($this->request->data['newAnswer']), 'sha1', true);
                         //新規の質問それとも新規の答えは使用中の質問と答えが合わせていない場合
-                        if ($verifyQuestion != trim($this->request->data('currentQuestion')) || $verifyAnswer != trim($this->request->data('currentAnswer'))) {
+                        if ($verifyQuestion != $currentQuestion|| $verifyAnswer != $currentAnswer) {
 
                             $this->Session->setFlash(__("使用中の秘密質問と答えは合わせていません"));
+
                         } else {
                             //新規の質問それとも新規の答えは使用中の質問と答えが合わせる場合、新規の質問とか答えをデータベースに更新する
                             if ($this->User->updateAll(array('VerifyCodeQuestion' => "'$newQuestion'", 'VerifyCodeAnswer' => "'$newAnswer'"), array('UserId' => $id))) {
@@ -388,7 +395,11 @@ class UsersController extends AppController {
         }
     }
 
-    public function edit_profile($id = null) {
+    public function edit_profile() {
+        $id = $this->_usersUsername()['UserId'];
+        $UserType = $this->Auth->user()['UserType'];
+//        $this->set(compact('UserType'));
+//        $userName = $this->_usersUsername()['Username'];
         if (!$id) {
             throw new NotFoundException(__("無効リクエスト"));
         } else {
@@ -448,8 +459,12 @@ class UsersController extends AppController {
         }
     }
 
-    public function delete_account($id = null) {
+    public function delete_account() {
 //        echo "Id is ".$id;
+        $id = $this->_usersUsername()['UserId'];
+        $UserType = $this->Auth->user()['UserType'];
+        $this->set(compact('UserType'));
+        $userName = $this->_usersUsername()['Username'];
         if ($id == null) {
             throw new NotFoundException(__("無効リクエスト"));
         } else {

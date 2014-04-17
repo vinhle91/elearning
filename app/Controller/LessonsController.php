@@ -19,47 +19,53 @@ class LessonsController extends AppController
     {
 //        $keyWord = $keyWord!=null? $keyWord:$this->request->data['Lesson']['keyWords'];
 //        $this->request->data['Lesson'];
-        if (!$keyWord) {
+//        debug($this->request->data);
+        if (!isset($keyWord) || empty($keyWord)) {
             if (!isset($this->request->data['Lesson'])) {
-                $this->set('results', $this->Lesson->find('all'));
+
+                $this->Session->setFlash("何かキーワードを入力してください");
+//                $this->set('results', $this->Lesson->find('all'));
 //                throw new NotFoundException(__("INVALID INPUT"));
             } else {
                 $keyWord = $this->request->data['Lesson']['keyWords'];
             }
         }
+        if (!isset($keyWord) || empty($keyWord)) {
+            $this->Session->setFlash("何かキーワードを入力してください");
+        } else {
+            $results = $this->Lesson->find("all", array(
+                    "joins" => array(
+                        array(
+                            "table" => "tags",
+                            "alias" => "Tag",
+                            "type" => "LEFT",
+                            "conditions" => array(
+                                "Tag.LessonId= Lesson.LessonId"
+                            )
+                        )
+                    ),
+                    'fields' => array('User.Username',
+                        'User.UserId',
+                        'Lesson.Title',
+                        'Lesson.LikeNumber',
+                        'Lesson.Abstract',
+                        'Tag.TagContent',
+                    ),
+                    'conditions' => array(
+                        'User.Status' => 1,
+                        'OR' => array(
+                            array('Lesson.Title LIKE' => "%$keyWord%"),
+                            array('Tag.TagContent LIKE' => "%$keyWord%"),
+                            array('User.Username LIKE' => "%$keyWord%"),
+                            array('Lesson.Abstract LIKE' => "%$keyWord%")
 
-        $results = $this->Lesson->find("all", array(
-                "joins" => array(
-                    array(
-                        "table" => "tags",
-                        "alias" => "Tag",
-                        "type" => "LEFT",
-                        "conditions" => array(
-                            "Tag.LessonId= Lesson.LessonId"
                         )
                     )
-                ),
-                'fields' => array('User.Username',
-                    'User.UserId',
-                    'Lesson.Title',
-                    'Lesson.LikeNumber',
-                    'Lesson.Abstract',
-                    'Tag.TagContent',
-                ),
-                'conditions' => array(
-                    'User.Status' => 1,
-                    'OR' => array(
-                        array('Lesson.Title LIKE' => "%$keyWord%"),
-                        array('Tag.TagContent LIKE' => "%$keyWord%"),
-                        array('User.Username LIKE' => "%$keyWord%"),
-                        array('Lesson.Abstract LIKE' =>"%$keyWord%")
-
-                    )
                 )
-            )
-        );
-        $this->set('results', $results);
+            );
+            $this->set('results', $results);
 
+        }
     }
 }
 

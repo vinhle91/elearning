@@ -979,6 +979,7 @@ ul.searchtype li {
 	padding: 0px 15px;
 	font-weight: 700;
 	text-align: center;
+	display: block;
 }
 .report_btn:hover{
 	background: linear-gradient(#fcbe47,#d76c03);
