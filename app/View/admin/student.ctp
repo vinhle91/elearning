@@ -193,9 +193,13 @@
 					</span>
 				</button>
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
-					
 					<span>
 						 Active
+					</span>
+				</button>
+				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
+					<span>
+						 Deny
 					</span>
 				</button>
 			</div>			
@@ -359,7 +363,7 @@
 			e.preventDefault();
 			var url = "/elearning/admin/updateUserInfo/update";
 			var submit_data = {
-				UserId: "<?php echo $moderatorInfo['UserId']?>",
+				UserId: "<?php echo $studentInfo['UserId']?>",
 				Username: '\''+$('#Username').text()+'\'',
 			};
 			if ($('#Password').text() != origin.Password) {
@@ -554,7 +558,7 @@
 		    return false;
 		});
 
-		$("#first-active").on("click", function(e){
+		$("#first-active").on("click", function(e) {
 			e = $.event.fix(e);
 			e.preventDefault();
 			var url = "/elearning/admin/updateUserInfo/active";
@@ -562,7 +566,12 @@
 				UserId: "<?php echo $studentInfo['UserId']?>",
 				Username: "<?php echo $studentInfo['Username']?>",
 			};
-
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-deny").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-active").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-active").unbind();
 			$.ajax({
 		           type: "POST",
 		           url: url,
@@ -571,10 +580,41 @@
 		           {
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-		               		$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
-							$(".handle-user #first-active").delay(1000).prepend('<i class="fa fa-check margin-right-5"></i>');
+		               		
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+
+		               	}
+		           }
+		         });
+
+		    return false;
+		});
+
+		$("#first-deny").on("click", function(e) {
+			e = $.event.fix(e);
+			e.preventDefault();
+			var url = "/elearning/admin/updateUserInfo/deny";
+			var submit_data = {
+				UserId: "<?php echo $studentInfo['UserId']?>",
+				Username: "<?php echo $studentInfo['Username']?>",
+			};
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-active").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-deny").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-deny").unbind();
+			$.ajax({
+		           type: "POST",
+		           url: url,
+		           data: submit_data, 
+		           success: function(data)
+		           {
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+		               		
+		               	} else if (data.result == "Fail") {
+
 		               	}
 		           }
 		         });

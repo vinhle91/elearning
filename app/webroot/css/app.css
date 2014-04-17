@@ -573,8 +573,8 @@ Profile Page
 section.editable {
   /*background-color: #fff;*/
   /*border: 1px solid #dddddd;*/
-  max-width: 300px;
-  width: 300px;
+  max-width: 200px;
+  width: 200px;
   line-height: 1em;
 }
 

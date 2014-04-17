@@ -39,7 +39,8 @@ class AdminController extends AppController {
 					'Msg.UserId' => '',
 					'User.UserType' => 3,
 					)
-				)
+				),
+			'order' => 'Msg.created DESC',
 			));
 		$nmsg = $this->Msg->find("count", array(
 			'conditions' => array(
@@ -49,7 +50,6 @@ class AdminController extends AppController {
 						'Msg.IsReaded' => 0,
 						),
 					'Msg.UserId' => ''
-
 					)
 					
 				)
@@ -92,7 +92,7 @@ class AdminController extends AppController {
 	}
 
 	public function logout() {
-		
+
 		session_destroy();
 	    return $this->redirect($this->Auth->logout());
 	}
@@ -564,6 +564,17 @@ class AdminController extends AppController {
 				}				
 			}
 
+			if ($param == "deny") {
+				$buff = array(
+					"Status" => "4",
+					);
+				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}				
+			}
+
 			if ($param == "insert") {
 				$conditions = array(
 					'User.Username' => $data['Username'],
@@ -700,6 +711,20 @@ class AdminController extends AppController {
 			if ($param == "active") {
 				$this->Lesson->activeLesson($data);
 				$ret['result'] = "Success";
+			}
+
+			if ($param == "report") {
+				foreach ($data as $key => $lesson) {
+		            $lesson_info = $this->Lesson->getLessonInfo($lesson);
+		            $this->log($lesson_info);
+		            $submit_data = array();
+		            $submit_data['Content'] = "Lesson ".$lesson_info['Title']." has been reported!";
+		            $submit_data['UserId'] = $lesson_info['Author']['UserId'];
+		            $submit_data['MsgType'] = 2;
+		            $submit_data['IsReaded'] = 0;
+		            $this->Msg->create();
+		            $this->Msg->save($submit_data);
+		        }
 			}
 
 			
