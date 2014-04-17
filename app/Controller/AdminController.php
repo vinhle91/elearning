@@ -8,6 +8,7 @@ class AdminController extends AppController {
 	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg');
 
 	function beforeFilter() {
+		$this->disableCache();
 		$this->Auth->authenticate = array(
 			'Form' => array(
 				'userModel' => 'User',
