@@ -57,15 +57,15 @@ class FileValidationBehavior extends ModelBehavior {
 		),
 		'filesize' => array(
 			'rule' => array('filesize'),
-			'message' => 'Your filesize is too large; maximum size %s.'
+			'message' => 'あなたのファイルサイズが大きすぎます。最大サイズ： %s.'
 		),
 		'extension' => array(
 			'rule' => array('extension'),
-			'message' => 'Your file type is not allowed; allowed types: %s.'
+			'message' => 'あなたのファイルタイプが許可されていません。承認されたタイプ： %s.'
 		),
 		'required' => array(
 			'rule' => array('required'),
-			'message' => 'This file is required.',
+			'message' => 'このファイルは必須です.',
 			'on' => 'create',
 			'allowEmpty' => true
 		)

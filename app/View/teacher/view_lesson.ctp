@@ -41,8 +41,8 @@
                                     </video>
                                 </div>
                                 <?php endif;?>
-                                 <?php if($value['Extension'] == 'mp3'):?>
-                                <div class="<?php echo 'file'.$key ?> file_l"style="margin:50px" > 
+                                <?php if($value['Extension'] == 'mp3'):?>
+                                <div class="<?php echo 'file'.$key ?> file_l"style="margin:50px" >
                                     <audio controls>
                                       <source src="<?php echo '/elearning'.$value['FileLink']?>" type="video/mp4" type="audio/mpeg">
                                      お使いのブラウザはaudioタグをサポートしていません。

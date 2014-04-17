@@ -6,6 +6,11 @@
         ?>
         <div class="error">
             <?php echo $error; ?>
+            <?php if(isset($error_msg)){
+                    foreach ($error_msg as $key => $value) {
+                        echo '<h4>'.$value.'</h4>';
+                    }
+            }?>
         </div>
         <?php endif;?>
         <div class="title"><h3>授業 アップロード</h3></div>
@@ -17,10 +22,10 @@
                         <table class="sign_up_tb">
                             <tbody>
                                 <tr>
-                                    <td width="22%">
+                                    <td width="25%">
                                         <div class="td_text">タイトル<span style="color:red">*</span></div>
                                     </td>
-                                    <td width="78%">
+                                    <td width="75%">
                                         <?php echo $this->Form->input('Title', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
                                     </td>
                                 </tr>
@@ -55,6 +60,12 @@
                                 <tr>
                                     <td> <div class="td_text">ファイル アップロード</div></td>
                                     <td>
+                                        <div class="td_text">承認されたタイプ：GIF、JPG、PNG、PDF、MP3、MP4、WAV、TSV</div>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td> </td>
+                                    <td>
                                         <input type="hidden" value="0" id="n_file">
                                         <?php echo $this->Form->input('File.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
                                         <a href="javascript:void(0)" id="morefile">さらにファイルを追加</a>
@@ -63,12 +74,17 @@
                                 
                                 <tr>
                                     <td> <div class="td_text">テスト ファイル アップロード</div></td>
+                                    <td><div class="td_text">承認されたタイプ：TSV</div>
+                                    </td>
+                                </tr> 
+                                  <tr>
+                                    <td></td>
                                     <td>
                                         <input type="hidden" value="0" id="n_testfile">
                                         <?php echo $this->Form->input('TestFile.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
                                         <a href="javascript:void(0)" id="moretestfile">さらにファイルを追加</a>
                                     </td>
-                                </tr>    
+                                </tr>       
                                 <tr>
                                     <td></td>
                                     <td>

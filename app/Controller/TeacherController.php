@@ -317,6 +317,7 @@ class TeacherController extends AppController
                             $options['conditions'] = array(
                                 'File.FileName' => $value['path']['name'],
                                 'File.IsDeleted' => '0',
+                                'File.FileType' => '1',
                                 'Lesson.IsDeleted' => '0',
                                 'Lesson.UserId' => $userId,
                             );
@@ -332,7 +333,7 @@ class TeacherController extends AppController
                             }
                             $data['File'][$key]['path']['old_name'] = $value['path']['name'];
                             $num_file++;
-                            $type = explode("/", $value['path']['type']);
+                            $type = explode(".", $value['path']['name']);
                             $type = $type['1'];
                             //formatName LessonId_FileNum_Size.Type
                             $name = 'File' . '_' . $lesson_id . '_' . $num_file . '_' . $value['path']['size'] . '.' . $type;
@@ -359,10 +360,13 @@ class TeacherController extends AppController
                                     $file_id = $File['File']['FileId'];
                                 }
                             } else {
+                            	$error_msg = $this->File->validationErrors['File'];
+                            	$this->set(compact('error_msg'));
                                 $this->Lesson->delete($lesson_id);
                                 $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                                 $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
-                                $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+                                return;
+                                // $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
                             }
                         }
                     }
@@ -370,20 +374,25 @@ class TeacherController extends AppController
                     $num_test = 0;
                     foreach ($data['TestFile'] as $key => $value) {
                         if (!empty($value['path']['name'])) {
-                            $file_name = $this->File->find('first', array(
-                                    'conditions' => array('File.LessonId' => $lesson_id, 'File.FileName' => $value['path']['name']),
-                                    'fields' => array('File.FileId'),
-                                    'order' => array('File.created' => 'Asc'),
-                                    'contain' => False,
-                                )
+                            $options['conditions'] = array(
+                                'File.FileName' => $value['path']['name'],
+                                'File.IsDeleted' => '0',
+                                'File.FileType' => '2',
+                                'Lesson.IsDeleted' => '0',
+                                'Lesson.UserId' => $userId,
                             );
+                            $options['fields'] = array('Lesson.UserId', 'File.*');
+                            $file_name = $this->File->find('all', $options);
                             if (!empty($file_name)) {
+                            	$this->Lesson->delete($lesson_id);
+                                $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
                                 $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
                                 $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
                             }
                             $data['TestFile'][$key]['path']['old_name'] = $value['path']['name'];
                             $num_test++;
-                            $type = explode("/", $value['path']['type']);
+                            $type = explode(".", $value['path']['name']);
                             $type = $type['1'];
                             //formatName LessonId_FileNum_Size_Type
                             $name = 'Test' . '_' . $lesson_id . '_' . $num_test . '_' . $value['path']['size'] . '.' . $type;
@@ -482,7 +491,6 @@ class TeacherController extends AppController
                                                         $this->Question->deleteAll(array('Question.TestId' => $test_id), false);
                                                         $this->Session->setFlash(__('答えは作成できませんでした。 、もう一度お試しください。'));
                                                         $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-
                                                     }
                                                     $h++;
                                                 }
@@ -506,7 +514,13 @@ class TeacherController extends AppController
 
                                 }
                             } else {
+                            	$error_msg = $this->File->validationErrors['File'];
+                            	$this->set(compact('error_msg'));
+                                $this->Lesson->delete($lesson_id);
+                                $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
                                 $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
+                                return;
                             }
                         }
                     }
