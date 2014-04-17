@@ -257,31 +257,6 @@ class User extends AppModel {
             'conditions' => array(
                 'User.Username' => $username,
             ),
-            'fields' => array(
-                'UserId',
-                'Username',
-                'Password',
-                'InitialPassword',
-                'UserType',
-                'FullName',
-                'Birthday',
-                'VerifyCodeQuestion',
-                'InitialCodeQuestion',
-                'VerifyCodeAnswer',
-                'InitialCodeAnswer',
-                'Gender',
-                'Address',
-                'Phone',
-                'Email',
-                'ImageProfile',
-                'IsOnline',
-                'created',
-                'modified',
-                'Status',
-                'Violated',
-                'BankInfo',
-                'CreditCard',
-            )
         ));
         return $user['User'];
     }

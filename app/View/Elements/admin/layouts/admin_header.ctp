@@ -30,17 +30,17 @@ function time_elapsed_string($ptime)
 
 	<!-- BEGIN TOP NAVIGATION BAR -->
 	<div class="header-inner">
-		<!-- BEGIN LOGO -->  
 		<a class="navbar-brand" href="">
 		<p>E-learning システム</p>
 		</a>
-		<form class="search-form search-form-header" role="form" action="">
+
+		<!-- Search Form -->
+		<!-- <form class="search-form search-form-header" role="form" action="">
 			<div class="input-icon right">
 				<i class="fa fa-search"></i>
 				<input type="text" class="form-control input-medium input-sm" name="query" placeholder="検索 ...">
 			</div>
-		</form>
-		<!-- END LOGO -->
+		</form> -->
 
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<ul class="nav navbar-nav pull-right">
@@ -93,7 +93,7 @@ function time_elapsed_string($ptime)
 				<i class="fa fa-angle-down"></i>
 				</a>
 				<ul class="dropdown-menu">
-					<li><a href=""><i class="fa fa-user"></i> プロフィール</a>
+					<li><a href="/elearning/admin/moderator/<?php echo $this->Session->read('User.Username') ? $this->Sesson->read('User.Username') : null?>"><i class="fa fa-user"></i> プロフィール</a>
 					</li>
 					<li class="divider"></li>
 					<li><a href="/elearning/Users/logout"><i class="fa fa-key"></i>　ログアウト </a>

@@ -569,7 +569,12 @@ section.editable {
   /*background-color: #fff;*/
   /*border: 1px solid #dddddd;*/
   max-width: 300px;
-  line-height: 2em;
+  width: 300px;
+  line-height: 1em;
+}
+
+section.editable#Password {
+  -webkit-text-security: disc;
 }
 
 .ajax-loader {

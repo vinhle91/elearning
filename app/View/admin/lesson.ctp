@@ -14,7 +14,7 @@
 							<ul class="dropdown-menu-list no-space no-list-style">
 								<li>  
 									<a link="" onclick="block_lesson(this, event)">
-									<span class="label label-sm label-icon label-warning"><i class="fa fa-pencil"></i></span>
+									<span class="label label-sm label-icon label-warning"><i class="fa fa-ban"></i></span>
 									Block selected lessons
 									</a>
 								</li>
@@ -26,8 +26,8 @@
 								</li>
 								<li>  
 									<a link="" onclick="remove_lesson(event)">
-									<span class="label label-sm label-icon label-danger"><i class="fa fa-ban"></i></span>
-									Remove selected lessons
+									<span class="label label-sm label-icon label-danger"><i class="fa fa-bell-o"></i></span>
+									Report selected lessons
 									</a>
 								</li>
 							</ul>
