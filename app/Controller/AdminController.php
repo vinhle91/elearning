@@ -2,32 +2,108 @@
 /**
 *@copyright Copyright (c) 2013 mrhieusd
 */
+App::uses('AuthComponent', 'Controller/Component');
 class AdminController extends AppController {
 	
-	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File');
+	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg');
 
 	function beforeFilter() {
-		$UserType = $this->Auth->user('UserType');
-		if($UserType == 1){
-        	$this->redirect(array('controller'=>'Student','action' => 'index'));
-        }else if($UserType == 2){
-        	$this->redirect(array('controller'=>'Teacher','action' => 'index'));
-        }else{
-        	
-        }
+		$this->Auth->authenticate = array(
+			'Form' => array(
+				'userModel' => 'User',
+				'fields' => array('username' => 'Username', 'password' => 'Password'),
+				'scope' => array('Status' => 1, 'UserType' => 3),
+			)
+		);
+		$this->Auth->loginAction = array('controller' => 'admin', 'action' => 'login');
+		$this->Auth->loginRedirect = array('controller'=>'admin','action'=>'home');
+		$this->Auth->loginError = 'ユーザー名又はパスワードが間違った。';
+		$this->Auth->authError = 'このページを表示するために、ログインしてください。';
+
+
         $pageTitle = 'E-Learningシステム';
         $this->layout = 'admin';
+
         $status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
+		$fa_label = array('1' => 'plus', '2' => 'bell-o');
+		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/teacher/');
 		$this->set(compact('status'));
 		$this->set(compact('status_label'));
-        return parent::beforeFilter();
+		$this->set(compact('fa_label'));
+		$this->set(compact('msg_link'));
 
+		$msg = $this->Msg->find("all", array(
+			'conditions' => array(
+				'OR' => array(
+					'Msg.UserId' => '',
+					'User.UserType' => 3,
+					)
+				)
+			));
+		$nmsg = $this->Msg->find("count", array(
+			'conditions' => array(
+				'OR' => array(
+					array(
+						'User.UserType' => 3,
+						'Msg.IsReaded' => 0,
+						),
+					'Msg.UserId' => ''
+
+					)
+					
+				)
+			));
+		$this->set('nmsg', $nmsg);
+		$this->set('notifs', $msg);
+        // return parent::beforeFilter();
     }
 
-    public function img() {
-    	//khong biet tai sao luon co log bao thieu adminController::img(), them vao cho k bao loi
-    }
+    public function checkLogin() {
+		// if ($this->request->is('post') && !empty($this->request->data)) {
+		// 	$this->layout = null;
+		// 	$data = $this->request->data;
+		// 	$ret = array();
+		// 	$user = $this->User->find('all', array(
+		// 		'conditions' => array(
+		// 			'User.Username' => $data['User']['Username'],
+		// 			'User.UserType' => 3,
+		// 			)
+		// 		));
+
+		// 	if (empty($user)) {
+		// 		$ret['result'] = "Fail";
+		// 		$ret['msg'] = "アカウントが存在しません";
+		// 	} else {
+		// 		if ($user[0]['User']['Password'] == Security::hash($data['User']['Password'], 'sha1', true)) {
+		// 			$ret['result'] = "Success";
+		// 		} else {
+		// 			$ret['result'] = "Fail";
+		// 			$ret['msg'] = "パスワードが正しくありません";
+		// 		}
+		// 	}
+		// 	$this->log($ret);
+		// 	$log = $this->User->getDataSource()->getLog(false, false);       
+		// 	$this->log($log);
+		// 	echo json_encode($ret);
+		// 	die;
+		// }
+	}
+
+    public function login() {
+		$this->layout = null;
+		if ($this->request->is('post')) {
+            $data = $this->request->data;
+			$this->log($data);
+            if(!empty($data['User']['Username']) && !empty($data['User']['Password']) ) {
+            	if ($this->Auth->login()) 
+            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
+            	else {
+            		$this->Session->setFlash("パスワードが正しくありません");
+            	}
+            }
+        }
+	}
 
    	public function test() {
 
@@ -73,7 +149,7 @@ class AdminController extends AppController {
 				))
 			);
 		$this->set(compact('new_students'));
-		$this->log($new_students);
+		// $this->log($new_students);
 	}
 
 	public function payment($param = null) {
@@ -149,7 +225,7 @@ class AdminController extends AppController {
 
 		$payment_summary = $this->Transaction->getTransactions("LastMonth");
 		$payment_summary['Earn'] = $payment_summary['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
-		$this->log($payment_summary);
+		// $this->log($payment_summary);
 		$this->set(compact('payment_summary'));
 
 	}
@@ -183,6 +259,7 @@ class AdminController extends AppController {
 					))
 				);
 			$this->set(compact('all_lessons'));
+			$this->log($all_lessons);
 
 		} else {
 			$lessonInfo = $this->Lesson->getLessonInfo($lesson);
@@ -235,10 +312,6 @@ class AdminController extends AppController {
 		$this->set(compact('all_files'));
 	}
 
-	public function login() {
-		
-	}
-
 	public function student($username = null) {
 		$this->set('sidebar', array('user', 'student'));
 
@@ -289,7 +362,7 @@ class AdminController extends AppController {
 			$this->set(compact('page_breadcrumb'));
 			//end breadcrumb cho trang
 
-			
+			$this->log($studentInfo);
 			$this->set('studentInfo', $studentInfo);
 		}
 	} 
@@ -367,7 +440,7 @@ class AdminController extends AppController {
 		}
 	}
 
-	public function moderator() {
+	public function moderator($username = null) {
 		$this->set('sidebar', array('user', 'moderator'));
 
 		if (!isset($username)) {
@@ -389,12 +462,14 @@ class AdminController extends AppController {
 				'Total' => $this->User->find("count", array(
 					'conditions' => array(
 						'UserType' => '3',
+						'Status <>' => '0'
 						),
 					)),
 				'Data' => $this->User->find('all', array(
 					'limit' => 10,
 					'conditions' => array(
-						'UserType' => '3'
+						'UserType' => '3',
+						'Status <>' => '0'
 						),
 					))
 				);
@@ -453,15 +528,15 @@ class AdminController extends AppController {
 			$ret = array();
 
 			if ($param == "update") {
+				if (isset($data['Password'])) {
+                        $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
+				}
 
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
 				}
-
-				$log = $this->User->getDataSource()->getLog(false, false);       
-				$this->log($log);
 			}
 
 			if ($param == "block") {
@@ -498,17 +573,36 @@ class AdminController extends AppController {
 			}
 
 			if ($param == "insert") {
-				$this->User->create();
-				if ($this->User->save($data)) {
+				$conditions = array(
+					'User.Username' => $data['Username'],
+					);
+				if ($this->User->hasAny($conditions)) {
+					$ret['result'] = "Fail";
+					$ret['msg'] = "ユーザー '".$data['Username']."'' があった!!!";
+				} else {
+					$this->User->create();
+					if ($this->User->save($data)) {
+						$ret['result'] = "Success";
+					} else {
+						$ret['result'] = "Fail";
+					}
+				}
+
+				
+			}
+
+			if ($param == "msg") {
+				if ($this->Msg->updateAll(array("IsReaded" => "1"), array('MsgId' => $data)) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
 				}
-
-				// $log = $this->User->getDataSource()->getLog(false, false);       
-				// $this->log($log);
 			}
 
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+
+			$this->log($ret);
 			echo json_encode($ret);
 			die;
 		}
@@ -597,6 +691,56 @@ class AdminController extends AppController {
 			die;
 		}
 
+	}
+
+	public function updateLesson($param = null) {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$ret = array();
+			
+
+			if ($param == "block") {
+				$this->Lesson->blockLesson($data);
+				$ret['result'] = "Success";
+			} 
+
+			if ($param == "active") {
+				$this->Lesson->activeLesson($data);
+				$ret['result'] = "Success";
+			}
+
+			
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+			echo json_encode($ret);
+			die;
+		}
+	}
+
+	public function updateFile($param = null) {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$ret = array();
+			
+
+			if ($param == "block") {
+				$this->File->blockFile($data);
+				$ret['result'] = "Success";
+			} 
+
+			if ($param == "active") {
+				$this->File->activeLesson($data);
+				$ret['result'] = "Success";
+			}
+
+			
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
+			echo json_encode($ret);
+			die;
+		}
 	}
 
 

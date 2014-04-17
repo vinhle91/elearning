@@ -102,9 +102,11 @@ class UsersController extends AppController {
                 $currentIpAddress = '123.1.1.124';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
-
+                if(isset($user)&&$user['User']['Status'] ==2){
+                    $this->Session->setFlash(__('このアカウントは、管理者が受け入れるために保留状態である。'));
+                    $this->redirect(array('action' => 'login')); 
+                }               
                 $ipAddress = $user['User']['IpAddress'];
-                // debug($data);
                 //check remaining blocking time
                 $remainBlockTime = $this->remainBlockTime($user['User']['Username']);
 
@@ -123,8 +125,26 @@ class UsersController extends AppController {
                         $this->User->saveField('IpAddress', $currentIpAddress);
                     }
                     //if valid verifycode answer, allow to login
-                    if (!array_key_exists('VerifyCodeAnswer', $data['User']) ||
-                            (array_key_exists('VerifyCodeAnswer', $data['User']) && $data['User']['VerifyCodeAnswer'] == $user['User']['VerifyCodeAnswer'])) {
+                    $isValidVerifyCode = false;
+                    if (!array_key_exists('VerifyCodeAnswer', $data['User'])) {
+                        $isValidVerifyCode = true;
+                    } else {
+                        $username = $user['User']['Username'];
+                        $verifyCodeQuestion = $username . $data['User']['VerifyCodeQuestion'];
+                        $verifyCodeAnswer = $username . $data['User']['VerifyCodeAnswer'];
+
+                        $verifyCodeQuestionHash = Security::hash($verifyCodeQuestion, 'sha1', true);
+                        $verifyCodeAnswerHash = Security::hash($verifyCodeAnswer, 'sha1', true);
+                        debug($verifyCodeQuestionHash);
+                        debug($user['User']['VerifyCodeQuestion']);
+                        debug($verifyCodeAnswerHash);
+                        debug($user['User']['VerifyCodeAnswer']);
+                        if ($user['User']['VerifyCodeQuestion'] == $verifyCodeQuestionHash
+                            && $user['User']['VerifyCodeAnswer'] == $verifyCodeAnswerHash) {
+                            $isValidVerifyCode = true;
+                        }
+                    }
+                    if ($isValidVerifyCode) {
                         //login here
                         if ($this->Auth->login()) {
                             //if login success, save the ip
@@ -378,7 +398,7 @@ class UsersController extends AppController {
                     'conditions' => array('User.UserId' => $id)
                 ));
                 if ($userData == null) {
-                    throw new NotFoundException('Could not find that User');
+                    throw new NotFoundException('そのユーザーを見つけることができませんでした');
                 } else {
 //                    print_r($userData);
                     $question = Security::hash($userName . trim($this->request->data['質問']), 'sha1', true);

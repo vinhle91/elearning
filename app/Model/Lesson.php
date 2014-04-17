@@ -44,6 +44,12 @@ class Lesson extends AppModel {
             'order' => 'Tag.created DESC',
             'dependent' => true
         ),
+        'Report' => array(
+            'className' => 'Report',
+            'foreignKey' => 'LessonId',
+            'order' => 'Report.created DESC',
+            'dependent' => true
+        ),
     );
     public $belongsTo = array(
         'Author' => array(
@@ -61,6 +67,26 @@ class Lesson extends AppModel {
             'className' => 'User',
             'foreignKey' => 'UserId',
         )
+    );
+    public $validate = array(
+        'Title' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'タイトル空ではありません'
+            ),
+        ),
+        'Tag' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'タグが空ではありません'
+            ),
+        ),
+        'Abstract' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => '記述が空ではありません'
+            ),
+        ),        
     );
     public function getLessonsByTeacher($userId) {
         $this->contain('Comment');
@@ -111,33 +137,7 @@ class Lesson extends AppModel {
         return $lessons;
     }
 
-    public $validate = array(
-        'Title' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'Title is required'
-            ),
-        ),
-        'Category' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'Category is required'
-            ),
-        ),
-        'File.name' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'This file is required'
-            ),
-        ),
-        'TestFile.name' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'This file is required'
-            ),
-        )
-    );
-
+   
     public function getLessonInfo($lessonId) {
         $buff = $this->find('first', array(
             'conditions' => array(
@@ -145,6 +145,20 @@ class Lesson extends AppModel {
             ),
         ));
         return $buff['Lesson'];
+    }
+
+    public function blockLesson($lessons) {
+        foreach ($lessons as $key => $lessonId) {
+            $this->id = $lessonId;
+            $this->saveField('IsBlocked', '1');
+        }
+    }
+
+    public function activeLesson($lessons) {
+        foreach ($lessons as $key => $lessonId) {
+            $this->id = $lessonId;
+            $this->saveField('IsBlocked', '0');
+        }
     }
 
 }

@@ -57,6 +57,7 @@ textarea{
 	-moz-border-radius: 1px;
 	border-radius: 3px;
 	padding: 10px 8px;
+	float: left;
 }
 select{
 	display: inline-block;

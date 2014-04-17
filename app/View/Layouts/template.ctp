@@ -18,11 +18,12 @@
 			//onLoad="disableContextMenu()"
 		)); 
 	?>
+	<style type="text/css"> @media print { body { display:none } } </style>
 </head>
 
 <body >
 <!-- <?php echo $this->element('sql_dump'); ?>  -->
-	<div id="body">
+	<div id="body" >
 		<!--Start header-->
 		<?php echo $this->Element('header');?>
 		<!--End	header-->		

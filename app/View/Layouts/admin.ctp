@@ -24,15 +24,16 @@
 			'bootstrap',
 			'jquery.blockui.min',
 			'jquery.cookie.min',
-			'app(1)',			
+			'admin-layout',
+			'jquery-ui.min.js',
+			'jquery.metadata',
+			'jquery.tablesorter',
+			'jquery.tablesorter.min',
+			'jquery.slimscroll.min'
 		)); 
 	?>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 </head>
-<?php
-	$status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
-	$status_label = array('default', 'success', 'info', 'warning', 'danger');
-?>
+
 <body class="page-header-fixed">
 	<!--<?php echo $this->element('sql_dump'); ?>-->
 		<!--Start header-->

@@ -66,11 +66,13 @@
                             <span>パースワード</span>
                         </a>
                     </li>
+                    <?php if(isset($UserType)&&$UserType ==2) : ?>
                     <li>
                         <a href="javascript:void(0)" class="secu">
                             <span>セキュリティ</span>
                         </a>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -164,5 +166,6 @@
 //        alert("Take care");
         $("#change_pass").hide();
         $("#change_secu").show();
+
     </script>
 <?php endif; ?>
