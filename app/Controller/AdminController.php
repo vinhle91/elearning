@@ -2,19 +2,25 @@
 /**
 *@copyright Copyright (c) 2013 mrhieusd
 */
+App::uses('AuthComponent', 'Controller/Component');
 class AdminController extends AppController {
 	
 	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg');
 
 	function beforeFilter() {
-		$UserType = $this->Auth->user('UserType');
-		if($UserType == 1){
-        	$this->redirect(array('controller'=>'Student','action' => 'index'));
-        }else if($UserType == 2){
-        	$this->redirect(array('controller'=>'Teacher','action' => 'index'));
-        }else{
-        	
-        }
+		$this->Auth->authenticate = array(
+			'Form' => array(
+				'userModel' => 'User',
+				'fields' => array('username' => 'Username', 'password' => 'Password'),
+				'scope' => array('Status' => 1, 'UserType' => 3),
+			)
+		);
+		$this->Auth->loginAction = array('controller' => 'admin', 'action' => 'login');
+		$this->Auth->loginRedirect = array('controller'=>'admin','action'=>'home');
+		$this->Auth->loginError = 'ユーザー名又はパスワードが間違った。';
+		$this->Auth->authError = 'このページを表示するために、ログインしてください。';
+
+
         $pageTitle = 'E-Learningシステム';
         $this->layout = 'admin';
 
@@ -50,13 +56,54 @@ class AdminController extends AppController {
 			));
 		$this->set('nmsg', $nmsg);
 		$this->set('notifs', $msg);
-        return parent::beforeFilter();
-
+        // return parent::beforeFilter();
     }
 
-    public function img() {
+    public function checkLogin() {
+		// if ($this->request->is('post') && !empty($this->request->data)) {
+		// 	$this->layout = null;
+		// 	$data = $this->request->data;
+		// 	$ret = array();
+		// 	$user = $this->User->find('all', array(
+		// 		'conditions' => array(
+		// 			'User.Username' => $data['User']['Username'],
+		// 			'User.UserType' => 3,
+		// 			)
+		// 		));
 
-    }
+		// 	if (empty($user)) {
+		// 		$ret['result'] = "Fail";
+		// 		$ret['msg'] = "アカウントが存在しません";
+		// 	} else {
+		// 		if ($user[0]['User']['Password'] == Security::hash($data['User']['Password'], 'sha1', true)) {
+		// 			$ret['result'] = "Success";
+		// 		} else {
+		// 			$ret['result'] = "Fail";
+		// 			$ret['msg'] = "パスワードが正しくありません";
+		// 		}
+		// 	}
+		// 	$this->log($ret);
+		// 	$log = $this->User->getDataSource()->getLog(false, false);       
+		// 	$this->log($log);
+		// 	echo json_encode($ret);
+		// 	die;
+		// }
+	}
+
+    public function login() {
+		$this->layout = null;
+		if ($this->request->is('post')) {
+            $data = $this->request->data;
+			$this->log($data);
+            if(!empty($data['User']['Username']) && !empty($data['User']['Password']) ) {
+            	if ($this->Auth->login()) 
+            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
+            	else {
+            		$this->Session->setFlash("パスワードが正しくありません");
+            	}
+            }
+        }
+	}
 
    	public function test() {
 
@@ -263,10 +310,6 @@ class AdminController extends AppController {
 			);
 
 		$this->set(compact('all_files'));
-	}
-
-	public function login() {
-		
 	}
 
 	public function student($username = null) {

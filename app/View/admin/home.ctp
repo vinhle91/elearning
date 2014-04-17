@@ -21,31 +21,6 @@
 <?php 
 $paid = array('Unpaid', 'Paid');
 $paid_label = array('warning', 'success');
-
-$transactions = array(
-	'total_student' => '1',
-	'total_teacher' => '1',
-	'total_profit' => '40000',
-	'data' => array(
-			array(
-				'date' => date('d/m/Y', time()),
-				'lesson' => 'ls001',
-				'student' => 'lucilucency',
-				'teacher' => 'gondai',
-				'cost' => '20000',
-				'paid' => 1
-				),
-			array(
-				'date' => date('d/m/Y', time()),
-				'lesson' => 'ls001',
-				'student' => 'lucilucency',
-				'teacher' => 'gondai',
-				'cost' => '20000',
-				'paid' => 0
-				)
-			)
-		)
-
 ?>
 
 <div class="tabbable tabbable-custom tabbable-custom-profile col-md-9">
