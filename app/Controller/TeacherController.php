@@ -637,17 +637,18 @@ class TeacherController extends AppController {
         }
         $this->set('selectMonth',$month-1);
             $this->set('selectYear',$year);
-        $rate = $this->Config->getConfig('SharingRate');
+        $rate = $this->Config->getSharingRateConfig();
         if($rate == null) {
             $this->Session->setFlash('システム設定の定数が見つかれない');
-            $rate = 100;
+            $rate = 0;
         }
         $transactions = $this->StudentHistory->getTeacherTransactionHistory($userId, $month, $year);
         $this->set('transactions', $transactions);
         $total = 0;
         foreach ($transactions as $t) {
-            $total = $total + $rate/100*$t['StudentHistory']['fee'];
+            $total = $total + $t['StudentHistory']['fee'];
         }
+        $this->set(compact('rate'));
         $this->set('total', $total);
     }
 

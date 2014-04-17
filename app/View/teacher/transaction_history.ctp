@@ -93,7 +93,11 @@
                         <tr> 
                             <td colspan="3"><h3>合計</h3></td>           
                             <td><h3 style="color:red"><?php echo $total; ?></h3></td>
-                        </tr>   
+                        </tr>
+                        <tr>
+                            <td colspan="3"><h2><?php echo $rate.'% は報酬';?></h2></td>
+                            <td><h3 style="color:red"><?php echo $rate/100*$total; ?></h3></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
