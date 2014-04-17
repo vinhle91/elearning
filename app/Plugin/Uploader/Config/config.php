@@ -51,7 +51,7 @@ $config['Uploader']['mimeTypes'] = array(
 		'js'	=> 'text/javascript',
 		'xhtml'	=> 'application/xhtml+xml',
 		'xht'	=> 'application/xhtml+xml',
-		'json'	=> 'application/json'
+		'json'	=> 'application/json',
 	),
 	'archive' => array(
 		'gz'	=> 'application/x-gzip',

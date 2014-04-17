@@ -38,12 +38,9 @@ class File extends AppModel {
         ),
         'Uploader.FileValidation' => array(
             'File' => array(
-                'extension' => array('gif', 'jpg', 'png', 'pdf','mp3','mp4','wav','tsv'),
+                'extension' => array('gif','jpg','png','pdf','mp3','mp4','wav','tsv'),
                 'filesize' => 52428800,
-                'required' => array(
-                    'value' => true,
-                    'error' => 'File required',
-                )
+                'required' => true
             ),
             'TestFile' => array(
                 'extension' => array('tsv'),
@@ -53,28 +50,6 @@ class File extends AppModel {
         )
     );
 
-    public function formatName($name, $file) {
-        $userId = $this->Auth->user('UserId');
-        // Get lesson id
-        $lesson= $this->Lesson->find('first', array(
-             'conditions' => array('Lesson.UserId' => $userId),
-             'fields' => array('Lesson.LessonId','Lesson.created'),
-             'order' => array('Lesson.created' => 'desc'),
-             'contain'=> False,
-        ));
-        $lesson_id = $lesson['Lesson']['LessonId'];
-        $date = $lesson['Lesson']['created'];
-        $date = date_format($date, 'Y-m-d');
-
-        if ($lesson_id) {
-            sprintf('%s-%s-%s-%s', $lesson_id, $file->size(), $file->ext());
-        }
-        return $name;
-    }
-    // public function beforeUpload($options) {
-    //     $options['uploadDir'] = WWW_ROOT . $options['finalPath'];         
-    //     return $options;
-    
     public function blockFile($files) {
         foreach ($files as $key => $fileId) {
             $this->id = $fileId;

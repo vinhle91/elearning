@@ -26,23 +26,7 @@ class User extends AppModel {
             'dependent' => true,
         ),
     ); 
-    // public $hasAndBelongsToMany = array(
-    //     'StudentTest' =>array(
-    //         'className' => 'StudentTest',
-    //         'joinTable' => 'students_tests',
-    //         'foreignKey' => 'UserId',
-    //         'associationForeignKey' => 'TestId',
-    //         'unique' => true,
-    //         'conditions' => '',
-    //         'fields' => '',
-    //         'order' => '',
-    //         'limit' => '',
-    //         'offset' => '',
-    //         'finderQuery' => '',
-    //         'deleteQuery' => '',
-    //         'insertQuery' => ''
-    //     )
-    // );     
+
    	public $validate = array(
         'Username' => array(
             'nonEmpty' => array(
@@ -108,40 +92,6 @@ class User extends AppModel {
                 'message' => 'Fullname must be between 6 to 60 characters'
             )
         ),
-
-        // 'Email' => array(
-        //     'required' => array(
-        //         'rule' => array('email', true),    
-        //         'message' => 'Please provide a valid email address.'   
-        //     ),
-        //     // 'unique' => array(
-        //     //     'rule'    => array('isUniqueEmail'),
-        //     //     'message' => 'This email is already in use',
-        //     // ),
-        // ),
-        // 'role' => array(
-        //     'valid' => array(
-        //         'rule' => array('inList', array('king', 'queen', 'bishop', 'rook', 'knight', 'pawn')),
-        //         'message' => 'Please enter a valid role',
-        //         'allowEmpty' => false
-        //     )
-        // ),
-         
-        // 'password_update' => array(
-        //     'min_length' => array(
-        //         'rule' => array('minLength', '6'),   
-        //         'message' => 'Password must have a mimimum of 6 characters',
-        //         'allowEmpty' => true,
-        //         'required' => false
-        //     )
-        // ),
-        // 'password_confirm_update' => array(
-        //      'equaltofield' => array(
-        //         'rule' => array('equaltofield','password_update'),
-        //         'message' => 'Both passwords must match.',
-        //         'required' => false,
-        //     )
-        // )
     );
     /**
      * Before isUniqueUsername
@@ -242,11 +192,6 @@ class User extends AppModel {
         if (isset($this->data[$this->alias]['InitialPassword'])) {
             $this->data[$this->alias]['InitialPassword'] = AuthComponent::password($userName.$this->data[$this->alias]['InitialPassword']);
         }
-
-        // // if we get a new password, hash it
-        // if (isset($this->data[$this->alias]['password_update']) && !empty($this->data[$this->alias]['password_update'])) {
-        //     $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password_update']);
-        // }
 
         // fallback to our parent
         return parent::beforeSave($options);
