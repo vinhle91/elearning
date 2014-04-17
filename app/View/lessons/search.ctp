@@ -40,7 +40,7 @@
                     <span style="float:right"><img src="img/icon/icon-like.png"/> <?php echo $result[LESSON]["LikeNumber"]; ?> </span>
 <!--                    <span style="float:right"><img src="img/icon/icon-hits-12.png"/> 4500 </span>-->
                 </div>
-                <div class="creat_author">Published by <a href="#"><?php echo $result[TEACHER]["Username"]; ?></a> 2 hours ago</div>
+                <div class="creat_author">作家 <a href="#"><?php echo $result[TEACHER]["Username"]; ?></a> </div>
                 <div class="description"><p><?php echo $result[LESSON]["Abstract"]; ?></p></div>
 
             </div>
