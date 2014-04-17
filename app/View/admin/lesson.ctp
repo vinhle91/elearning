@@ -25,7 +25,7 @@
 									</a>
 								</li>
 								<li>  
-									<a link="" onclick="remove_lesson(event)">
+									<a link="" onclick="report_lesson(event)">
 									<span class="label label-sm label-icon label-danger"><i class="fa fa-bell-o"></i></span>
 									Report selected lessons
 									</a>
@@ -187,7 +187,28 @@
 
            }
        	});
+	}
 
+	function report_lesson(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
+		var buff = [];
+		var submit_data = [];
+		$("#lesson-table tbody tr").each(function(){
+			if ($(this).find("input").is(":checked")) {
+				submit_data.push(parseInt($(this).find("td:eq(1)").html()));
+			}
+		});
+		console.log(submit_data);
+		$.ajax({
+           type: "POST",
+           url: '/elearning/admin/updateLesson/report',
+           data: {'data':submit_data},
+           success: function(data)
+           {
+				alert("Report lessons successful!")
+           }
+       	});
 	}
 
 	$("input[type='checkbox']").on("click", function(){

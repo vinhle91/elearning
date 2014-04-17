@@ -193,9 +193,13 @@
 					</span>
 				</button>
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
-					
 					<span>
 						 Active
+					</span>
+				</button>
+				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
+					<span>
+						 Deny
 					</span>
 				</button>
 			</div>			
@@ -329,6 +333,17 @@
 		</div>
 	</div>
 <script type="text/javascript">
+	function checkEmailValidate(str) {
+		var regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/;
+		if (str.match(regex)) return true;
+		else return false;
+	}
+
+	function checkDateValidate(str) {
+		var regex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		if (str.match(regex)) return true;
+		else return false;
+	}
 
 	$(document).ready(function(){
 		var origin = {};
@@ -359,7 +374,7 @@
 			e.preventDefault();
 			var url = "/elearning/admin/updateUserInfo/update";
 			var submit_data = {
-				UserId: "<?php echo $moderatorInfo['UserId']?>",
+				UserId: "<?php echo $studentInfo['UserId']?>",
 				Username: '\''+$('#Username').text()+'\'',
 			};
 			if ($('#Password').text() != origin.Password) {
@@ -376,6 +391,28 @@
 			}
 			if ($('#Address').text() != origin.Address) {
 				submit_data.Address = '\''+$('#Address').text()+'\'';
+			}
+
+			if (!checkEmailValidate($('#Email').text())) {
+				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+				$(".update-notif span").text("Invalid Email!");
+				setTimeout(function(){
+	   				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+	   			return;
+			}
+
+			if (!checkDateValidate($('#Birthday').text())) {
+				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+				$(".update-notif span").text("Invalid Birthday!");
+				setTimeout(function(){
+	   				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+	   			return;
 			}
 			
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
@@ -554,7 +591,7 @@
 		    return false;
 		});
 
-		$("#first-active").on("click", function(e){
+		$("#first-active").on("click", function(e) {
 			e = $.event.fix(e);
 			e.preventDefault();
 			var url = "/elearning/admin/updateUserInfo/active";
@@ -562,7 +599,12 @@
 				UserId: "<?php echo $studentInfo['UserId']?>",
 				Username: "<?php echo $studentInfo['Username']?>",
 			};
-
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-deny").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-active").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-active").unbind();
 			$.ajax({
 		           type: "POST",
 		           url: url,
@@ -571,10 +613,41 @@
 		           {
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-		               		$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
-							$(".handle-user #first-active").delay(1000).prepend('<i class="fa fa-check margin-right-5"></i>');
+		               		
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+
+		               	}
+		           }
+		         });
+
+		    return false;
+		});
+
+		$("#first-deny").on("click", function(e) {
+			e = $.event.fix(e);
+			e.preventDefault();
+			var url = "/elearning/admin/updateUserInfo/deny";
+			var submit_data = {
+				UserId: "<?php echo $studentInfo['UserId']?>",
+				Username: "<?php echo $studentInfo['Username']?>",
+			};
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-active").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-deny").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-deny").unbind();
+			$.ajax({
+		           type: "POST",
+		           url: url,
+		           data: submit_data, 
+		           success: function(data)
+		           {
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+		               		
+		               	} else if (data.result == "Fail") {
+
 		               	}
 		           }
 		         });

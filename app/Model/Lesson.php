@@ -140,6 +140,7 @@ class Lesson extends AppModel {
    
     public function getLessonInfo($lessonId) {
         $buff = $this->find('first', array(
+            'recursive' => '2',
             'conditions' => array(
                 'Lesson.LessonId' => $lessonId,
             ),

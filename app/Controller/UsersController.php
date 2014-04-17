@@ -397,7 +397,11 @@ class UsersController extends AppController {
         }
     }
 
-    public function edit_profile($id = null) {
+    public function edit_profile() {
+        $id = $this->_usersUsername()['UserId'];
+        $UserType = $this->Auth->user()['UserType'];
+//        $this->set(compact('UserType'));
+//        $userName = $this->_usersUsername()['Username'];
         if (!$id) {
             throw new NotFoundException(__("無効リクエスト"));
         } else {
@@ -457,8 +461,12 @@ class UsersController extends AppController {
         }
     }
 
-    public function delete_account($id = null) {
+    public function delete_account() {
 //        echo "Id is ".$id;
+        $id = $this->_usersUsername()['UserId'];
+        $UserType = $this->Auth->user()['UserType'];
+        $this->set(compact('UserType'));
+        $userName = $this->_usersUsername()['Username'];
         if ($id == null) {
             throw new NotFoundException(__("無効リクエスト"));
         } else {

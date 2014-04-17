@@ -109,9 +109,9 @@ function time_elapsed_string($ptime)
 
 <script>
 	$(".dropdown-menu-list").slimScroll({
-        height: '150px'
+        height: '250px'
     });
-	function confirmReaded(target, e){
+	function confirmReaded(target, e) {
 		submit_data = {msgId: $(target).attr("msgId")};
 		$.ajax({
            type: "POST",
@@ -127,7 +127,7 @@ function time_elapsed_string($ptime)
 
                	}
            }
-         });
+        });
 	}
 
 

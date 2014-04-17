@@ -64,53 +64,23 @@
 							</tr>
 						</thead>
 						<tbody>
+						<?php $this->log($configs)?>
+							<?php foreach ($configs as $key => $config) { ?>
 							<tr>
-								<td class="">自動セッション終了時間</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[0]['Config']['ConfigValue']?></textarea><span style="line-height: 1.7; margin-left: 5px">Seconds</span>
+								<td class="col-md-3"><?php echo $config['Config']['ConfigName']?></td>
+								<td class="col-md-7 align-right">
+									<section class="editable padding-5" id="config<?php echo $config['Config']['ConfigId']?>"><?php echo $config['Config']['ConfigValue']  ? $config['Config']['ConfigValue'] : ""?></section>
+								</td>
+								<td class="col-md-2">
+									<span style="line-height: 1.7; margin-left: 5px"><?php echo $config['Config']['ConfigUnit']?></span>
 								</td>
 							</tr>
-							<tr>
-								<td class="">自動バックアップ時刻</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[0]['Config']['ConfigValue']?></textarea><span style="line-height: 1.7; margin-left: 5px">Seconds</span>
-								</td>
-							</tr>
-							<tr>
-								<td>ログイン誤り回数</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[1]['Config']['ConfigValue']?></textarea>
-								</td>
-							</tr>
-							<tr>
-								<td>ロッグ時間</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""></textarea>
-								</td>
-							</tr>
-							<tr>
-								<td>一回受講料</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[2]['Config']['ConfigValue']?></textarea> <span style="line-height: 1.7">VND</span>
-								</td>
-							</tr>
-							<tr>
-								<td>受講可能時間</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id="">Thoi gian hoc 1 bai</textarea> <span style="line-height: 1.7">VND</span>
-								</td>
-							</tr>
-							<tr>
-								<td>報酬%</td>
-								<td class="col-md-5 align-right">
-									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="2" id=""><?php echo $configs[3]['Config']['ConfigValue']?></textarea><span style="line-height: 1.7">%</span>
-								</td>
-							</tr>
+							<?php }?>
 						</tbody>
 					</table>
 					<div class="clear-fix"></div>
 					<div class="padding-5 align-right">
-						<a href="#" class="btn btn-info btn-xs" disabled="disabled"><i class="fa fa-pencil"></i> 保存</a>
+						<a href="#" class="btn btn-info btn-xs button-save" disabled="disabled"><i class="fa fa-pencil"></i> 保存</a>
 					</div>
 				</div>
 			</div>
@@ -245,5 +215,54 @@
 
 	$(document).ready(function(){
 		
+	});
+
+	$(".editable").on("click", function(){
+		$(this).attr("contenteditable", "true");
+		$(this).css("background-color", "#fff");
+		$(this).focus();
+		$(".button-save").removeClass("disabled");			
+	});
+
+	$(".button-save").on("click", function(e){
+		e = $.event.fix(e);
+		e.preventDefault();
+		$("li.dropdown#options").removeClass("open");
+		var url = "/elearning/admin/updateUserInfo/update";
+		var submit_data = {};
+		console.log(submit_data);
+		
+		$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+		$(".user-info .update-notif span").text("Updating infomation...");
+		$(".ajax-loader").fadeIn(10);
+		$(".button-save").addClass("disabled");
+
+	    $.ajax({
+	           type: "POST",
+	           url: url,
+	           data: submit_data, 
+	           success: function(data)
+	           {
+					$(".ajax-loader").fadeOut(10);
+					data = $.parseJSON(data);
+	               	if (data.result == "Success") {
+	           			$(".user-info .update-notif span").text("Updated successfully");
+	           			setTimeout(function(){
+	           				$('.user-info .update-notif span').fadeTo(500, 0, function(){
+							  	$('.user-info .update-notif span').css("visibility", "hidden");   
+							});
+	           			}, 2000);
+	               	} else if (data.result == "Fail") {
+	           			$(".user-info .update-notif span").text("Updated fail");
+	               		setTimeout(function(){
+	           				//$(".user-info .update-notif span").text("");
+	           				$('.user-info .update-notif span').fadeTo(500, 0, function(){
+							  	$('.user-info .update-notif span').css("visibility", "hidden");   
+							});
+	           			}, 2000);
+	               	}
+	           }
+	         });
+	    return false;
 	});
 </script>

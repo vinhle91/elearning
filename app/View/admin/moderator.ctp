@@ -220,6 +220,7 @@
                                                 verifycodeをリセット
 											</a>
 										</li>
+										<?php if ($moderatorInfo['Username'] != $this->Session->read('User.Username')) { ?>
 										<?php if ($moderatorInfo['Status'] == 1) { ?>
 										<li>  
 											<a class="update-block" href="">
@@ -234,6 +235,7 @@
 											    ユーザーを削除
 											</a>
 										</li>
+										<?php } ?>
 										<?php if ($moderatorInfo['Status'] != 1) { ?>
 										<li>  
 											<a class="update-active" href="">
@@ -308,6 +310,18 @@
 	</div>
 <script type="text/javascript">
 
+	function checkEmailValidate(str) {
+		var regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/;
+		if (str.match(regex)) return true;
+		else return false;
+	}
+
+	function checkDateValidate(str) {
+		var regex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		if (str.match(regex)) return true;
+		else return false;
+	}
+
 	$(document).ready(function(){
 		var origin = {};
 		origin.Password = $('#Password').text();
@@ -357,8 +371,28 @@
 				submit_data.Address = '\''+$('#Address').text()+'\'';
 			}
 
-			console.log(submit_data);
-			
+			if (!checkEmailValidate($('#Email').text())) {
+				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+				$(".update-notif span").text("Invalid Email!");
+				setTimeout(function(){
+	   				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+	   			return;
+			}
+
+			if (!checkDateValidate($('#Birthday').text())) {
+				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+				$(".update-notif span").text("Invalid Birthday!");
+				setTimeout(function(){
+	   				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+	   			return;
+			}
+
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
 			$(".user-info .update-notif span").text("Updating infomation...");
 			$(".ajax-loader").fadeIn(10);
