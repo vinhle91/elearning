@@ -22,7 +22,8 @@ class TeacherController extends AppController {
         'Question',
         'Answer',
         'Comment',
-        'StudentBlock'
+        'StudentBlock',
+        'Report'
     );
 
     public function beforeFilter() {
@@ -42,6 +43,7 @@ class TeacherController extends AppController {
     public function index() {
         $this->pageTitle = 'ホームページ';
         $userId = $this->Auth->user('UserId');
+        $this->set(compact('userId'));
         $lessons = $this->Lesson->getLessonsByTeacher($userId);
         foreach ($lessons as $key => $value) {
             $file = $this->File->find('first', array(
@@ -696,6 +698,8 @@ class TeacherController extends AppController {
     }
 
     public function view_category($catId) {
+    	$userId = $this->Auth->user('UserId');
+        $this->set(compact('userId'));
         $category = $this->Category->getCategory($catId);
         $this->set('cat', $category);
 
@@ -751,6 +755,31 @@ class TeacherController extends AppController {
                 );
             } else {
                 $this->redirect(array('action' => 'list_student/' . $lessonId));
+            }
+        }
+    }
+    public function report($lessonId = null)
+    {
+        $userId = $this->_usersUsername()['UserId'];
+
+        if ($lessonId == null || $userId == null) {
+            $this->Session->setFlash(__('あなたがその授業にアクセスできません'));
+            $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+        } else {
+            $this->set("userId", $userId);
+            $this->set("lessonId", $lessonId);
+
+            if ($this->request->is('post')) {
+                $data = $this->request->data;
+                $this->Report->create();
+                if($this->Report->save($data)){
+                    $this->Session->setFlash(__('ご協力ありがとうございます'));
+                    $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+                }
+                else{
+                    $this->Session->setFlash(__('エラーが発生しました。ちょっと待ってください'));
+                }
+                debug($data);
             }
         }
     }

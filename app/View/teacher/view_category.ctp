@@ -46,7 +46,7 @@
                             <td><?php echo $lesson['Lesson']['ViewNumber'];?></td>
                             <td><?php echo $lesson['Lesson']['modified'];?></td>
                             <td><?php echo $lesson['Lesson']['Abstract'];?></td>
-                            <td> <div class="report_btn"> 報告</div> </td>
+                            <td> <?php if($lesson['Lesson']['UserId']!=$userId){echo $this->Html->link("報告",array('controller'=>'teacher','action'=>'report',$lesson['Lesson']['LessonId']),array('class'=>'report_btn')); }?></td>
                         </tr>
                         <?php endforeach;?>
                         <?php unset($lesson);?>   
