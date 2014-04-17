@@ -4,11 +4,15 @@
 <div id="contents">
     <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
-        <h3 style="color:red"><?php echo $this->Session->flash(); ?></h3>
-
-        <?php if(isset($results)): ?>
+        <?php
+        $error = $this->Session->flash();
+        if (!empty($error)):
+            ?>
+            <div class="error">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
         <div class="t_title">
-
             <div class="left">
                 <ul>
                     <li>
@@ -16,55 +20,64 @@
                             <span>検索結果</span>
                         </a>
                     </li>
-                    <!--            <li>-->
-                    <!--                <a href="javascript:void(0)" class="t_teacher">-->
-                    <!--                    <span>Top Teacher</span>-->
-                    <!--                </a>-->
-                    <!--            </li>-->
                 </ul>
             </div>
         </div>
         <div class="box">
             <div class="top" id="t_lesson">
-                <div class="row">
-                    <?php foreach ($results
-                    as
-                    $result): ?>
-                    <?php echo '<div class="lesson">'; ?>
-                    <?php echo ' <div class="imageThumbContainer">'; ?>
-                    <img width="96" height="96" alt="mrhieusd"
-                         src="img/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">
-                </div>
-                <div class="ls_title">
-                    <a href="#"><?php echo $result[LESSON]["Title"]; ?></a>
-                    <span style="float:right"><img src="img/icon/icon-like.png"/> <?php echo $result[LESSON]["LikeNumber"]; ?> </span>
-<!--                    <span style="float:right"><img src="img/icon/icon-hits-12.png"/> 4500 </span>-->
-                </div>
-                <div class="creat_author">作家 <a href="#"><?php echo $result[TEACHER]["Username"]; ?></a> </div>
-                <div class="description"><p><?php echo $result[LESSON]["Abstract"]; ?></p></div>
-
+                <?php if(isset($results)): ?>
+                    <?php
+                    if(sizeof($results)==0):?>
+                        <h2><?php echo $keyWord?>での検索も結果は得られなかった。</h2>
+                    <?php else :?>
+                    <table border="1" align="center" id="mylesson">
+                        <tbody>
+                            <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
+                                <td width="5%" style="background-color: #eee;">ID</td>
+                                <td width="23%" style="background-color: #eee;"> タイトル</td>
+                                <td width="7%" style="background-color: #eee;">カテゴリィ</td>
+                                <td width="7%" style="background-color: #eee;">先生</td>
+                                <td width="5%" style="background-color: #eee;">いいねと</td>
+                                <td width="5%" style="background-color: #eee;">ビュー</td>
+                                <td width="13%" style="background-color: #eee;">パブリック時間</td>
+                                <td width="25%" style="background-color: #eee;">記述</td>
+                                <?php if($UserType ==1):?>
+                                <td width="10%" style="background-color: #eee;">購入</td>
+                                <?php else:?>
+                                <td width="10%" style="background-color: #eee;">報告</td>
+                                <?php endif;?>           
+                            </tr>
+                            <?php foreach ($results as $reuslt): ?>
+                                <tr>
+                                    <td><?php echo ($reuslt['Lesson']['LessonId']); ?></td>
+                                    <td><a href="javascript:void(0)"><?php echo ($reuslt['Lesson']['Title']); ?></a></td>
+                                    <td><?php echo $Category[$reuslt['Lesson']['Category']]; ?></td>
+                                    <td><?php echo $reuslt['User']['FullName']; ?></td>
+                                    <td><?php echo $reuslt['Lesson']['LikeNumber']; ?></td>
+                                    <td><?php echo $reuslt['Lesson']['ViewNumber']; ?></td>
+                                    <td><?php echo $reuslt['Lesson']['modified']; ?></td>
+                                    <td><?php echo $reuslt['Lesson']['Abstract']; ?></td>
+                                    <td>
+                                    <?php if($UserType ==1):?>
+                                       <?php if ($reuslt['Lesson']['isStudying'] && $reuslt['Lesson']['isBlocked'] == 0) { ?>
+                                            <span class="bought_bt"><?php echo $this->Html->image('icon/yes.png'); ?> 既婚入</span>              
+                                        <?php } else if ($reuslt['Lesson']['isBlocked'] == 1) { ?>
+                                        <?php } else { ?>
+                                            <?php echo $this->Html->link('購入', array('controller' => 'Student', 'action' => 'buy_lesson', $reuslt['Lesson']['LessonId']), array('class' => 'buy_bt', 'id' => $lesson['Lesson']['LessonId'])); ?>
+                                        <?php } ?>
+                                    <?php else:?>
+                                        <?php if($reuslt['User']['UserId']!=$userId){echo $this->Html->link("報告",array('controller'=>'teacher','action'=>'report',$reuslt['Lesson']['LessonId']),array('class'=>'report_btn')); }?>
+                                    <?php endif;?>    
+                                        
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php unset($reuslt); ?> 
+                            </tbody>
+                        </table>  
+                    <?php endif;?>
+                <?php endif;?>           
             </div>
-            <!--            <div class="lesson">-->
-            <!--                <div class="imageThumbContainer">-->
-            <!--                    <img width="96" height="96" alt="mrhieusd" src="img/icon/qnxpps-121211101606-phpapp01-thumbnail-2.jpg" class="imageThumb">-->
-            <!--                </div>-->
-            <!--                <div class="ls_title">-->
-            <!--                    <a href="#">The Dissident</a>-->
-            <!--                    <span style="float:right"><img src="img/icon/icon-like.png"/> 10 </span>-->
-            <!--                    <span style="float:right"><img src="img/icon/icon-hits-12.png" /> 4500 </span>-->
-            <!--                </div>-->
-            <!--                <div class="creat_author">Published by <a href="#">HarperCollins</a> 2 hours ago</div>-->
-            <!--                <div class="description"><p>The story begins in 1962. On a rocky patch of the sun-drenched Italian coastline, a young innkeeper, chest-deep in daydreams, looks out over the incandescent waters...</p></div>-->
-            <!--            </div>-->
-            <?php endforeach; ?>
         </div>
-
-<!--        <div class="load_more load_more_btn">-->
-<!--            <span class="normal_text">LOAD MORE</span>-->
-<!--        </div>-->
     </div>
-</div>
-<?php endif; ?>
-</div>
-</div>
 </div>
