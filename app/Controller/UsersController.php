@@ -68,7 +68,7 @@ class UsersController extends AppController {
                     $this->redirect(array('action' => 'login')); 
                 }               
                 $ipAddress = $user['User']['IpAddress'];
-                // debug($data);
+                //debug($user);
 
                 //check remaining blocking time
                 $remainBlockTime = $this->remainBlockTime($user['User']['Username']);
@@ -90,8 +90,26 @@ class UsersController extends AppController {
                         $this->User->saveField('IpAddress', $currentIpAddress);
                     }
                     //if valid verifycode answer, allow to login
-                    if (!array_key_exists('VerifyCodeAnswer', $data['User']) ||
-                        (array_key_exists('VerifyCodeAnswer', $data['User']) && $data['User']['VerifyCodeAnswer'] == $user['User']['VerifyCodeAnswer'])) {
+                    $isValidVerifyCode = false;
+                    if (!array_key_exists('VerifyCodeAnswer', $data['User'])) {
+                        $isValidVerifyCode = true;
+                    } else {
+                        $username = $user['User']['Username'];
+                        $verifyCodeQuestion = $username . $data['User']['VerifyCodeQuestion'];
+                        $verifyCodeAnswer = $username . $data['User']['VerifyCodeAnswer'];
+
+                        $verifyCodeQuestionHash = Security::hash($verifyCodeQuestion, 'sha1', true);
+                        $verifyCodeAnswerHash = Security::hash($verifyCodeAnswer, 'sha1', true);
+                        debug($verifyCodeQuestionHash);
+                        debug($user['User']['VerifyCodeQuestion']);
+                        debug($verifyCodeAnswerHash);
+                        debug($user['User']['VerifyCodeAnswer']);
+                        if ($user['User']['VerifyCodeQuestion'] == $verifyCodeQuestionHash
+                            && $user['User']['VerifyCodeAnswer'] == $verifyCodeAnswerHash) {
+                            $isValidVerifyCode = true;
+                        }
+                    }
+                    if ($isValidVerifyCode) {
                         //login here
                         if ($this->Auth->login()) {
                             //if login success, save the ip

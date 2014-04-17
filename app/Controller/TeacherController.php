@@ -18,7 +18,8 @@ class TeacherController extends AppController {
         'Test',
         'Question',
         'Answer',
-        'Comment'
+        'Comment',
+        'StudentBlock'
     );
 
     public function beforeFilter() {
