@@ -8,7 +8,7 @@
                     <tbody>
                     <tr>
                         <td colspan="2"><?php echo $this->Html->link("プロフィール編集", array('controller' => 'Users', 'action' => 'edit_profile', $users_username['UserId']), array('class' => 'btn')); ?>
-                            <?php echo $this->Html->link("パースワードと秘密の質問を変更", array('controller' => 'Users', 'action' => 'update_security', $users_username['UserId']), array('class' => 'btn')); ?>
+<!--                            --><?php //echo $this->Html->link("セキュリティーに関する機能", array('controller' => 'Users', 'action' => 'update_security', $users_username['UserId']), array('class' => 'btn')); ?>
                             <?php echo $this->Html->link("退会する", array('controller' => 'Users', 'action' => 'delete_account', $users_username['UserId']), array('class' => 'btn')); ?>
                         </td>
                     </tr>
