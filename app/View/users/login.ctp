@@ -26,10 +26,16 @@
                         </label>
 
                         <?php if(!empty($allowVerifyCode)):?>
+
                         <label>
-                            <div class="label_text"><?php echo 'セキュリティ質問:　'.$user['User']['VerifyCodeQuestion']?></div>
+                            <div class="label_text">セキュリティ質問:</div>
+                             <?php echo $this->Form->input('VerifyCodeQuestion', array('class'=>'input','type'=>'text','label'=>false));?>
+                        </label>
+                        <label>
+                            <div class="label_text">セキュリティ答え:</div>
                              <?php echo $this->Form->input('VerifyCodeAnswer', array('class'=>'input','type'=>'text','label'=>false));?>
                         </label>
+
                         <?php endif;?>
 
                         <label style="margin-top:40px;">

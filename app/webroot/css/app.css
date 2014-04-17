@@ -569,7 +569,12 @@ section.editable {
   /*background-color: #fff;*/
   /*border: 1px solid #dddddd;*/
   max-width: 300px;
-  line-height: 2em;
+  width: 300px;
+  line-height: 1em;
+}
+
+section.editable#Password {
+  -webkit-text-security: disc;
 }
 
 .ajax-loader {
@@ -597,4 +602,13 @@ Config Page
 }
 #ip-table tbody td:nth-child(2) {
   width: 30%;
+}
+
+/*Admin Header*/
+.notification a.not-read {
+  background-color: #f5f5f5 !important;
+}
+
+.notification a.not-read:hover {
+  background-color: #F2F7F8 !important;
 }

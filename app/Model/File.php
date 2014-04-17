@@ -38,23 +38,31 @@ class File extends AppModel {
         ),
         'Uploader.FileValidation' => array(
             'File' => array(
-                'extension' => array('gif', 'jpg', 'png', 'pdf','mp3','mp4','wav','tsv'),
+                'extension' => array('gif','jpg','png','pdf','mp3','mp4','wav','tsv'),
                 'filesize' => 52428800,
-                'required' => array(
-                    'value' => true,
-                    'error' => 'File required',
-                )
+                'required' => true
             ),
             'TestFile' => array(
                 'extension' => array('tsv'),
-                'filesize' => 52428800,
-                'required' => array(
-                    'value' => true,
-                    'error' => 'File required',
-                )
+                'filesize' => 5242880,
+                'required' => true
             )
         )
-    );    
+    );
+
+    public function blockFile($files) {
+        foreach ($files as $key => $fileId) {
+            $this->id = $fileId;
+            $this->saveField('IsBlocked', '1');
+        }
+    }
+
+    public function activeFile($files) {
+        foreach ($files as $key => $fileId) {
+            $this->id = $fileId;
+            $this->saveField('IsBlocked', '0');
+        }
+    }
 }
 
 ?>

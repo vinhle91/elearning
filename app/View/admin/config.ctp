@@ -65,25 +65,43 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td class="">セッションタイムアウト</td>
+								<td class="">自動セッション終了時間</td>
 								<td class="col-md-5 align-right">
 									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[0]['Config']['ConfigValue']?></textarea><span style="line-height: 1.7; margin-left: 5px">Seconds</span>
 								</td>
 							</tr>
 							<tr>
-								<td>最大ログインが間違えられる回</td>
+								<td class="">自動バックアップ時刻</td>
+								<td class="col-md-5 align-right">
+									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[0]['Config']['ConfigValue']?></textarea><span style="line-height: 1.7; margin-left: 5px">Seconds</span>
+								</td>
+							</tr>
+							<tr>
+								<td>ログイン誤り回数</td>
 								<td class="col-md-5 align-right">
 									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[1]['Config']['ConfigValue']?></textarea>
 								</td>
 							</tr>
 							<tr>
-								<td>課金の金額</td>
+								<td>ロッグ時間</td>
+								<td class="col-md-5 align-right">
+									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td>一回受講料</td>
 								<td class="col-md-5 align-right">
 									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id=""><?php echo $configs[2]['Config']['ConfigValue']?></textarea> <span style="line-height: 1.7">VND</span>
 								</td>
 							</tr>
 							<tr>
-								<td>報酬の割合</td>
+								<td>受講可能時間</td>
+								<td class="col-md-5 align-right">
+									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="10" id="">Thoi gian hoc 1 bai</textarea> <span style="line-height: 1.7">VND</span>
+								</td>
+							</tr>
+							<tr>
+								<td>報酬%</td>
 								<td class="col-md-5 align-right">
 									<textarea name="" rows="1" class="no-border align-right" style="resize: none" cols="2" id=""><?php echo $configs[3]['Config']['ConfigValue']?></textarea><span style="line-height: 1.7">%</span>
 								</td>

@@ -180,8 +180,8 @@
 						<h4 class="block" style="margin-bottom: 0; margin-top: -10px;"><?php echo $studentInfo['FullName'] ?></h4> 
 						<span class="gender male"></span><?php echo $studentInfo['Gender'] == 1 ? "男" : "女" ?>
 						<span class="bday"></span><?php echo $studentInfo['Birthday'] ?>
-						<span class="addr"></span><?php echo $studentInfo['Address'] ? $studentInfo['Address'] : "住所  <i class='margin-left-5'> 更新している...</i>" ?>
-						<span class="phone"><label class="fa fa-phone"></label><?php echo $studentInfo['Phone'] ? $studentInfo['Phone'] : "<i class=''> 更新している...</i>" ?></span>
+						<span class="addr"></span><?php echo $studentInfo['Address'] ? $studentInfo['Address'] : "住所  <i class='margin-left-5'> </i>" ?>
+						<span class="phone"><label class="fa fa-phone"></label><?php echo $studentInfo['Phone'] ? $studentInfo['Phone'] : "<i class=''> </i>" ?></span>
 				</div>
 			</div>
 			<?php if ($studentInfo['Status'] == 2) { ?>
@@ -296,21 +296,25 @@
 									</tr>
 									<tr>
 										<td>生年月日</td>
-										<td><section class="pull-left editable padding-5" id="Birthday"><?php echo $studentInfo['Birthday']  ? $studentInfo['Birthday'] : "<i>更新している... </i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="Birthday"><?php echo $studentInfo['Birthday']  ? $studentInfo['Birthday'] : "<i> </i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 										
 									</tr>
 									<tr>
 										<td>メール</td>
-										<td><section class="pull-left editable padding-5" id="Email"><?php echo $studentInfo['Email']  ? $studentInfo['Email'] : "<i>更新している... </i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="Email"><?php echo $studentInfo['Email']  ? $studentInfo['Email'] : "<i> </i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 										
 									</tr>
 									<tr>
 										<td>クレジットカード情報</td>
-										<td><section class="pull-left editable padding-5" id="BankInfo"><?php echo $studentInfo['BankInfo'] ? $studentInfo['BankInfo'] : "<i>更新している...</i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="BankInfo"><?php echo $studentInfo['BankInfo'] ? $studentInfo['BankInfo'] : "<i></i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 									</tr>
 									<tr>
 										<td>住所</td>
-										<td><section class="pull-left editable padding-5" id="Address"><?php echo $studentInfo['Address']  ? $studentInfo['Address'] : "<i>更新している...</i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="Address"><?php echo $studentInfo['Address']  ? $studentInfo['Address'] : "<i></i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+									</tr>
+									<tr>
+										<td>IP Address</td>
+										<td><section class="pull-left editable padding-5" id="Address"><?php echo $studentInfo['IpAddress']  ? $studentInfo['IpAddress'] : ""?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 									</tr>							
 								</tbody>
 							</table>
@@ -330,6 +334,12 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		var origin = {};
+		origin.Password = $('#Password').text();
+		origin.Birthday = $('#Birthday').text();
+		origin.Email = $('#Email').text();
+		origin.BankInfo = $('#BankInfo').text();
+		origin.Address = $('#Address').text();
 
 		$(".editable").on("click", function(){
 			$(this).attr("contenteditable", "true");
@@ -352,14 +362,24 @@
 			e.preventDefault();
 			var url = "/elearning/admin/updateUserInfo/update";
 			var submit_data = {
-				UserId: "<?php echo $studentInfo['UserId']?>",
+				UserId: "<?php echo $moderatorInfo['UserId']?>",
 				Username: '\''+$('#Username').text()+'\'',
-				Fullname: '\''+$('#Fullname').text()+'\'',
-				Birthday: '\''+$('#Birthday').text()+'\'',
-				Email: '\''+$('#Email').text()+'\'',
-				BankInfo: '\''+$('#BankInfo').text()+'\'',
-				Address: '\''+$('#Address').text()+'\''
 			};
+			if ($('#Password').text() != origin.Password) {
+				submit_data.Password = '\''+$('#Password').text()+'\'';
+			}
+			if ($('#Birthday').text() != origin.Birthday) {
+				submit_data.Birthday = '\''+$('#Birthday').text()+'\'';
+			}
+			if ($('#Email').text() != origin.Email) {
+				submit_data.Email = '\''+$('#Email').text()+'\'';
+			}
+			if ($('#BankInfo').text() != origin.BankInfo) {
+				submit_data.BankInfo = '\''+$('#BankInfo').text()+'\'';
+			}
+			if ($('#Address').text() != origin.Address) {
+				submit_data.Address = '\''+$('#Address').text()+'\'';
+			}
 			
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
 			$(".user-info .update-notif span").text("Updating infomation...");
