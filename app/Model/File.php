@@ -47,11 +47,8 @@ class File extends AppModel {
             ),
             'TestFile' => array(
                 'extension' => array('tsv'),
-                'filesize' => 52428800,
-                'required' => array(
-                    'value' => true,
-                    'error' => 'File required',
-                )
+                'filesize' => 5242880,
+                'required' => true
             )
         )
     );    

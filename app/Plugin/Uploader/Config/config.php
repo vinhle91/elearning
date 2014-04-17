@@ -117,6 +117,6 @@ $config['Uploader']['mimeTypes'] = array(
 		'eps' 	=> 'application/postscript',
 		'ps' 	=> 'application/postscript',
 		'swf'	=> 'application/x-shockwave-flash',
-		'tsv'	=> 'application/octet-stream'
+		'tsv'	=> 'application/octet-stream',
 	)
 );
