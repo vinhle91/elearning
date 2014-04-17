@@ -125,8 +125,8 @@ class StudentController extends AppController {
             $this->Paginator->settings = array(
                 'conditions' => array('IsDeleted' => '0'),
                 'limit' => 15,
-                'fields'=> array(
-                    'Lesson.*','Lesson.Author'
+                'fields' => array(
+                    'Lesson.*', 'Lesson.Author'
                 ),
                 'contain' => array('User'),
             );
@@ -520,13 +520,16 @@ class StudentController extends AppController {
 
     public function transaction_history($id = null) {
         $this->pageTitle = 'Transaction History';
-        if (isset($this->request->data['months']) && isset($this->request->data['year'])) {
-            $month = $this->request->data['months'];
-            $year = $this->request->data['year'];
+        if (isset($this->request->data['User'])) {
+            $month = $this->request->data['User']['months'] + 1;
+            $year = $this->request->data['User']['year'];
         } else {
-            $month = 0;
-            $year = 0;
+            $today = getdate();
+            $month = $today['mon'];
+            $year = $today['year'];
         }
+        $this->set('selectMonth', $month - 1);
+        $this->set('selectYear', $year);
 
         $transactions = $this->StudentHistory->getStudentTransactionHistory($this->Auth->user('UserId'), $month, $year);
         $this->set('transactions', $transactions);
