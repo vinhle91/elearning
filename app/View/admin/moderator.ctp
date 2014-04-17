@@ -63,8 +63,8 @@
 		var next = parseInt($("#mod-tbl tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td>' + next + '</td>'
-						+ '<td><input type="textarea" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
-						+ '<td><input type="textarea" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
+						+ '<td><input type="text" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
+						+ '<td><input type="password" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
 						+ '<td><a href="#" class="btn btn-xs btn-success" onclick="submitNewMod(event)"><?php echo __("Save") ?></a><a href="#" class="btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a></td>'
 						+ '</tr>';
 		$("#add-new-mod").addClass("disabled");
@@ -160,8 +160,8 @@
 						<h4 class="block" style="margin-bottom: 0; margin-top: -10px;"><?php echo $moderatorInfo['FullName'] ?></h4> 
 						<span class="gender male"></span><?php echo $moderatorInfo['Gender'] == 1 ? "男" : "女" ?>
 						<span class="bday"></span><?php echo $moderatorInfo['Birthday'] ?>
-						<span class="addr"></span><?php echo $moderatorInfo['Address'] ? $moderatorInfo['Address'] : "住所  <i class='margin-left-5'> 更新している...</i>" ?>
-						<span class="phone"><label class="fa fa-phone"></label><?php echo $moderatorInfo['Phone'] ? $moderatorInfo['Phone'] : "<i class=''> 更新している...</i>" ?></span>
+						<span class="addr"></span><?php echo $moderatorInfo['Address'] ? $moderatorInfo['Address'] : "住所  <i class='margin-left-5'> </i>" ?>
+						<span class="phone"><label class="fa fa-phone"></label><?php echo $moderatorInfo['Phone'] ? $moderatorInfo['Phone'] : "<i class=''> </i>" ?></span>
 				</div>
 			</div>
 			<?php if ($moderatorInfo['Status'] == 2) { ?>
@@ -173,7 +173,6 @@
 					</span>
 				</button>
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
-					
 					<span>
 						 Active
 					</span>
@@ -258,7 +257,10 @@
 									<tr>
 										<td class="col-md-3">ユーザー名</td>
 										<td><section class="pull-left padding-5" id="Username"><?php echo $moderatorInfo['Username'] ?></section></td>
-
+									</tr>
+									<tr>
+										<td class="col-md-3">パスワード</td>
+										<td><section class="pull-left editable padding-5" id="Password"></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 									</tr>
 									<tr>
 										<td>性</td>
@@ -273,22 +275,22 @@
 									<?php } ?>				
 									<tr>
 										<td>生年月日</td>
-										<td><section class="pull-left editable padding-5" id="Birthday"><?php echo $moderatorInfo['Birthday']  ? $moderatorInfo['Birthday'] : "<i>更新している... </i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="Birthday"><?php echo $moderatorInfo['Birthday']  ? $moderatorInfo['Birthday'] : ""?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 										
 									</tr>
 									<tr>
 										<td>メール</td>
-										<td><section class="pull-left editable padding-5" id="Email"><?php echo $moderatorInfo['Email']  ? $moderatorInfo['Email'] : "<i>更新している... </i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="Email"><?php echo $moderatorInfo['Email']  ? $moderatorInfo['Email'] : ""?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 										
 									</tr>
 									<tr>
 										<td>クレジットカード情報</td>
-										<td><section class="pull-left editable padding-5" id="BankInfo"><?php echo $moderatorInfo['BankInfo'] ? $moderatorInfo['BankInfo'] : "<i>更新している...</i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+										<td><section class="pull-left editable padding-5" id="BankInfo"><?php echo $moderatorInfo['BankInfo'] ? $moderatorInfo['BankInfo'] : ""?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
 									</tr>
 									<tr>
 										<td>住所</td>
-										<td><section class="pull-left editable padding-5" id="Address"><?php echo $moderatorInfo['Address']  ? $moderatorInfo['Address'] : "<i>更新している...</i>"?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
-									</tr>							
+										<td><section class="pull-left editable padding-5" id="Address"><?php echo $moderatorInfo['Address']  ? $moderatorInfo['Address'] : ""?></section><span class="edit-btn pull-right fa fa-edit pointer" data-toggle="modal" href="#portlet-config"></span></td>
+									</tr>
 								</tbody>
 							</table>
 							<div class="update-notif">
@@ -307,6 +309,12 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		var origin = {};
+		origin.Password = $('#Password').text();
+		origin.Birthday = $('#Birthday').text();
+		origin.Email = $('#Email').text();
+		origin.BankInfo = $('#BankInfo').text();
+		origin.Address = $('#Address').text();
 
 		$(".editable").on("click", function(){
 			$(this).attr("contenteditable", "true");
@@ -332,11 +340,24 @@
 			var submit_data = {
 				UserId: "<?php echo $moderatorInfo['UserId']?>",
 				Username: '\''+$('#Username').text()+'\'',
-				Birthday: '\''+$('#Birthday').text()+'\'',
-				Email: '\''+$('#Email').text()+'\'',
-				BankInfo: '\''+$('#BankInfo').text()+'\'',
-				Address: '\''+$('#Address').text()+'\'',
 			};
+			if ($('#Password').text() != origin.Password) {
+				submit_data.Password = '\''+$('#Password').text()+'\'';
+			}
+			if ($('#Birthday').text() != origin.Birthday) {
+				submit_data.Birthday = '\''+$('#Birthday').text()+'\'';
+			}
+			if ($('#Email').text() != origin.Email) {
+				submit_data.Email = '\''+$('#Email').text()+'\'';
+			}
+			if ($('#BankInfo').text() != origin.BankInfo) {
+				submit_data.BankInfo = '\''+$('#BankInfo').text()+'\'';
+			}
+			if ($('#Address').text() != origin.Address) {
+				submit_data.Address = '\''+$('#Address').text()+'\'';
+			}
+
+			console.log(submit_data);
 			
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
 			$(".user-info .update-notif span").text("Updating infomation...");

@@ -51,7 +51,43 @@ class File extends AppModel {
                 'required' => true
             )
         )
-    );    
+    );
+
+    public function formatName($name, $file) {
+        $userId = $this->Auth->user('UserId');
+        // Get lesson id
+        $lesson= $this->Lesson->find('first', array(
+             'conditions' => array('Lesson.UserId' => $userId),
+             'fields' => array('Lesson.LessonId','Lesson.created'),
+             'order' => array('Lesson.created' => 'desc'),
+             'contain'=> False,
+        ));
+        $lesson_id = $lesson['Lesson']['LessonId'];
+        $date = $lesson['Lesson']['created'];
+        $date = date_format($date, 'Y-m-d');
+
+        if ($lesson_id) {
+            sprintf('%s-%s-%s-%s', $lesson_id, $file->size(), $file->ext());
+        }
+        return $name;
+    }
+    // public function beforeUpload($options) {
+    //     $options['uploadDir'] = WWW_ROOT . $options['finalPath'];         
+    //     return $options;
+    
+    public function blockFile($files) {
+        foreach ($files as $key => $fileId) {
+            $this->id = $fileId;
+            $this->saveField('IsBlocked', '1');
+        }
+    }
+
+    public function activeFile($files) {
+        foreach ($files as $key => $fileId) {
+            $this->id = $fileId;
+            $this->saveField('IsBlocked', '0');
+        }
+    }
 }
 
 ?>

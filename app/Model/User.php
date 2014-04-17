@@ -18,6 +18,13 @@ class User extends AppModel {
             'order' => 'Comment.created DESC',
             'dependent' => true,
         ),
+        'Message' => array(
+            'className' => 'Msg',
+            'foreignKey' => 'UserId',
+            'conditions' => array('Message.IsReaded' => '0'),
+            'order' => 'Message.created DESC',
+            'dependent' => true,
+        ),
     ); 
     // public $hasAndBelongsToMany = array(
     //     'StudentTest' =>array(
@@ -250,31 +257,6 @@ class User extends AppModel {
             'conditions' => array(
                 'User.Username' => $username,
             ),
-            'fields' => array(
-                'UserId',
-                'Username',
-                'Password',
-                'InitialPassword',
-                'UserType',
-                'FullName',
-                'Birthday',
-                'VerifyCodeQuestion',
-                'InitialCodeQuestion',
-                'VerifyCodeAnswer',
-                'InitialCodeAnswer',
-                'Gender',
-                'Address',
-                'Phone',
-                'Email',
-                'ImageProfile',
-                'IsOnline',
-                'created',
-                'modified',
-                'Status',
-                'Violated',
-                'BankInfo',
-                'CreditCard',
-            )
         ));
         return $user['User'];
     }
