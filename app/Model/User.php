@@ -19,6 +19,10 @@ class User extends AppModel
             'order' => 'Comment.created DESC',
             'dependent' => true,
         ),
+        'Ip' => array(
+            'className' => 'Ip',
+            'foreignKey' => 'UserId'
+            )
     );
     // public $hasAndBelongsToMany = array(
     //     'StudentTest' =>array(

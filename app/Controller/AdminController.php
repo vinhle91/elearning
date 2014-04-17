@@ -64,12 +64,28 @@ class AdminController extends AppController {
 		if ($this->request->is('post')) {
             $data = $this->request->data;
             if(!empty($data['User']['Username']) && !empty($data['User']['Password']) ) {
-            	if ($this->Auth->login()) {
-            		$this->Session->write('User', $this->Auth->user());
-            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
-            	}
-            	else {
+            	$currentIpAddress = $this->request->clientIp();
+            	$user = $this->User->find('first', array(
+            			"conditions" => array(
+            				"User.Username" => $data['User']['Username'],
+            				"User.Password" => Security::hash($data['User']['Password'], 'sha1', true),
+            				),
+            		));
+
+            	if (empty($user)) {
             		$this->Session->setFlash("パスワードが正しくありません");
+            	} else {
+            		$ip_tble = [];
+            		foreach ($user['Ip'] as $key => $ip) {
+            			array_push($ip_tble, $ip['IpAddress']);
+            		}
+            		if (in_array($currentIpAddress, $ip_tble)) {
+            			$this->Auth->login();
+            			$this->Session->write('User', $this->Auth->user());
+	            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
+            		} else {
+            			$this->Session->setFlash("IPアドレスが正しくありません");
+            		}
             	}
             }
         }
