@@ -32,6 +32,10 @@
                         <?php echo $this->Html->link("セキュリティ",array('controller'=>'Users','action'=>'update_security',$users_username['UserId']));?>
                     </li>
                     <li class="icon">
+                        <span style="background-position: -72px 0;"></span>
+                        <?php echo $this->Html->link("メッセージ",array('controller'=>'Teacher','action'=>'view_message'));?>
+                    </li>
+                    <li class="icon">
                         <span style="background-position: -383px 0;"></span><?php echo $this->Html->link( "ログアウト",   array('controller'=>'Users','action'=>'logout') ); ?>
                     </li>
                 </ul>

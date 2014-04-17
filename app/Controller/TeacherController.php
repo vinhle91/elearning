@@ -23,7 +23,8 @@ class TeacherController extends AppController {
         'Answer',
         'Comment',
         'StudentBlock',
-        'Report'
+        'Report',
+        'msg'
     );
 
     public function beforeFilter() {
@@ -783,6 +784,16 @@ class TeacherController extends AppController {
                 debug($data);
             }
         }
+    }
+    public function view_message(){
+          $id = $this->_usersUsername()['UserId'];
+        $messages = $this->msg->find('all', array(
+            'conditions' => array('msg.UserId' => $id,'msg.IsReaded'=>0)
+        ));
+//        echo $id;
+//        debug($messages);
+        if($messages!=null)
+        $this->set("messages",$messages);
     }
 
 }
