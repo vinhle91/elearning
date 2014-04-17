@@ -21,7 +21,8 @@ class User extends AppModel
         ),
         'Ip' => array(
             'className' => 'Ip',
-            'foreignKey' => 'UserId'
+            'foreignKey' => 'UserId',
+            'dependent' => true,
             )
     );
     public $validate = array(
