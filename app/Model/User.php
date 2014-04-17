@@ -298,8 +298,8 @@ class User extends AppModel
             'User.Username' => $username
         );
 
-        $users = $this->find('all', $options);
-        return $users[0];
+        $users = $this->find('first', $options);
+        return $users;
     }
 
 }
