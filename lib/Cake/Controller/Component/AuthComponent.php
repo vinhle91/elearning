@@ -682,7 +682,7 @@ class AuthComponent extends Component {
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#hashing-passwords
  */
 	public static function password($password) {
-		return Security::hash($password, null, true);
+		return Security::hash($password, 'sha1', true);
 	}
 
 /**

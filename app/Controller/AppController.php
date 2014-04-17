@@ -67,6 +67,7 @@ class AppController extends Controller {
 			// debug($this->Auth->user());
 			$users_username['FullName'] = $this->Auth->user('FullName');
 			$users_username['UserId'] = $this->Auth->user('UserId');
+            $users_username['Username'] = $this->Auth->user('Username');
 		}
 		return $users_username;
 	}

@@ -43,22 +43,7 @@
                                     <?php echo $this->Form->input('PasswordConfirm', array('class'=>'input','type'=>'password','label'=>false,'div'=>false));?>
                                 </td>
                             </tr>
-                            <tr>
-                                <td> 
-                                    <div class="td_text">セキュリティ質問<span style="color:red">*</span></div>
-                                </td>
-                                <td>
-                                    <?php echo $this->Form->input('VerifyCodeQuestion', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td> 
-                                    <div class="td_text">答え<span style="color:red">*</span></div>
-                                </td>
-                                <td>
-                                    <?php echo $this->Form->input('VerifyCodeAnswer', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
-                                </td>
-                            </tr>
+
                             <tr>
                                 <td> <div class="td_text">アカウントタイプ<span style="color:red">*</span></div></td>
                                 <td>
@@ -74,10 +59,27 @@
                             <tr class="teacher_info" style="display:none">                      
                                 <td colspan="2" align="left"><div class="td_text"><h3>先生のプロファイル</div></h3></td>
                             </tr>
+
                             <tr>
                                 <td > <div class="td_text">名前<span style="color:red">*</span></div></td>
                                 <td>
                                     <?php echo $this->Form->input('FullName', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
+                                </td>
+                            </tr>
+                            <tr class="teacher_info" style="display:none">
+                            <td>
+                                    <div class="td_text">セキュリティ質問<span style="color:red">*</span></div>
+                                </td>
+                                <td>
+                                    <?php echo $this->Form->input('VerifyCodeQuestion', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
+                                </td>
+                            </tr>
+                            <tr class="teacher_info" style="display:none">
+                            <td>
+                                    <div class="td_text">答え<span style="color:red">*</span></div>
+                                </td>
+                                <td>
+                                    <?php echo $this->Form->input('VerifyCodeAnswer', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
                                 </td>
                             </tr>
                             <tr>
