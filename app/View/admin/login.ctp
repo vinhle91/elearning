@@ -82,9 +82,9 @@
             	<?php endif;?>
 	</div>
 
-	<script>
-		jQuery(document).ready(function() {       
-		   App.init();
-		});
-	</script>
+<script>
+	jQuery(document).ready(function() {       
+	   App.init();
+	});
+</script>
 </body></html>
