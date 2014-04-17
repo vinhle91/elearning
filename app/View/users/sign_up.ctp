@@ -48,8 +48,8 @@
                                 <td> <div class="td_text">アカウントタイプ<span style="color:red">*</span></div></td>
                                 <td>
                                     <select name="data[User][UserType]" id="account_type">
-                                        <option value="1" selected="selected" >学生</option>
-                                        <option value="2" >先生</option>
+                                        <option value="1" <?php if(!isset($userType)||$userType == '1')echo 'selected="selected"'?> >学生</option>
+                                        <option value="2" <?php if(isset($userType)&&$userType == '2')echo 'selected="selected"'?>>先生</option>
                                     </select>
                                 </td>
                             </tr>
@@ -67,7 +67,7 @@
                                 </td>
                             </tr>
                             <tr class="teacher_info" style="display:none">
-                            <td>
+                                <td>
                                     <div class="td_text">セキュリティ質問<span style="color:red">*</span></div>
                                 </td>
                                 <td>
@@ -75,7 +75,7 @@
                                 </td>
                             </tr>
                             <tr class="teacher_info" style="display:none">
-                            <td>
+                                <td>
                                     <div class="td_text">答え<span style="color:red">*</span></div>
                                 </td>
                                 <td>
@@ -114,7 +114,7 @@
                                 <td><?php echo $this->Form->input('Phone', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?></td>
                             </tr>
                             <tr>
-                                <td> <div class="td_text">メール<span style="color:red">*</span></div></td>
+                                <td> <div class="td_text">メール</div></td>
                                 <td><?php echo $this->Form->input('Email', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?></td>
                             </tr>
                             <tr>
@@ -123,13 +123,13 @@
                             </tr>
                             </tr>
                             <tr class="student_info">
-                                <td> <div class="td_text"> クレジットカード</div></td>
+                                <td> <div class="td_text"> クレジットカード<span style="color:red">*</span></div></td>
                                 <td>
                                     <?php echo $this->Form->input('CreditCard', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>      
                                 </td>
                             </tr>
                             <tr class="teacher_info" style="display:none">
-                                <td> <div class="td_text">銀行預金</div></td>
+                                <td> <div class="td_text">銀行預金<span style="color:red">*</span></div></td>
                                 <td>
                                     <?php echo $this->Form->input('BankInfo', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
                                 </td>
@@ -154,3 +154,26 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    // select user type
+    $(document).ready(function() {
+        if( $('#account_type').val()==1)
+            {
+                $('.student_info').show();
+                $('.teacher_info').hide();
+            }else{
+                $('.teacher_info').show();
+                $('.student_info').hide();
+            }
+         $('#account_type').change(function(){
+            if( $('#account_type').val()==1)
+            {
+                $('.student_info').show();
+                $('.teacher_info').hide();
+            }else{
+                $('.teacher_info').show();
+                $('.student_info').hide();
+            }
+        });
+    });
+</script>

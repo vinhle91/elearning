@@ -80,18 +80,18 @@ class User extends AppModel
                 'message' => 'Both passwords must match.'
             )
         ),
-        'VerifyCodeQuestion' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A verify code question is required'
-            ),
-        ),
-        'VerifyCodeAnswer' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A verify code answer is required'
-            ),
-        ),
+        // 'VerifyCodeQuestion' => array(
+        //     'required' => array(
+        //         'rule' => array('notEmpty'),
+        //         'message' => 'A verify code question is required'
+        //     ),
+        // ),
+        // 'VerifyCodeAnswer' => array(
+        //     'required' => array(
+        //         'rule' => array('notEmpty'),
+        //         'message' => 'A verify code answer is required'
+        //     ),
+        // ),
         'FullName' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
@@ -102,40 +102,18 @@ class User extends AppModel
                 'message' => 'Fullname must be between 6 to 60 characters'
             )
         ),
-
-        // 'Email' => array(
+        // 'BankInfo' => array(
         //     'required' => array(
-        //         'rule' => array('email', true),    
-        //         'message' => 'Please provide a valid email address.'   
+        //         'rule' => array('notEmpty'),
+        //         'message' => 'A bank infor is required'
         //     ),
-        //     // 'unique' => array(
-        //     //     'rule'    => array('isUniqueEmail'),
-        //     //     'message' => 'This email is already in use',
-        //     // ),
         // ),
-        // 'role' => array(
-        //     'valid' => array(
-        //         'rule' => array('inList', array('king', 'queen', 'bishop', 'rook', 'knight', 'pawn')),
-        //         'message' => 'Please enter a valid role',
-        //         'allowEmpty' => false
-        //     )
+        // 'CreditCard' => array(
+        //     'required' => array(
+        //         'rule' => array('notEmpty'),
+        //         'message' => 'A CreditCard infor is required'
+        //     ),
         // ),
-
-        // 'password_update' => array(
-        //     'min_length' => array(
-        //         'rule' => array('minLength', '6'),   
-        //         'message' => 'Password must have a mimimum of 6 characters',
-        //         'allowEmpty' => true,
-        //         'required' => false
-        //     )
-        // ),
-        // 'password_confirm_update' => array(
-        //      'equaltofield' => array(
-        //         'rule' => array('equaltofield','password_update'),
-        //         'message' => 'Both passwords must match.',
-        //         'required' => false,
-        //     )
-        // )
     );
 
     /**
@@ -298,8 +276,8 @@ class User extends AppModel
             'User.Username' => $username
         );
 
-        $users = $this->find('all', $options);
-        return $users[0];
+        $users = $this->find('first', $options);
+        return $users;
     }
 
 }

@@ -1,5 +1,5 @@
 <?php define("LESSON", "Lesson", true) ?>
-<?php define("TEACHER","Teacher",true) ?>
+<?php define("TEACHER","User",true) ?>
 <?php //if (isset($results)) { echo "<pre>";print_r($results); echo "</pre>";} ?>
 <div id="contents">
     <?php echo $this->Element('cat_menu'); ?>

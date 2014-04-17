@@ -9,13 +9,6 @@ $(document).ready(function() {
     $(".left>ul>li>a").click(function(){
         $(".left>ul>li>a").removeClass('selected');
         $(this).addClass('selected');   
-        if($(this).hasClass('t_teacher')){      
-            $("#t_teacher").show()
-            $("#t_lesson").hide();
-        }else{
-            $("#t_lesson").show();
-            $("#t_teacher").hide();
-        }
     });
 });
 // top menu
@@ -39,20 +32,7 @@ $(document).ready(function() {
 $(document).click(function() {
     $('.profilenav').hide();
 });
-// select user type
-$(document).ready(function() {
 
-     $('#account_type').change(function(){
-        if( $('#account_type').val()==1)
-        {
-            $('.student_info').show();
-            $('.teacher_info').hide();
-        }else{
-            $('.teacher_info').show();
-            $('.student_info').hide();
-        }
-    });
-});
 // change security
 $(document).ready(function() {    
     $(".left>ul>li>a").click(function(){

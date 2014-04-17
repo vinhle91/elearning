@@ -1,4 +1,4 @@
-<div id="contents" style="height:900px">
+<div id="contents">
     <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
         <?php 
@@ -30,10 +30,10 @@
                     <tbody>
                         <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
                             <td width="5%" style="background-color: #eee;">番号</td>
-                            <td width="25%" style="background-color: #eee;">タイトル</td>
-                            <td width="5%" style="background-color: #eee;"> いいねと言う</td>
-                            <td width="5%" style="background-color: #eee;">ビュー</td>
-                            <td width="13%" style="background-color: #eee;">パブリック時間</td>
+                            <td width="25%" style="background-color: #eee;"><?php echo $paginator->sort('Lesson.Title','タイトル');?></td>
+                            <td width="5%" style="background-color: #eee;"><?php echo $paginator->sort('Lesson.LikeNumber', 'いいねと言う');?></td>
+                            <td width="5%" style="background-color: #eee;"><?php echo $paginator->sort('Lesson.ViewNumber', 'ビュー');?></td>
+                            <td width="13%" style="background-color: #eee;"><?php echo $paginator->sort('Lesson.modified','パブリック時間');?></td>
                             <td width="27%" style="background-color: #eee;">記述</td>
                             <td width="10%" style="background-color: #eee;">報告</td>
                             

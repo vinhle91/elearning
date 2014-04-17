@@ -8,7 +8,8 @@ class StudentController extends AppController {
     /**
      * index
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator', 'RequestHandler');
+    public $helpers = array('Js');
     public $uses = array(
         'User',
         'StudentHistory',
@@ -42,19 +43,40 @@ class StudentController extends AppController {
         $userId = $this->Auth->user('UserId');
         $today = new DateTime();
         //Get history of student
-        if (isset($this->request->query['sortBy'])) {
+        if (isset($this->request->query['sortBy']) && isset($this->request->query['direction'])) {
             $sortBy = $this->request->query['sortBy'];
+            $direction = $this->request->query['direction'];
         } else {
             $sortBy = 'time';
+            $direction = 'DESC';
         }
         $this->StudentHistory->virtualFields = array(
-                    'LikeNumber' => 'Lesson.LikeNumber',
-                    'ViewNumber' => 'Lesson.ViewNumber'
+            'LikeNumber' => 'Lesson.LikeNumber',
+            'ViewNumber' => 'Lesson.ViewNumber'
         );
-        $options = $this->StudentHistory->getPaginationOptions($userId, $sortBy);
-        $this->paginate = $options;
-        $histories = $this->paginate('StudentHistory');
-//        debug($histories);
+        switch ($sortBy) {
+            case 'like':
+                $order = 'StudentHistory.LikeNumber ' . $direction;
+                break;
+            case 'view':
+                $order = 'StudentHistory.ViewNumber ' . $direction;
+                break;
+            default:
+                $order = 'StudentHistory.ExpiryDate ' . $direction;
+                break;
+        }
+        if ($direction == 'DESC') {
+            $direction = 'ASC';
+        } else {
+            $direction = 'DESC';
+        }
+        $histories = $this->StudentHistory->find('all', array(
+            'conditions' => array(
+                'StudentHistory.UserId' => $userId,
+                'CURDATE() BETWEEN DATE(StudentHistory.StartDate) AND DATE(StudentHistory.ExpiryDate)'
+            ),
+            'order' => $order,
+        ));
         foreach ($histories as $key => $value) {
             $test = $this->Test->find('first', array(
                 'conditions' => array(
@@ -87,6 +109,7 @@ class StudentController extends AppController {
             }
         }
         $this->set('histories', $histories);
+        $this->set('direction', $direction);
         //Get category
         $cat = $this->Category->getCategories();
         $Category = array();
@@ -95,38 +118,76 @@ class StudentController extends AppController {
         }
         $this->set('Category', $Category);
         //Get top lesson
-        $topLessons = $this->Lesson->getTopLessons();
-        foreach ($topLessons as $key => $value) {
-            $isStudying = false;
-            $isBlocked = $this->StudentBlock->find('first', array(
-                'conditions' => array(
-                    'StudentBlock.UserId' => $userId,
-                    'StudentBlock.LessonId' => $value['Lesson']['LessonId'],
-                )
-                    )
+        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
+            $this->Lesson->virtualFields = array(
+                'Author' => 'User.Username'
             );
-            if ($isBlocked) {
-                $topLessons[$key]['Lesson']['isBlocked'] = 1;
-            } else {
-                $topLessons[$key]['Lesson']['isBlocked'] = 0;
-            }
-            $study_history = $this->StudentHistory->find('first', array(
-                'conditions' => array(
-                    'StudentHistory.LessonId' => $value['Lesson']['LessonId'],
-                    'StudentHistory.UserId' => $userId
+            $this->Paginator->settings = array(
+                'conditions' => array('IsDeleted' => '0'),
+                'limit' => 15,
+                'fields'=> array(
+                    'Lesson.*','Lesson.Author'
                 ),
-                'order' => array('StudentHistory.StartDate' => 'DESC'),
-                    )
+                'contain' => array('User'),
             );
-            if ($study_history) {
-                $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
-                if ($today < $expiryDay) {
-                    $isStudying = true;
+            $topLessons = $this->Paginator->paginate('Lesson');
+            foreach ($topLessons as $key => $value) {
+                $isStudying = false;
+                $isBlocked = $this->StudentBlock->find('first', array(
+                    'conditions' => array(
+                        'StudentBlock.UserId' => $userId,
+                        'StudentBlock.LessonId' => $value['Lesson']['LessonId'],
+                    )
+                        )
+                );
+                if ($isBlocked) {
+                    $topLessons[$key]['Lesson']['isBlocked'] = 1;
+                } else {
+                    $topLessons[$key]['Lesson']['isBlocked'] = 0;
                 }
+                $study_history = $this->StudentHistory->find('first', array(
+                    'conditions' => array(
+                        'StudentHistory.LessonId' => $value['Lesson']['LessonId'],
+                        'StudentHistory.UserId' => $userId
+                    ),
+                    'order' => array('StudentHistory.StartDate' => 'DESC'),
+                        )
+                );
+                if ($study_history) {
+                    $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
+                    if ($today < $expiryDay) {
+                        $isStudying = true;
+                    }
+                }
+                $topLessons[$key]['Lesson']['isStudying'] = $isStudying;
             }
-            $topLessons[$key]['Lesson']['isStudying'] = $isStudying;
+            $this->set('topLessons', $topLessons);
+        } else {
+            $this->User->virtualFields = array(
+                'totalLesson' => 'Count(Lesson.LessonId)',
+                'totalLike' => 'Sum(Lesson.LikeNumber)',
+                'totalView' => 'Sum(Lesson.ViewNumber)'
+            );
+            $this->Paginator->settings = array(
+                'fields' => array(
+                    'User.*', 'User.totalLesson', 'User.totalLike', 'User.totalView',
+                    'Lesson.*'
+                ),
+                'conditions' => array('Status' => '1', 'UserType' => '2', 'Lesson.IsDeleted' => '0'),
+                'limit' => 15,
+                'group' => array('User.UserId'),
+                'contain' => array('User', 'Lesson'),
+                'joins' => array(
+                    array(
+                        'alias' => 'Lesson',
+                        'table' => 'lessons',
+                        'conditions' => array('User.UserId = Lesson.UserId')
+                    )
+                ),
+            );
+            $topTeachers = $this->Paginator->paginate('User');
+            $this->set('topTeachers', $topTeachers);
         }
-        $this->set('topLessons', $topLessons);
     }
 
     public function view_lesson($lesson_id = null, $file_id = null) {
@@ -251,7 +312,7 @@ class StudentController extends AppController {
                                 'StudentHistory.LessonId' => $lesson_id,
                                 'StudentHistory.UserId' => $userId
                             ),
-                            'order' => array('StudentHistory.StartDate' => 'DESC'),
+                            'order' => array('StudentHistory.ExpiryDate' => 'DESC'),
                                 )
                         );
                         // debug($study_history);
@@ -633,17 +694,16 @@ class StudentController extends AppController {
                     'StudentHistory.UserId' => $userId
                 ),
                 'order' => array('StudentHistory.StartDate' => 'DESC'),));
-            if ($study_history) {
+            if ($study_history != null) {
                 $today = new DateTime();
                 $expiryDay = new DateTime($study_history['StudentHistory']['ExpiryDate']);
                 if ($today < $expiryDay) {
                     $isStudying = true;
                 }
             }
-
             if ($isStudying) {
                 if ($study_history['StudentHistory']['IsLike'] == 0) {
-                    if ($this->StudentHistory->updateAll(array("IsLike" => 1), array("LessonId" => $lesson_id))) {
+                    if ($this->StudentHistory->updateAll(array("IsLike" => 1), array("StudentHistory.LessonId" => $lesson_id, "StudentHistory.UserId" => $userId))) {
                         if ($lesson != null) {
                             $likenumber = $lesson['Lesson']['LikeNumber'];
                             $likenumber += 1;
@@ -656,7 +716,7 @@ class StudentController extends AppController {
                         $this->Session->setFlash("エラーが発生した、もう一度お願いします");
                     }
                 } else {
-                    if ($this->StudentHistory->updateAll(array("IsLike" => 0), array("LessonId" => $lesson_id))) {
+                    if ($this->StudentHistory->updateAll(array("IsLike" => 0), array("StudentHistory.LessonId" => $lesson_id, "StudentHistory.UserId" => $userId))) {
                         $likenumber = $lesson['Lesson']['LikeNumber'];
                         $likenumber -= 1;
                         if ($likenumber > 0) {
@@ -667,6 +727,7 @@ class StudentController extends AppController {
                         $this->Session->setFlash("エラーが発生した、もう一度お願いします");
                     }
                 }
+                $lesson = $this->Lesson->find('first', $params);
             } else {
                 $this->Session->setFlash("あなたはこの授業を勉強していません。授業評価してはいけない");
             }

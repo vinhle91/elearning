@@ -82,13 +82,13 @@
                         $this->Js->get('#like_lesson')->event(
                                 'click', $this->Js->request(
                                         array(
-                                            'controller'=>'Student',
-                                            'action'=>'like_lesson',
-                                            $lesson_id
-                                            ), 
-                                        array(
-                                            'update'=>'#like_lesson h3',
-                                            'method'=>'POST'
+                                    'controller' => 'Student',
+                                    'action' => 'like_lesson',
+                                    $lesson_id
+                                        ), array(
+                                    'update' => '#like_lesson h3',
+                                    'method' => 'POST',
+                                            'complete' => 'location.reload();'
                                         )
                                 )
                         );
@@ -101,10 +101,10 @@
                         <h1><?php echo $this->Html->link($lesson['Lesson']['Title'], array('controller' => 'Teacher', 'action' => 'view_lesson', $lesson['Lesson']['LessonId'])); ?></h1>
                     </div>
                     <div class="type"><h3><?php
-                        if (isset($cat)) {
-                            echo $cat['Category']['CatName'];
-                        }
-                        ?></h3></div>
+                            if (isset($cat)) {
+                                echo $cat['Category']['CatName'];
+                            }
+                            ?></h3></div>
                     <div class="ls_rate" style=" font-size:16px;">
                         <span><?php echo $this->Html->image('icon/icon-hits-12.png', array('alt' => 'views')); ?> <?php echo $lesson['Lesson']['ViewNumber']; ?></span>
                         <span><?php echo $this->Html->image('icon/icon-like.png', array('alt' => 'views')); ?><?php echo $lesson['Lesson']['LikeNumber']; ?> </span>
@@ -113,7 +113,7 @@
                     <div class="description" style="width:600px"><?php echo $lesson['Lesson']['Abstract']; ?></div>
                 </div>
                 <div class="articleCore " style="margin-top:5px">
-<?php foreach ($lesson['Tag'] as $key => $value): ?>
+                    <?php foreach ($lesson['Tag'] as $key => $value): ?>
                         <a href="javascript:void(0)" class="tag"><?php echo $value['TagContent']; ?></a>
                     <?php endforeach; ?>
                 </div>
@@ -121,10 +121,10 @@
                     <ul class="tabs">
                         <li class="active h-comments-tab j-comments">
 
-<?php
-$i = 0;
-if (isset($com)):
-    ?>
+                            <?php
+                            $i = 0;
+                            if (isset($com)):
+                                ?>
                                 <?php foreach ($com as $key => $value): ?>
                                     <?php $i++; ?>
                                 <?php endforeach; ?>
@@ -134,24 +134,24 @@ if (isset($com)):
                     </ul>
                     <div class="commentsWrapper">
                         <ul class="commentWrapper h-comment-list" id="commentsList" style="">
-<?php if (isset($com)): ?>
+                            <?php if (isset($com)): ?>
                                 <?php foreach ($com as $key => $value): ?>
                                     <li cass="comment"  style="display: list-item;">
                                         <a href="#" title="Dahiibrahim" class="commenter" >
                                             <img class="nickname" src="images/icon/user-48x48.png" height="48" alt="Dahiibrahim" width="48" style="display: block;">
-        <?php echo $this->Html->image('icon/user-48x48.png', array('alt' => 'views', 'height' => '48px')); ?>
+                                            <?php echo $this->Html->image('icon/user-48x48.png', array('alt' => 'views', 'height' => '48px')); ?>
                                             <strong class=""><?php echo $value['User']['FullName'] ?></strong>
                                         </a>
                                         <span class="commentText"><?php echo $value['Comment']['Content'] ?></span>
                                     </li>
-    <?php endforeach; ?>
+                                <?php endforeach; ?>
                             <?php endif; ?>                                
                         </ul>    
                         <form action="" method="post"  style="display: block;" class="postComment">
                             <fieldset>
                                 <div class="">
                                     <a href="/mrhieusd/newsfeed" title="mrhieusd" class="commenter">
-<?php echo $this->Html->image('icon/user-48x48.png', array('alt' => 'views', 'height' => '48px')); ?>
+                                        <?php echo $this->Html->image('icon/user-48x48.png', array('alt' => 'views', 'height' => '48px')); ?>
                                         <strong><?php echo $users_username['FullName']; ?></strong>
                                     </a>
                                 </div>
@@ -182,7 +182,7 @@ if (isset($com)):
                     </div>
                 </div>
                 <ul>
-<?php foreach ($allLessons as $lesson): ?>
+                    <?php foreach ($allLessons as $lesson): ?>
                         <li>
                             <div class="lesson">
                                 <div class="ls_title"><a href="javascript:void(0)"><?php echo ($lesson['Lesson']['Title']); ?></a></div>
@@ -192,7 +192,7 @@ if (isset($com)):
                                 </div>
                             </div>
                         </li>
-<?php endforeach; ?>
+                    <?php endforeach; ?>
                     <?php unset($lesson); ?> 
                 </ul>
             </div>
