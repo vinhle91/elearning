@@ -239,6 +239,7 @@ class TeacherController extends AppController
                             $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
                         } else {
                             $this->set(compact('lesson'));
+                            // debug($lesson);
                             $cat = $this->Category->find('first', array(
                                     'conditions' => array('Category.CatID' => $lesson['Lesson']['Category'], 'IsDeleted' => '0'),
                                     'fields' => array('CatName'),
