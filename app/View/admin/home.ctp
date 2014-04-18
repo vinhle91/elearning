@@ -62,15 +62,15 @@ $paid_label = array('warning', 'success');
 						<table class="table margin-top-10" style="width: 400px">
 							<tbody>
 								<tr>
-									<td class="">First transaction </td>
+									<td class="">最初トランザクション</td>
 									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
-									<td>Last transaction </td>
+									<td>最後トランザクション </td>
 									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
-									<td>Total transactions</td>
+									<td>総トランザクション</td>
 									<td id="payment-total"><?php echo $payment_summary['Total'] ?></td>
 								</tr>
 								<tr>
@@ -82,7 +82,7 @@ $paid_label = array('warning', 'success');
 									<td id="payment-total-student"><?php echo $payment_summary['TotalTeacher'] ?></td>
 								</tr>
 								<tr>
-									<td>Profits</td>
+									<td>報酬％</td>
 									<td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
 								</tr>
 							</tbody>
@@ -96,7 +96,7 @@ $paid_label = array('warning', 'success');
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Transaction time</th>
+									<th>トランザクション時間</th>
 									<th>授業</th>
 									<th>学生</th>
 									<th>先生</th>
@@ -119,7 +119,7 @@ $paid_label = array('warning', 'success');
 							<?php } else { ?>
 							<tbody>
 								<tr>
-									No transactions!
+                                    トランザクションがない
 								</tr>
 							</tbody>
 							<?php } ?>
@@ -178,7 +178,7 @@ $paid_label = array('warning', 'success');
 					</li>
 					<li>
 						<span class="sale-caption" style = "width: 100px;">
-							 Sharing rate
+							 報酬％
 						</span>
 						<span class="sale-num" style="font-size: 14px;">
 							 <?php echo $CONFIG_SHARING_RATE?> %

@@ -45,7 +45,7 @@
 
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
-			<h3 class="form-title">Login to your account</h3>
+			<h3 class="form-title">管理者ログイン</h3>
 			<div class="alert alert-error display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>
@@ -58,18 +58,18 @@
 				<label class="control-label visible-ie8 visible-ie9">Username</label>
 				<div class="input-icon">
 					<i class="fa fa-user"></i>
-                    <?php echo $this->Form->input('Username', array('class'=>'form-control placeholder-no-fix','type'=>'text','label'=>false, 'placeholder' => 'Username'));?>
+                    <?php echo $this->Form->input('Username', array('class'=>'form-control placeholder-no-fix','type'=>'text','label'=>false, 'placeholder' => 'ユーザー名'));?>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label visible-ie8 visible-ie9">Password</label>
 				<div class="input-icon">
 					<i class="fa fa-lock"></i>
-                    <?php echo $this->Form->input('Password', array('class'=>'form-control placeholder-no-fix','type'=>'password','label'=>false, 'placeholder' => 'Password'));?>
+                    <?php echo $this->Form->input('Password', array('class'=>'form-control placeholder-no-fix','type'=>'password','label'=>false, 'placeholder' => 'パスワード'));?>
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-info pull-right">Login </button>
+				<button type="submit" class="btn btn-info pull-right">ログイン </button>
 			</div>
             <?php echo $this->Form->end(); ?>
             <?php 

@@ -107,7 +107,7 @@ class AdminController extends AppController {
 
 	public function home() {
 		//title cho trang
-		$pageTitle = 'Home';
+		$pageTitle = 'ホーム';
 		$this->set(compact('pageTitle'));
 
 		//sidebar
@@ -275,13 +275,13 @@ class AdminController extends AppController {
 		$this->set('sidebar', array('file'));
 
 		//title cho trang
-		$pageTitle = "admin/files";
+		$pageTitle = "管理者/ファイル";
 		$this->set(compact('pageTitle'));
 		//end title cho trang
 		
 		//breadcrumb cho trang
 		$page_breadcrumb = array();
-		$page_breadcrumb['title'] = 'Files';
+		$page_breadcrumb['title'] = 'ファイル';
 		$page_breadcrumb['direct'] = array('ホーム', 'Files');
 		$this->set(compact('page_breadcrumb'));
 		//end breadcrumb cho trang
@@ -308,7 +308,7 @@ class AdminController extends AppController {
 		if (!isset($username)) {
 
 			//title cho trang
-			$pageTitle = "admin/students";
+			$pageTitle = "管理者/学生";
 			$this->set(compact('pageTitle'));
 			//end title cho trang
 			
@@ -341,7 +341,7 @@ class AdminController extends AppController {
 		} else {
 			$studentInfo = $this->User->getUserInfo($username);
 			//title cho trang
-			$pageTitle = "student/" . $studentInfo['FullName'];
+			$pageTitle = "学生/" . $studentInfo['FullName'];
 			$this->set(compact('pageTitle'));
 			//end title cho trang
 			
