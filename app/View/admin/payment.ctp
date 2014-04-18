@@ -6,7 +6,7 @@
 	<div class="tabbable tabbable-custom tabbable-custom-profile col-md-9">
 		<ul class="nav nav-tabs">
 			<li class="active">
-				<a href="#tab_1_11" data-toggle="tab">Payment Summary</a>
+				<a href="#tab_1_11" data-toggle="tab">お支払い概要</a>
 			</li>
 			<li class="">
 				<a href="#tab_1_22" data-toggle="tab">今日</a>
@@ -49,15 +49,15 @@
 						<?php $this->log($payment_summary)?>
 							<tbody>
 								<tr>
-									<td class="">First transaction </td>
+									<td class="">最初トランザクション</td>
 									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
-									<td>Last transaction </td>
+									<td>最後トランザクション</td>
 									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'd M Y H:m:s') : null?></td>
 								</tr>
 								<tr>
-									<td>Total transactions</td>
+									<td>総合トランザクション</td>
 									<td id="payment-total"><?php echo $payment_summary['Total'] ?></td>
 								</tr>
 								<tr>
@@ -69,7 +69,7 @@
 									<td id="payment-total-student"><?php echo $payment_summary['TotalTeacher'] ?></td>
 								</tr>
 								<tr>
-									<td>Profits</td>
+									<td>報酬</td>
 									<td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
 								</tr>
 							</tbody>
@@ -83,7 +83,7 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Transaction time</th>
+									<th>トランザクション時間</th>
 									<th>授業</th>
 									<th>学生</th>
 									<th>先生</th>
@@ -106,7 +106,7 @@
 							<?php } else { ?>
 							<tbody>
 								<tr>
-									No transactions!
+                                    トランザクションがない
 								</tr>
 							</tbody>
 							<?php } ?>
@@ -204,7 +204,7 @@
 					</li>
 					<li>
 						<span class="sale-caption" style = "width: 100px;">
-							 Sharing rate
+							 報酬％
 						</span>
 						<span class="sale-num" style="font-size: 14px;">
 							 <?php echo $CONFIG_SHARING_RATE?> %

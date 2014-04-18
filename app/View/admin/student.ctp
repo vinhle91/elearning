@@ -134,8 +134,8 @@
 								<th class="numeric"><a link>性</a></th>
 								<th class="numeric"><a link>電話番号</a></th>
 								<th class="numeric"><a link>登録日時</a></th>
-								<th class="numeric"><a link>Modified</a></th>
-								<th class="numeric"><a link>Violated</a></th>
+								<th class="numeric"><a link>変更</a></th>
+								<th class="numeric"><a link>レポート</a></th>
 								<th class="numeric"><a link>状態</a></th>
 							</tr>
 						</thead>
@@ -159,7 +159,7 @@
 					</table>
 					<?php }  else { ?>
 					<div class="portlet-body">
-						There isn't new student registed today.
+                        今日登録が新入生はありません。
 					</div>
 					<?php } ?>
 				</div>
@@ -194,12 +194,12 @@
 				</button>
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
 					<span>
-						 Active
+						 アクティブ
 					</span>
 				</button>
 				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
 					<span>
-						 Deny
+						 否定
 					</span>
 				</button>
 			</div>			

@@ -148,13 +148,14 @@ class AdminController extends AppController {
 		$CONFIG_SHARING_RATE = $this->Config->getConfig("SharingRate") ? $this->Config->getConfig("SharingRate") : 40;
 		if (!isset($param)) {
 			//title cho trang
-			$pageTitle = __('Payment Summary');
+			$pageTitle = __('支払い概要');
 			$this->set(compact('pageTitle'));
 
 			//breadcrumb cho trang
 			$page_breadcrumb = array();
-			$page_breadcrumb['title'] = __('Payment Summary');
-			$page_breadcrumb['direct'] = array('Home', 'Payment');
+			$page_breadcrumb['title'] = __('支払い概要
+			y');
+			$page_breadcrumb['direct'] = array('ホーム', '支払い');
 			$this->set(compact('page_breadcrumb'));
 			//end breadcrumb cho trang
 
@@ -436,14 +437,14 @@ class AdminController extends AppController {
 		if (!isset($username)) {
 
 			//title cho trang
-			$pageTitle = __("admin/moderators");
+			$pageTitle = __("管理者/管理者");
 			$this->set(compact('pageTitle'));
 			//end title cho trang
 			
 			//breadcrumb cho trang
 			$page_breadcrumb = array();
-			$page_breadcrumb['title'] = __('Moderators');
-			$page_breadcrumb['direct'] = array('Home', 'Moderator');
+			$page_breadcrumb['title'] = __('管理者');
+			$page_breadcrumb['direct'] = array('ホーム', '管理者');
 			$this->set(compact('page_breadcrumb'));
 			//end breadcrumb cho trang
 
@@ -469,7 +470,7 @@ class AdminController extends AppController {
 			$moderatorInfo = $this->User->getUserInfo($username);
 
 			//title cho trang
-			$pageTitle = "moderator/" . $moderatorInfo['FullName'];
+			$pageTitle = "管理者/" . $moderatorInfo['FullName'];
 			$this->set(compact('pageTitle'));
 			//end title cho trang
 			
