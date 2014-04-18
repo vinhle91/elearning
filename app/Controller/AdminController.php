@@ -546,6 +546,17 @@ class AdminController extends AppController {
 				}				
 			}
 
+			if ($param == "remove") {
+				$this->log($data);
+				$user = $this->User->getUserByUsername($data);
+				$userId = $user['User']['UserId'];
+				if ($this->User->delete($userId) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}				
+			}
+
 			if ($param == "delete") {
 				$buff = array(
 					"Status" => "0",
@@ -608,8 +619,8 @@ class AdminController extends AppController {
 				}
 			}
 
-			// $log = $this->User->getDataSource()->getLog(false, false);       
-			// $this->log($log);
+			$log = $this->User->getDataSource()->getLog(false, false);       
+			$this->log($log);
 
 			$this->log($ret);
 			echo json_encode($ret);

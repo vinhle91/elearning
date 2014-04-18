@@ -7,7 +7,7 @@
 
 <?php if (!isset($moderatorInfo)) { ?>
 <div class="user-info">		
-	<div class="col-md-6">
+	<div class="col-md-8">
 		<div class="portlet">
 			<div class="nav portlet-title padding-top-8">
 				<div class="caption">すべての管理者</div>
@@ -28,6 +28,7 @@
 								<th class="col-md-3">ユーザー名</th>
 								<th>登録日時</th>
 								<th class="col-md-3">状態</th>
+								<th class="col-md-3"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -37,6 +38,7 @@
 								<td><a href="/elearning/admin/moderator/<?php echo $moderator['User']['Username']?>"><?php echo $moderator['User']['Username']?></a></td>
 								<td><?php echo $moderator['User']['created']?></td>
 								<td><label class="line-8 label label-sm label-<?php echo $moderator['User']['IsOnline'] == 1 ? "success" : "default disabled"?>"><?php echo $moderator['User']['IsOnline'] == 1 ? "Online" : "Offline"?></label></td>
+								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>	
 							<?php } ?>
 						</tbody>
@@ -66,13 +68,51 @@
 						+ '<td><input type="text" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
 						+ '<td><input type="password" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
 						+ '<td><a href="#" class="btn btn-xs btn-success" onclick="submitNewMod(event)"><?php echo __("Save") ?></a><a href="#" class="btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a></td>'
+						+ '<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a></td>'
 						+ '</tr>';
 		$("#add-new-mod").addClass("disabled");
 		$("#mod-tbl tr:last").after(buff);
 		$("#mod-tbl tr:last td:eq(1) input").focus();
 	}
 
-	
+	function removeIp(event) {
+		parent = $(event.target).closest("tr");
+		submit_data = parent.find("td:eq(1) a").html();
+		r = confirm("Do you want to remove this IP Address?");		
+		if (r == true) {
+			$("#user-info .update-notif span").css({"visibility": "visible", "opacity": 1});
+			$("#user-info .update-notif span").text("Removing user...");
+			$("#user-info .ajax-loader").fadeIn(10);
+			$("#user-info .button-save").addClass("disabled");
+			$.ajax({
+	           type: "POST",
+	           url: "/elearning/admin/updateUserInfo/remove",
+	           data: {Username: submit_data}, 
+	           success: function(data)
+	           {
+					$(".ajax-loader").fadeOut(10);
+					data = $.parseJSON(data);
+	               	if (data.result == "Success") {
+	               		$("#user-info .update-notif span").text("Updated successfully");
+						parent.remove();
+	               	} else if (data.result == "Fail") {
+	               		$("#user-info .update-notif span").text("Updated fail");
+	               		
+	               	}
+	               	setTimeout(function(){
+           				$('#user-info .update-notif span').fadeTo(500, 0, function(){
+						  	$('#user-info .update-notif span').css("visibility", "hidden");   
+						});
+           			}, 2000);
+	           }
+	        });
+
+			
+
+		} 
+
+		//submit to server
+	}
 
 	function submitNewMod(e) {
 		e = $.event.fix(e);
