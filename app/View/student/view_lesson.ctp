@@ -1,3 +1,10 @@
+<script type="text/javascript"> 
+function disableContextMenu()
+  {
+    window.frames["fraDisabled"].document.oncontextmenu = function(){alert("No way!"); return false;};   
+  }  
+</script>
+
 <div id="contents">
     <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
@@ -34,7 +41,7 @@
                             <?php foreach ($lesson['File'] as $key => $value): ?>
                                 <?php if ($value['Extension'] == 'pdf'): ?>
                                     <div class="<?php echo 'file' . $key ?> file_l">
-                                        <iframe id="fraDisabled" width='725' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?>"></iframe>
+                                        <iframe id="fraDisabled" width='725' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?> "></iframe>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ($value['Extension'] == 'gif'|| $value['Extension'] == 'jpg'||$value['Extension'] == 'png'): ?>
@@ -207,4 +214,16 @@
         </div>
     </div>
 </div>
-</div>
+<script type="text/javascript">
+    $(function () {
+      $(document).bind("contextmenu",function(e){
+        e.preventDefault();
+        alert("Right Click is not allowed");
+      });
+
+      /*$('.dvOne').bind("contextmenu",function(e){
+        e.preventDefault();
+        alert("Right Click is not allowed on div");
+      });*/
+    });
+</script>

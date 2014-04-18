@@ -66,6 +66,7 @@ class LessonsController extends AppController
                 ),
                 'fields' => array('User.FullName',
                     'User.UserId',
+                    'Lesson.LessonId',
                     'Lesson.Title',
                     'Lesson.LikeNumber',
                     'Lesson.Category',
