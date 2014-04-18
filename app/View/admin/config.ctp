@@ -15,7 +15,7 @@
 							<tr>
 								<th class="col-md-1">#</th>
 								<th class="col-md-3">IP</th>
-								<th class="col-md-3">最も近い使うこと</th>
+								<th class="col-md-3">ユーザー</th>
 								<th class="col-md-3"></th>
 							</tr>
 						</thead>
@@ -25,7 +25,7 @@
 							<tr>
 								<td><?php echo $key + 1?></td>
 								<td><?php echo $ip['Ip']['IpAddress']?></td>
-								<td><?php echo $ip['Ip']['modified']?></td>
+								<td><?php echo $ip['Ip']['UserId']?></td>
 								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>Remove</span></a></td>
 							</tr>
 							<?php } ?>
@@ -100,7 +100,7 @@
 		var buff = 		'<tr>'
 						+ '<td class="col-md-1">' + next + '</td>'
 						+ '<td class="col-md-3"><input type="textarea" name="" rows="1" class="no-border padding-5" style="resize: none" id="submit-ip" placeholder="IP Address" onkeypress="submitKey(event.which)"></input></td>'
-						+ '<td class="col-md-3"></td>'
+						+ '<td class="col-md-3"><input type="textarea" name="" rows="1" class="no-border padding-5" style="resize: none" id="submit-ip" placeholder="ユーザー" onkeypress="submitKey(event.which)"></input></td>'
 						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("Save") ?></a></td>'
 						+ '</tr>';
 		$("#add-ip").addClass("disabled");
@@ -118,6 +118,7 @@
 	function submitNewIp() {
 		var time = "<?php echo date("Y-m-d h:i:s"); ?>";
 		var submit_data = $("#ip-table tr:last td:eq(1) input").val();
+		var submit_data2 = $("#ip-table tr:last td:eq(2) input").val();
 		if (checkIpValidate(submit_data)) { 
 			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
 			$("#ip-info .update-notif span").text("Updating infomation...");
@@ -126,14 +127,14 @@
 			$.ajax({
 		           type: "POST",
 		           url: "/elearning/admin/updateConfig/ip",
-		           data: {IpAddress: submit_data}, 
+		           data: {IpAddress: submit_data, UserId: submit_data2}, 
 		           success: function(data)
 		           {
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
 		               		$("#ip-table tr:last td:eq(1)").html('<span>' + submit_data + '</span>');
-							$("#ip-table tr:last td:eq(2)").html(time);
+							$("#ip-table tr:last td:eq(2)").html('<span>' + submit_data2 + '</span>');
 							$("#ip-table tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>Remove</span></a>');
 							$("#ip-info #add-ip").removeClass("disabled");
 		               		$("#ip-info .update-notif span").text("Updated successfully");
