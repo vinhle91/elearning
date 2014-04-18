@@ -155,10 +155,10 @@ class UsersController extends AppController
 
                         $verifyCodeQuestionHash = Security::hash($verifyCodeQuestion, 'sha1', true);
                         $verifyCodeAnswerHash = Security::hash($verifyCodeAnswer, 'sha1', true);
-                        debug($verifyCodeQuestionHash);
-                        debug($user['User']['VerifyCodeQuestion']);
-                        debug($verifyCodeAnswerHash);
-                        debug($user['User']['VerifyCodeAnswer']);
+                        // debug($verifyCodeQuestionHash);
+                        // debug($user['User']['VerifyCodeQuestion']);
+                        // debug($verifyCodeAnswerHash);
+                        // debug($user['User']['VerifyCodeAnswer']);
                         if ($user['User']['VerifyCodeQuestion'] == $verifyCodeQuestionHash
                             && $user['User']['VerifyCodeAnswer'] == $verifyCodeAnswerHash
                         ) {
