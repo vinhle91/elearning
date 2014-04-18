@@ -147,7 +147,7 @@
 								<td><?php echo $teacher['User']['Email']?></td>
 								<td><?php echo $teacher['User']['FullName']?></td>
 								<td><?php echo $teacher['User']['Birthday']?></td>
-								<td><?php echo $teacher['User']['Gender'] == 0 ? __("Female") : __("Male")?></td>
+								<td><?php echo $teacher['User']['Gender'] == 0 ? __("男") : __("女")?></td>
 								<td><?php echo $teacher['User']['Phone']?></td>
 								<td><?php echo $teacher['User']['created']?></td>
 								<td><?php echo $teacher['User']['modified']?></td>
@@ -159,7 +159,7 @@
 					</table>
 					<?php }  else { ?>
 					<div class="portlet-body">
-						There isn't new teacher registed today.
+                        今日登録が新しい先生はありません。
 					</div>
 					<?php } ?>
 				</div>
@@ -194,12 +194,12 @@
 				</button>
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
 					<span>
-						 Active
+						 アクティブ
 					</span>
 				</button>
 				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
 					<span>
-						 Deny
+						 否定
 					</span>
 				</button>
 			</div>			

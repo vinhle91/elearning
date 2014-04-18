@@ -1,10 +1,10 @@
 <div class="portlet">
 	<div class="portlet-title padding-top-8">
 		<div class="caption padding-top-3">
-			<i class="fa fa-book"></i>Uploaded lessons
+			<i class="fa fa-book"></i>アップロードされた授業
 		</div>
 		<div class="tools">
-			<span class="pull-left" style="padding-right: 20px">Sort by: Last update | Total 6  • Page 1</span>
+			<span class="pull-left" style="padding-right: 20px">ソート: 最後変更</span>
 			<div class="pull-right no-list-style">
 				<li class="dropdown menu-right" id="header_notification_bar">
 					<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>Options</span>
@@ -15,19 +15,19 @@
 								<li>  
 									<a link="" onclick="block_lesson(this, event)">
 									<span class="label label-sm label-icon label-warning"><i class="fa fa-ban"></i></span>
-									Block selected lessons
+                                        授業が選択されたをブロック
 									</a>
 								</li>
 								<li>  
 									<a link="" onclick="active_lesson(event)">
 									<span class="label label-sm label-icon label-success"><i class="fa fa-pencil"></i></span>
-									Active selected lessons
+                                        授業が選択されたをアクティブ
 									</a>
 								</li>
 								<li>  
 									<a link="" onclick="report_lesson(event)">
 									<span class="label label-sm label-icon label-danger"><i class="fa fa-bell-o"></i></span>
-									Report selected lessons
+                                        授業が選択されたをレポート
 									</a>
 								</li>
 							</ul>
@@ -49,31 +49,31 @@
 						<a link>ID</a>
 					</th>
 					<th scope="col">
-						<a link>Title</a>
+						<a link>タイトル</a>
 					</th>
 					<th scope="col">
-						<a link>Category</a>
+						<a link>種類</a>
 					</th>
 					<th scope="col" style="width: 200px;">
 						Abstract
 					</th>
 					<th scope="col">
-						<a link>Author</a>
+						<a link>著者</a>
 					</th>
 					<th scope="col">
-						<a link>Created</a>
+						<a link>作成した時間</a>
 					</th>
 					<th scope="col">
-						<a link>Liked</a>
+						<a link>いいね回数</a>
 					</th>
 					<th scope="col">
-						<a link>Viewed</a>
+						<a link>勉強回数</a>
 					</th>
 					<th scope="col">
-						<a link>Reported</a>
+						<a link>レポート回数</a>
 					</th>
 					<th scope="col">
-						<a link>Status</a>
+						<a link>状態</a>
 					</th>
 				</tr>
 				</thead>

@@ -1,13 +1,13 @@
 <div class="portlet">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-cogs"></i>Uploaded Files
+			<i class="fa fa-cogs"></i>アップロードされたファイル
 		</div>
 		<div class="tools">
-			<span class="pull-left" style="padding-right: 20px">Sort by: Last update | Total 6  • Page 1</span>
+			<span class="pull-left" style="padding-right: 20px">ソート: 最後変更</span>
 			<div class="pull-right no-list-style">
 				<li class="dropdown menu-right" id="header_notification_bar">
-					<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>Options</span>
+					<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>オプション</span>
 					
 					<ul class="dropdown-menu extended" style="width: 200px !important">
 						<li>
@@ -15,13 +15,13 @@
 								<li>  
 									<a link="" onclick="block_file(this, event)">
 									<span class="label label-sm label-icon label-warning"><i class="fa fa-ban"></i></span>
-									Block selected files
+                                        ファイルが選択されたをブロック
 									</a>
 								</li>
 								<li>  
 									<a link="" onclick="active_file(event)">
 									<span class="label label-sm label-icon label-success"><i class="fa fa-pencil"></i></span>
-									Active selected files
+                                        ファイルが選択されたをアクティブ
 									</a>
 								</li>
 							</ul>
@@ -40,28 +40,28 @@
 							<input type="checkbox" class="checkbox all" onclick="checkAll(this, event)">
 						</th>
 						<th scope="col">
-							File ID
+                            ファイルID
 						</th>
 						<th scope="col">
-							<a link="">File Name</a>
+							<a link="">ファイル名</a>
 						</th>
 						<th scope="col">
-							File Link
+                            ファイルリンク
 						</th>
 						<th scope="col">
-							File Extension
+                            ファイル種類
 						</th>
 						<th scope="col">
-							<a link="">Uploader</a>
+							<a link="">アップロードユーザ</a>
 						</th>
 						<th scope="col">
-							<a link="">Created time</a>
+							<a link="">作成時間</a>
 						</th>
 						<th scope="col">
-							<a link="">Last update</a>
+							<a link="">最後変更</a>
 						</th>
 						<th scope="col">
-							<a link>Status</a>
+							<a link>状態</a>
 						</th>
 					</tr>
 				</thead>
