@@ -1,12 +1,11 @@
 jQuery.fn.table2TSV = function(options) {
+    console.log(options);
     var options = jQuery.extend({
         separator: '\t',
         header: [],
-        output: 'popup'
     },
     options);
-
-    // console.log(options);
+    console.log(options);
 
     var tsvData = [];
     var headerArr = [];
@@ -38,6 +37,14 @@ jQuery.fn.table2TSV = function(options) {
     });
     if (options.output == 'popup') {
         var mydata = tsvData.join('\n');
+        $.ajax({
+            type: "POST",
+            url: "/elearning/admin/exportPayment",
+            data: {data: mydata, year: options.year, month: options.month},
+            success: function(data){
+            	
+            }
+        })
         return popup(mydata);
     } 
     if (options.output == 'raw') {

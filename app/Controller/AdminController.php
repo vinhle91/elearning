@@ -686,6 +686,14 @@ class AdminController extends AppController {
 					$ret['result'] = "Success";
 				else 
 					$ret['result'] = "Fail";
+			}
+
+			if ($param == "config") {
+				$this->log($data);
+				foreach ($data as $key => $config) {
+					$this->Config->updateAll(array('ConfigValue' => $config), array('ConfigId' => $key));
+				}
+				$ret['result'] = "Success";
 				
 			}
 			
@@ -762,6 +770,20 @@ class AdminController extends AppController {
 			$this->log($log);
 			echo json_encode($ret);
 			die;
+		}
+	}
+
+	public function exportPayment() {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$this->log($data);
+			$this->log(ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS . date('Y-m-d').'.txt');
+			$file = ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS .$data['year']."-".$data['month'].'.txt';
+			$fh = fopen($file, 'w');
+			fwrite($fh, $data['data']);
+			fclose($fh);
+			die;	
 		}
 	}
 
