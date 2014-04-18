@@ -37,6 +37,11 @@
                                         <iframe id="fraDisabled" width='725' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?>"></iframe>
                                     </div>
                                 <?php endif; ?>
+                                <?php if ($value['Extension'] == 'gif'|| $value['Extension'] == 'jpg'||$value['Extension'] == 'png'): ?>
+                                    <div class="<?php echo 'file' . $key ?> file_l">
+                                        <?php echo $this->Html->image($value['FileLink']); ?>
+                                    </div>
+                                <?php endif; ?>
                                 <?php if ($value['Extension'] == 'mp4'): ?>
                                     <div class="<?php echo 'file' . $key ?> file_l" >
                                         <video width="725" height="535" controls>
