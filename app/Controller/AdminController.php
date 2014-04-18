@@ -70,7 +70,9 @@ class AdminController extends AppController {
             				"User.Password" => Security::hash($data['User']['Password'], 'sha1', true),
             				),
             		));
-
+            	$this->log($data['User']['Password']);
+            	$this->log(Security::hash($data['User']['Password'], 'sha1', true));
+            	$this->log($user);
             	if (empty($user)) {
             		$this->Session->setFlash("パスワードが正しくありません");
             	} else {
@@ -520,7 +522,10 @@ class AdminController extends AppController {
 
 			if ($param == "update") {
 				if (isset($data['Password'])) {
+                        $this->log($data['Password']);
+                        $data['Password'] = trim($data['Password']);
                         $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
+                        $this->log($data['Password']);
 				}
 
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
@@ -603,8 +608,8 @@ class AdminController extends AppController {
 				}
 			}
 
-			$log = $this->User->getDataSource()->getLog(false, false);       
-			$this->log($log);
+			// $log = $this->User->getDataSource()->getLog(false, false);       
+			// $this->log($log);
 
 			$this->log($ret);
 			echo json_encode($ret);

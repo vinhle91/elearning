@@ -356,7 +356,7 @@
 				Username: '\''+$('#Username').text()+'\'',
 			};
 			if ($('#Password').text() != origin.Password) {
-				submit_data.Password = '\''+$('#Password').text()+'\'';
+				submit_data.Password = $('#Password').text();
 			}
 			if ($('#Birthday').text() != origin.Birthday) {
 				submit_data.Birthday = '\''+$('#Birthday').text()+'\'';
@@ -370,7 +370,7 @@
 			if ($('#Address').text() != origin.Address) {
 				submit_data.Address = '\''+$('#Address').text()+'\'';
 			}
-
+			console.log(submit_data);
 			if (!checkEmailValidate($('#Email').text())) {
 				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
 				$(".update-notif span").text("Invalid Email!");
