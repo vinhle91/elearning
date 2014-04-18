@@ -63,7 +63,7 @@
                                             <span class="bought_bt"><?php echo $this->Html->image('icon/yes.png'); ?> 既婚入</span>              
                                         <?php } else if ($reuslt['Lesson']['isBlocked'] == 1) { ?>
                                         <?php } else { ?>
-                                            <?php echo $this->Html->link('購入', array('controller' => 'Student', 'action' => 'buy_lesson', $reuslt['Lesson']['LessonId']), array('class' => 'buy_bt', 'id' => $lesson['Lesson']['LessonId'])); ?>
+                                            <?php echo $this->Html->link('購入', array('controller' => 'Student', 'action' => 'buy_lesson', $reuslt['Lesson']['LessonId']), array('class' => 'buy_bt')); ?>
                                         <?php } ?>
                                     <?php else:?>
                                         <?php if($reuslt['User']['UserId']!=$userId){echo $this->Html->link("報告",array('controller'=>'teacher','action'=>'report',$reuslt['Lesson']['LessonId']),array('class'=>'report_btn')); }?>
