@@ -640,9 +640,146 @@ class TeacherController extends AppController
         }
     }
 
-    public function edit_lesson()
+    public function edit_lesson($lesson_id)
     {
         $this->pageTitle = 'Edit Lesson';
+        $userId = $this->Auth->user('UserId');
+        // Get list category 
+        $params = array(
+            'conditions' => array('Category.IsDeleted' => '0'),
+            'fields' => array('CatId', 'CatName'),
+            'order' => array('Category.CatId' => 'Asc'),
+        );
+        $cat = $this->Category->find('all', $params);
+        $this->set(compact('cat'));
+        if (!isset($lesson_id) || empty($lesson_id)) {
+            $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
+            $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
+        }else{
+        	$lessons = $this->Lesson->find('first', array(
+                'conditions' => array('Lesson.LessonId' => $lesson_id,'Lesson.IsDeleted'=>'0'),
+                'order' => array('Lesson.created' => 'desc'),
+                'contain' => False,
+            ));
+            // debug($lessons);
+            if (empty($lessons)) {
+            	$this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
+	            $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
+	        }else{
+	        	$this->set(compact('lessons'));
+	        	$tag = $this->Tag->find('all', array(
+	                'conditions' => array('Tag.LessonId' => $lesson_id),
+	                'order' => array('Tag.created' => 'desc'),
+	                'contain' => False,
+	            ));
+	            $list_tag = '';
+	            foreach ($tag as $key => $value) {
+	            	$list_tag = $list_tag.$value['Tag']['TagContent'].',';
+	            }
+	            $this->set(compact('list_tag'));
+	            // debug($list_tag);
+	        }
+        	if ($this->request->is('post')) {
+	            $data = $this->request->data;
+	            // debug($data);
+	            // die;
+	            if ($data['Lesson']['TermsOfService'] == 1) {
+	                //update lesson
+	                 $updateData = array(
+	                 	'Category' => "'" . $data['Lesson']['Category'] . "'",
+	                    'Title' => "'" . $data['Lesson']['Title'] . "'",
+	                    'Abstract' => "'" . $data['Lesson']['Abstract'] . "'",
+	                );
+	              	if($this->Lesson->updateAll($updateData, array('Lesson.LessonId' =>  $lesson_id)))
+	                {
+	                	 // Save file of lesson
+	                    $num_file = 0;
+	                    foreach ($data['File'] as $key => $value) {
+	                        if (!empty($value['path']['name'])) {
+	                            //check duplicate file name
+	                            $options['conditions'] = array(
+	                                'File.FileName' => $value['path']['name'],
+	                                'File.IsDeleted' => '0',
+	                                'File.FileType' => '1',
+	                                'Lesson.IsDeleted' => '0',
+	                                'Lesson.UserId' => $userId,
+	                            );
+	                            $options['fields'] = array('Lesson.UserId', 'File.*');
+	                            $file_name = $this->File->find('all', $options);
+	                            // debug($file_name);
+	                            // die;
+	                            if (!empty($file_name)) {
+	                                $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
+	                                $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
+	                            }
+	                            $data['File'][$key]['path']['old_name'] = $value['path']['name'];
+	                            $num_file++;
+	                            $type = explode(".", $value['path']['name']);
+	                            $type = $type['1'];
+	                            //formatName LessonId_FileNum_Size.Type
+	                            $name = 'File' . '_' . $lesson_id . '_' . $num_file . '_' . $value['path']['size'] . '.' . $type;
+	                            $data['File'][$key]['path']['name'] = $name;
+	                        }
+	                    }
+	                    // debug($data);
+	                    if ($num_file != 0) {
+	                        foreach ($data['File'] as $key => $value) {
+	                            $this->File->create();
+	                            $param1['File']['File'] = $value['path'];
+	                            $param1['File']['LessonId'] = $lesson_id;
+	                            $param1['File']['FileType'] = '1';
+	                            $param1['File']['FileName'] = $value['path']['old_name'];
+	                            // debug($param1);
+	                            if ($this->File->save($param1)) {
+	                                $File = $this->File->find('first', array(
+	                                    'conditions' => array('File.LessonId' => $lesson_id),
+	                                    'fields' => array('File.FileId'),
+	                                    'order' => array('File.created' => 'Asc'),
+	                                    'contain' => False,
+	                                ));
+	                                if (!empty($File)) {
+	                                    $file_id = $File['File']['FileId'];
+	                                }
+	                            } else {
+	                            	$error_msg = $this->File->validationErrors['File'];
+	                            	$this->set(compact('error_msg'));
+	                                $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
+	                                $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
+	                            }
+	                        }
+	                    }
+	                	$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+	                    // Save Tag of lesson
+	                    $tag = $data['Lesson']['Tag'];
+	                    $tag = strtolower($tag);
+	                    $tag = explode(",", $tag);
+	                    if (isset($tag) && !empty($tag)) {
+	                        foreach ($tag as $value) {
+	                            $value = trim($value);
+	                            $this->Tag->create();
+	                            $data1['Tag']['LessonId'] = $lesson_id;
+	                            $data1['Tag']['TagContent'] = $value;
+	                            if ($this->Tag->save($data1)) {
+
+	                            } else {
+	                                $this->Lesson->delete($lesson_id);
+	                                $this->Session->setFlash(__('タグは作成できませんでした。 、もう一度お試しください。'));
+	                                $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
+	                            }
+	                        }
+	                    }
+	                    $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id, $file_id));
+	                } else {
+	                    $this->Session->setFlash(__('レッスンを変更することができなかった。もう一度やり直してください。'));
+	                    // $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+	                }
+
+	            } else {
+	                $this->Session->setFlash(__(' コピーライト規約をご確認ください'));
+	            }
+	        }
+        }
+        
     }
 
     public function transaction_history()

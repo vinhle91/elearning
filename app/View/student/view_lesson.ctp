@@ -62,9 +62,9 @@
                         <?php echo $this->Html->link('テストをする', array('controller' => 'student', 'action' => 'test', $lesson['Lesson']['LessonId'], $test_id)); ?>          
                     </div>
                     <div class="lesson_nav">        
-                        <?php echo $this->Html->link('テストした結果をみる', array('controller' => 'student', 'action' => 'review_test', $lesson['Lesson']['LessonId'])); ?>
+                        <?php echo $this->Html->link('テストした結果をみる', array('controller' => 'student', 'action' => 'view_result', $lesson['Lesson']['LessonId'], $test_id)); ?>
                     </div>
-                     <div class = "lesson_nav">
+                     <div class = "lesson_nav" style="background: linear-gradient(#28a8e5,#28a811);color:#000;">
                      <?php echo $this->Html->link("違反報告",array('controller'=>'student','action'=>'report',$lesson['Lesson']['LessonId'])); ?>
                      </div>
                     <div style="float:right" >

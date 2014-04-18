@@ -497,10 +497,22 @@ class StudentController extends AppController {
                 $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
                 $this->redirect(array('controller' => 'student', 'action' => 'index'));
             } elseif ($test_id == 0) {
-                $this->Session->setFlash(__('テストは存在しません。'));
+                $this->Session->setFlash(__('テストの結果は存在しません。'));
                 $this->redirect(array('controller' => 'student', 'action' => 'view_lesson', $lesson_id));
             } else {
                 $this->set(compact('lesson_id'));
+                 $this->set(compact('test_id'));
+                $file = $this->File->find('first', array(
+                    'conditions' => array(
+                        'File.LessonId' => $lesson_id,
+                        'File.IsDeleted' => '0',
+                        'File.FileType' => '1',
+                    ),
+                    'contain' => false,
+                    'order' => array('File.FileId' => 'Asc'),
+                        )
+                );
+                $this->set(compact('file'));
                 $test = $this->Test->find('all', array(
                     'conditions' => array(
                         'Test.LessonId' => $lesson_id,
