@@ -117,7 +117,7 @@
 						
 							<a href="">Z</a>&nbsp; 
 						
-							<a href="">Other</a>&nbsp; 
+							<a href="">ほかの</a>&nbsp;
 						</strong>
 					</div>
 				</div>

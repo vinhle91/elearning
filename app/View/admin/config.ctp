@@ -33,7 +33,7 @@
 						</tbody>
 						<?php } else { ?>
 						<div class="portlet-body">
-							There is no registed IP Address.
+                            登録がIPアドレスがありません。
 						</div>
 						<?php } ?>
 					</table>
