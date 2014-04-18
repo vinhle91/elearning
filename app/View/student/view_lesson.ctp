@@ -1,10 +1,3 @@
-<script type="text/javascript"> 
-function disableContextMenu()
-  {
-    window.frames["fraDisabled"].document.oncontextmenu = function(){alert("No way!"); return false;};   
-  }  
-</script>
-
 <div id="contents">
     <?php echo $this->Element('cat_menu'); ?>
     <div id="content">

@@ -1,108 +1,76 @@
-<div id="contents" style="padding:0px 150px;">
+<div id="contents">
+    <?php echo $this->Element('cat_menu');?>
     <div id="content">
-        <?php 
-            $error = $this->Session->flash();
-            if(!empty($error)):
-        ?>
-        <div class="error">
-            <?php echo $error; ?>
-            <?php if(isset($error_msg)){
-                    foreach ($error_msg as $key => $value) {
-                        echo '<h4>'.$value.'</h4>';
-                    }
-            }?>
+        <div class="t_title">
+            <div class="left">
+                <ul>
+                    <li>                             
+                        <a href="javascript:void(0)" class="selected t_lesson">
+                            <span>テスト 1</span>
+                        </a>                          
+                    </li>
+                </ul>
+            </div>
         </div>
-        <?php endif;?>
-        <div class="title"><h3>授業 アップロード</h3></div>
         <div class="box">
-            <div class="top">
-                <span class="title_text">授業を作る</span> 
-                <div class="upload_page">                          
-                    <?php echo $this->Form->create('Lesson', array('type' => 'file'));?>
-                        <table class="sign_up_tb">
-                            <tbody>
-                                <tr>
-                                    <td width="25%">
-                                        <div class="td_text">タイトル<span style="color:red">*</span></div>
-                                    </td>
-                                    <td width="75%">
-                                        <?php echo $this->Form->input('Title', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> <div class="td_text">カテゴリィ<span style="color:red">*</span></div></td>
-                                    <td>
-                                        <select  name="data[Lesson][Category]">
-                                        <?php foreach ($cat as $value):?>
-                                            <option value="<?php echo $value['Category']['CatId']?>">
-                                                <?php echo $value['Category']['CatName']; ?>
-                                            </option>
-                                        <?php endforeach;?>
-                                        </select>
-                                     
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="td_text">記述<span style="color:red">*</span></div>
-                                    </td>
-                                    <td>
-                                        <?php echo $this->Form->input('Abstract', array('class'=>'input','type'=>'textarea','label'=>false,'div'=>false));?>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> <div class="td_text">タグ<span style="color:red">*</span></div></td>
-                                    <td>
-                                        <?php echo $this->Form->input('Tag', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td> <div class="td_text">ファイル アップロード</div></td>
-                                    <td>
-                                        <div class="td_text">承認されたタイプ：GIF、JPG、PNG、PDF、MP3、MP4、WAV、TSV</div>
-                                    </td>
-                                </tr>
-                                 <tr>
-                                    <td> </td>
-                                    <td>
-                                        <input type="hidden" value="0" id="n_file">
-                                        <?php echo $this->Form->input('File.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
-                                        <a href="javascript:void(0)" id="morefile">さらにファイルを追加</a>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td> <div class="td_text">テスト ファイル アップロード</div></td>
-                                    <td><div class="td_text">承認されたタイプ：TSV</div>
-                                    </td>
-                                </tr> 
-                                  <tr>
-                                    <td></td>
-                                    <td>
-                                        <input type="hidden" value="0" id="n_testfile">
-                                        <?php echo $this->Form->input('TestFile.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
-                                        <a href="javascript:void(0)" id="moretestfile">さらにファイルを追加</a>
-                                    </td>
-                                </tr>       
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                    <?php
-                                    echo $this->Form->checkbox('TermsOfService', array('checked' => false));
-                                    ?>
-                                    アップロードする際に、 <a href="">コピーライト規約</a>　に合意する.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td> <input class="flat_btn" data-act_as="submit" type="submit" value="授業を作る"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    <?php echo $this->Form->end(); ?>                           
-                </div> 
+            <div class="top">  
+                <table class="sign_up_tb" border="0px">
+                    <tbody >
+                        <tr>
+                            <td colspan="3" style="border:1px solid #333; border-bottom:0"><h2><?php echo $data_test['Title']?></h2></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #333;border-bottom:0"><h4><?php echo $data_test['SubTitle']?></h4></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #333; width:18%;border-right:0"><h4>トータルの質問: <?php echo $data_test['Total']?></h4></td>
+                            <td colspan="2" style="border:1px solid #333"><h3 style="color:red;"> <?php echo $test_result['StudentTest']['Point']?>点</h3></td>
+                        </tr>
+                        <?php foreach ($data_test['Question'] as $key1 => $value1): ?>
+                        <tr>
+                            <td width="10%" align="center" ><h3>質問 <?php echo $value1['QuesNum']?></h3></td>
+                            <td width="65%"><h3><?php echo $value1['Content']?></h3></td>
+                            <td width="25%" style="color:red"><h3><?php echo $value1['Point']?>ポイント</h3></td>
+                        </tr>
+                        <?php foreach ($value1['An'] as $key => $value): ?>
+                        <tr <?php 
+                            if($value['Answer']['AnswerNumber'] == $value1['Answer']){
+                                echo 'style="background-color: #e8f8d2;"';
+                            }?>
+                            <?php if($value1['Answer']!=$an[$value1['QuesNum']-1] && $an[$value1['QuesNum']-1] == $value['Answer']['AnswerNumber']):?>
+                                    <?php  echo 'style="background-color: #fae3e4;"'; ?>
+                                <?php endif;?>
+                            >
+                            <td align="right">
+                                <?php if($value['Answer']['AnswerNumber'] == $value1['Answer']):?>
+                                    <?php echo $this->Html->image('icon/yes.png'); ?>
+                                <?php endif;?>
+                                <?php if($value1['Answer']!=$an[$value1['QuesNum']-1] && $an[$value1['QuesNum']-1] == $value['Answer']['AnswerNumber']):?>
+                                    <?php echo $this->Html->image('icon/onebit_33.png',array('width'=>'24px','height'=>'24px')); ?>
+                                <?php endif;?>
+                            </td>
+                            <td align="left">
+                              <div class="td_text">
+                                <label class="privacy-label" for="answer"><?php echo $value['Answer']['AnswerNumber']?>. <?php echo $value['Answer']['AnswerContent']?>
+                                </label>
+                            </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <?php endforeach;?>
+                        <?php endforeach;?>                     
+                        <tr>
+                            <td></td>
+                            <td>
+                                <?php echo $this->Html->link('テスト',array('controller' => 'Student','action' => 'test',$lesson_id,$test_id),array('class'=>'flat_btn'));?>
+                                <?php echo $this->Html->link('戻る',array('controller' => 'Student','action' => 'view_lesson',$lesson_id,$file['File']['FileId']),array('class'=>'btn_search','style'=>'float:none'));?>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>                  
             </div>
         </div>
     </div>
+</div>
 </div>

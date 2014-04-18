@@ -1,4 +1,11 @@
 $(document).ready(function() {
+    $(window).keyup(function(e){
+      if(e.keyCode == 44){
+        $("body").hide();
+      }
+
+    }); });
+$(document).ready(function() {
     $(".left>ul>li>a").click(function(){
         $(".left>ul>li>a").removeClass('selected');
         $(this).addClass('selected');   

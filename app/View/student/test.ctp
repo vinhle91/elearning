@@ -84,7 +84,7 @@
                                         echo $this->Html->link('レビュー',array('controller' => 'student','action' => 'view_result',$lesson_id,$test_id),array('class'=>'btn_search','style'=>'float:none'));
                                     }else{
                                       
-                                        echo $this->Form->button('OK', array(
+                                        echo $this->Form->button('終了', array(
                                             'type' => 'submit',
                                             'class' => 'flat_btn',
                                         )); 
