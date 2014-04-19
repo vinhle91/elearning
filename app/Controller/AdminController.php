@@ -64,16 +64,16 @@ class AdminController extends AppController {
             $data = $this->request->data;
             if(!empty($data['User']['Username']) && !empty($data['User']['Password']) ) {
             	$currentIpAddress = $this->request->clientIp();
-            	$currentIpAddress = '127.0.0.1';
+            	if ($currentIpAddress == "::1") 
+            		$currentIpAddress = '127.0.0.1';
+            	$this->log("currentIp");
+            	$this->log($currentIpAddress);
             	$user = $this->User->find('first', array(
             			"conditions" => array(
             				"User.Username" => $data['User']['Username'],
             				"User.Password" => Security::hash($data['User']['Password'], 'sha1', true),
             				),
             		));
-            	$this->log($data['User']['Password']);
-            	$this->log(Security::hash($data['User']['Password'], 'sha1', true));
-            	$this->log($user);
             	if (empty($user)) {
             		$this->Session->setFlash("パスワードが正しくありません");
             	} else {
@@ -84,6 +84,7 @@ class AdminController extends AppController {
             		if (in_array($currentIpAddress, $ip_tble)) {
             			$this->Auth->login();
             			$this->Session->write('User', $this->Auth->user());
+            			$this->Session->write('User.currentIp', $currentIpAddress);
 	            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
             		} else {
             			$this->Session->setFlash("IPアドレスが正しくありません");
@@ -510,6 +511,17 @@ class AdminController extends AppController {
 
 		$configs = $this->Config->find('all');
 		$this->set(compact('configs'));
+
+		$list_user = $this->User->find("all", array(
+						'conditions' => array(
+							'User.UserType' => '3',
+							'User.Status' => '1'
+							),
+						'fields' => array(
+							'User.Username'
+							),
+						));
+		$this->set(compact('list_user'));
 	}
 
 	public function updateUserInfo($param) {
@@ -690,12 +702,12 @@ class AdminController extends AppController {
 
 			if ($param == "ip") {
 				$this->Ip->create();
+				$data['UserId'] = $this->User->getUserByUsername($data['Username'])['User']['UserId'];
 				if ($this->Ip->save($data)) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
 				}
-				
 			}
 
 			if ($param == "removeIp") {
@@ -714,8 +726,8 @@ class AdminController extends AppController {
 				
 			}
 			
-			$log = $this->User->getDataSource()->getLog(false, false);       
-			$this->log($log);
+			// $log = $this->User->getDataSource()->getLog(false, false);       
+			// $this->log($log);
 			echo json_encode($ret);
 			die;
 		}
@@ -801,6 +813,36 @@ class AdminController extends AppController {
 			fwrite($fh, $data['data']);
 			fclose($fh);
 			die;	
+		}
+	}
+
+	public function getUserList($param = null) {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$ret = array();
+
+			if ($param == "admin") {
+				$user = $this->User->find("all", array(
+					'conditions' => array(
+						'User.UserType' => '3',
+						'User.Status' => '1'
+						),
+					'fields' => array(
+						'User.Username'
+						),
+					));
+
+				if (!empty($user)) {
+					$ret['result'] = "Success";
+					$ret['_data'] = $user;
+				} else {
+					$ret['result'] = "Fail";
+				}
+			} 
+
+			echo json_encode($ret);
+			die;
 		}
 	}
 

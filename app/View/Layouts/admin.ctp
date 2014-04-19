@@ -29,7 +29,12 @@
 			'jquery.metadata',
 			'jquery.tablesorter',
 			'jquery.tablesorter.min',
-			'jquery.slimscroll.min'
+			'jquery.slimscroll.min',
+			'typeahead.bundle',
+			'typeahead.jquery',
+			'bloodhound',
+			'livequery',
+			'bootstrap-typeahead'
 		)); 
 	?>
 </head>

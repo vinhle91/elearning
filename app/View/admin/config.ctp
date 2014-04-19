@@ -1,4 +1,5 @@
 <?php echo $this->element('admin' . DS . 'page_breadcrumb'); ?>
+<?php $this->log($list_user)?>
 <div class="row">
 	<div class="col-md-6">
 		<div class="portlet">
@@ -25,8 +26,8 @@
 							<tr>
 								<td><?php echo $key + 1?></td>
 								<td><?php echo $ip['Ip']['IpAddress']?></td>
-								<td><?php echo $ip['Ip']['UserId']?></td>
-								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>Remove</span></a></td>
+								<td><a href="/elearning/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
+								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp')) echo "disabled"?>" onclick="removeIp(event)"><span>Remove</span></a></td>
 							</tr>
 							<?php } ?>
 						</tbody>
@@ -92,21 +93,47 @@
 </div>
 
 <script>
+	function getUserList() {
+		$.ajax({
+			type: "POST",
+			url: "/elearning/admin/getUserList/admin",
+			data: {data: "request"},
+			success: function(data){
+				data = $.parseJSON(data);
+				console.log(data._data);
+				if (data.result == "Success") {
+					return data._data;
+				}
+			}
+		});
+	}
 
 	function addNewIp(e) {
 		e = $.event.fix(e);
 		e.preventDefault();
+
 		var next = parseInt($("#ip-table tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td class="col-md-1">' + next + '</td>'
-						+ '<td class="col-md-3"><input type="textarea" name="" rows="1" class="no-border padding-5" style="resize: none" id="submit-ip" placeholder="IP Address" onkeypress="submitKey(event.which)"></input></td>'
-						+ '<td class="col-md-3"><input type="textarea" name="" rows="1" class="no-border padding-5" style="resize: none" id="submit-ip" placeholder="ユーザー" onkeypress="submitKey(event.which)"></input></td>'
+						+ '<td class="col-md-3"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-ip" placeholder="IP Address"></input></td>'
+						+ '<td class="col-md-3"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-user" placeholder="ユーザー"></input></td>'
 						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("Save") ?></a></td>'
 						+ '</tr>';
 		$("#add-ip").addClass("disabled");
 		$("#ip-table tr:last").after(buff);
 		$("#ip-table tr:last td:eq(1) input").focus();
 	}	
+
+	$("#new-user").live("focusin focusout", function(){
+		var availableTags = [];
+		<?php foreach ($list_user as $key => $user) { ?>
+			availableTags.push("<?php echo $user['User']['Username']?>");
+		<?php } ?>
+		$(this).autocomplete({
+	        source: availableTags,
+	        minLength:0
+	    }).bind('focus', function(){ $(this).autocomplete("search"); } );
+	});
 
 	function checkIpValidate(str) {
 		var regexIPv4 = /^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/;
@@ -127,14 +154,14 @@
 			$.ajax({
 		           type: "POST",
 		           url: "/elearning/admin/updateConfig/ip",
-		           data: {IpAddress: submit_data, UserId: submit_data2}, 
+		           data: {IpAddress: submit_data, Username: submit_data2}, 
 		           success: function(data)
 		           {
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
 		               		$("#ip-table tr:last td:eq(1)").html('<span>' + submit_data + '</span>');
-							$("#ip-table tr:last td:eq(2)").html('<span>' + submit_data2 + '</span>');
+							$("#ip-table tr:last td:eq(2)").html('<span><a href="/elearning/moderator/"' + submit_data2 + '">' + submit_data2 + '</a></span>');
 							$("#ip-table tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>Remove</span></a>');
 							$("#ip-info #add-ip").removeClass("disabled");
 		               		$("#ip-info .update-notif span").text("Updated successfully");
