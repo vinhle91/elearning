@@ -15,7 +15,7 @@ class Ip extends AppModel {
     public function removeIp($addr) {
     	$ip = $this->find('all', array(
     		'conditions' => array(
-    			'IpAddress' => $addr,
+    			'Ip.IpAddress' => $addr,
     			),
     		));
     	return $this->delete($ip[0]['Ip']['IpId']);

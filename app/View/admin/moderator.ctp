@@ -214,7 +214,7 @@
 				</button>
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
 					<span>
-						 Active
+						 アクティブ
 					</span>
 				</button>
 			</div>			
@@ -280,7 +280,7 @@
 										<li>  
 											<a class="update-active" href="">
 											<span class="label label-sm label-icon label-info"><i class="fa fa-check"></i></span>
-											    ユーザーをActive
+											    ユーザーをアクティブ
 											</a>
 										</li>
 										<?php } ?>
@@ -413,7 +413,7 @@
 			console.log(submit_data);
 			if (!checkEmailValidate($('#Email').text())) {
 				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-				$(".update-notif span").text("Invalid Email!");
+				$(".update-notif span").text("メールが正しくない!");
 				setTimeout(function(){
 	   				$('.update-notif span').fadeTo(500, 0, function(){
 					  	$('.update-notif span').css("visibility", "hidden");   
@@ -424,7 +424,7 @@
 
 			if (!checkDateValidate($('#Birthday').text())) {
 				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-				$(".update-notif span").text("Invalid Birthday!");
+				$(".update-notif span").text("生年月日が正しくない!");
 				setTimeout(function(){
 	   				$('.update-notif span').fadeTo(500, 0, function(){
 					  	$('.update-notif span').css("visibility", "hidden");   
@@ -434,7 +434,7 @@
 			}
 
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-			$(".user-info .update-notif span").text("Updating infomation...");
+			$(".user-info .update-notif span").text("情報が更新...");
 			$(".ajax-loader").fadeIn(10);
 			$(".button-save").addClass("disabled");
 
@@ -447,7 +447,7 @@
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-	               			$(".user-info .update-notif span").text("Updated successfully");
+	               			$(".user-info .update-notif span").text("更新が成功した");
 	               			setTimeout(function(){
 	               				//$(".user-info .update-notif span").text("");
 	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
@@ -455,7 +455,7 @@
 								});
 	               			}, 2000);
 		               	} else if (data.result == "Fail") {
-	               			$(".user-info .update-notif span").text("Updated fail");
+	               			$(".user-info .update-notif span").text("更新が失敗した");
 		               		setTimeout(function(){
 	               				//$(".user-info .update-notif span").text("");
 	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){

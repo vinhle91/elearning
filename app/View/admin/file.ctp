@@ -4,7 +4,7 @@
 			<i class="fa fa-cogs"></i>アップロードされたファイル
 		</div>
 		<div class="tools">
-			<span class="pull-left" style="padding-right: 20px">ソート: 最後変更</span>
+			<span class="pull-left" style="padding-right: 20px"></span>
 			<div class="pull-right no-list-style">
 				<li class="dropdown menu-right" id="header_notification_bar">
 					<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>オプション</span>

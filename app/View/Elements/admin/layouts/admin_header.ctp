@@ -73,7 +73,7 @@ function time_elapsed_string($ptime)
 					</li>
 				<?php } else { ?>
 					<li>
-						<p><?php echo __("You don't have any notification") ?></p>
+						<p><?php echo __("　通知がない") ?></p>
 					</li>
 					<li class="external">   
 						<a href="//elearning/admin/student">　近く知らせを表示　<i class="fa fa-angle-right"></i></a>

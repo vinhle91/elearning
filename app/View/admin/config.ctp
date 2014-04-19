@@ -1,7 +1,7 @@
 <?php echo $this->element('admin' . DS . 'page_breadcrumb'); ?>
 <?php $this->log($list_user)?>
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-7">
 		<div class="portlet">
 			<div class="portlet-title">
 				<div class="caption"><i class="fa fa-reorder"></i>IP アドレス</div>
@@ -14,9 +14,9 @@
 					<table class="table table-hover" id="ip-table">
 						<thead>
 							<tr>
-								<th class="col-md-1">#</th>
-								<th class="col-md-3">IP</th>
-								<th class="col-md-3">ユーザー</th>
+								<th class="col-md-1">番号</th>
+								<th class="col-md-2">IP</th>
+								<th class="col-md-4">ユーザー</th>
 								<th class="col-md-3"></th>
 							</tr>
 						</thead>
@@ -27,7 +27,7 @@
 								<td><?php echo $key + 1?></td>
 								<td><?php echo $ip['Ip']['IpAddress']?></td>
 								<td><a href="/elearning/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
-								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp')) echo "disabled"?>" onclick="removeIp(event)"><span>Remove</span></a></td>
+								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp')) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>
 							<?php } ?>
 						</tbody>
@@ -46,7 +46,7 @@
 		</div>
 	</div>
 
-	<div class="col-md-6 ">
+	<div class="col-md-5 ">
 		<div class="portlet">
 			<div class="portlet-title">
 				<div class="caption">
@@ -59,7 +59,7 @@
 					<table class="table table-hover" >
 						<thead>
 							<tr>
-								<th class=""># (設定)</th>
+								<th class="">設定</th>
 								<th class="col-md-5"></th>
 							</tr>
 						</thead>
@@ -115,9 +115,9 @@
 		var next = parseInt($("#ip-table tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td class="col-md-1">' + next + '</td>'
-						+ '<td class="col-md-3"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-ip" placeholder="IP Address"></input></td>'
-						+ '<td class="col-md-3"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-user" placeholder="ユーザー"></input></td>'
-						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("Save") ?></a></td>'
+						+ '<td class="col-md-2"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-ip" placeholder="IP Address"></input></td>'
+						+ '<td class="col-md-4"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-user" placeholder="ユーザー"></input></td>'
+						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("キャンセル")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("保存") ?></a></td>'
 						+ '</tr>';
 		$("#add-ip").addClass("disabled");
 		$("#ip-table tr:last").after(buff);
@@ -146,40 +146,51 @@
 		var time = "<?php echo date("Y-m-d h:i:s"); ?>";
 		var submit_data = $("#ip-table tr:last td:eq(1) input").val();
 		var submit_data2 = $("#ip-table tr:last td:eq(2) input").val();
-		if (checkIpValidate(submit_data)) { 
-			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
-			$("#ip-info .update-notif span").text("Updating infomation...");
-			$("#ip-info .ajax-loader").fadeIn(10);
-			$("#ip-info .button-save").addClass("disabled");
-			$.ajax({
-		           type: "POST",
-		           url: "/elearning/admin/updateConfig/ip",
-		           data: {IpAddress: submit_data, Username: submit_data2}, 
-		           success: function(data)
-		           {
-						$(".ajax-loader").fadeOut(10);
-						data = $.parseJSON(data);
-		               	if (data.result == "Success") {
-		               		$("#ip-table tr:last td:eq(1)").html('<span>' + submit_data + '</span>');
-							$("#ip-table tr:last td:eq(2)").html('<span><a href="/elearning/moderator/"' + submit_data2 + '">' + submit_data2 + '</a></span>');
-							$("#ip-table tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>Remove</span></a>');
-							$("#ip-info #add-ip").removeClass("disabled");
-		               		$("#ip-info .update-notif span").text("Updated successfully");
-	               			
-		               	} else if (data.result == "Fail") {
-		               		$("#ip-info .update-notif span").text("Updated fail");
-		               		
-		               	}
-		               	setTimeout(function(){
-               				$('#ip-info .update-notif span').fadeTo(500, 0, function(){
-							  	$('#ip-info .update-notif span').css("visibility", "hidden");   
-							});
-               			}, 2000);
-		           }
-		         });
+		if (checkIpValidate(submit_data)) {
+			if (submit_data2 != '') {
+				$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
+				$("#ip-info .update-notif span").text("IPアドレスを変更している...");
+				$("#ip-info .ajax-loader").fadeIn(10);
+				$("#ip-info .button-save").addClass("disabled");
+				$.ajax({
+			           type: "POST",
+			           url: "/elearning/admin/updateConfig/ip",
+			           data: {IpAddress: submit_data, Username: submit_data2}, 
+			           success: function(data)
+			           {
+							$(".ajax-loader").fadeOut(10);
+							data = $.parseJSON(data);
+			               	if (data.result == "Success") {
+			               		$("#ip-table tr:last td:eq(1)").html('<span>' + submit_data + '</span>');
+								$("#ip-table tr:last td:eq(2)").html('<span><a href="/elearning/moderator/"' + submit_data2 + '">' + submit_data2 + '</a></span>');
+								$("#ip-table tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a>');
+								$("#ip-info #add-ip").removeClass("disabled");
+			               		$("#ip-info .update-notif span").text("変更が成功");
+		               			
+			               	} else if (data.result == "Fail") {
+			               		$("#ip-info .update-notif span").text("変更が失敗");
+			               		
+			               	}
+			               	setTimeout(function(){
+	               				$('#ip-info .update-notif span').fadeTo(500, 0, function(){
+								  	$('#ip-info .update-notif span').css("visibility", "hidden");   
+								});
+	               			}, 2000);
+			           }
+			         });
+			} else {
+				$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
+				$("#ip-info .update-notif span").text("ユーザーがなければならない!");
+				setTimeout(function(){
+	   				$('#ip-info .update-notif span').fadeTo(500, 0, function(){
+					  	$('#ip-info .update-notif span').css("visibility", "hidden");   
+					});
+	   			}, 1000);
+			}
+				
 		} else {
 			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
-			$("#ip-info .update-notif span").text("IP address not match!");
+			$("#ip-info .update-notif span").text("IPアドレスが一致しない!");
 			setTimeout(function(){
    				$('#ip-info .update-notif span').fadeTo(500, 0, function(){
 				  	$('#ip-info .update-notif span').css("visibility", "hidden");   
@@ -199,10 +210,10 @@
 		parent = $(event.target).closest("tr");
 		window.abc = parent;
 		submit_data = parent.find("td:eq(1)").html();
-		r = confirm("Do you want to remove this IP Address?");		
+		r = confirm("あなたは、このIPアドレスを削除しますか?");
 		if (r == true) {
 			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
-			$("#ip-info .update-notif span").text("Removing ip...");
+			$("#ip-info .update-notif span").text("IPアドレスを削除している...");
 			$("#ip-info .ajax-loader").fadeIn(10);
 			$("#ip-info .button-save").addClass("disabled");
 			$.ajax({
@@ -215,10 +226,10 @@
 					$(".ajax-loader").fadeOut(10);
 					data = $.parseJSON(data);
 	               	if (data.result == "Success") {
-	               		$("#ip-info .update-notif span").text("Updated successfully");
+	               		$("#ip-info .update-notif span").text("変更が成功");
 						parent.remove();
 	               	} else if (data.result == "Fail") {
-	               		$("#ip-info .update-notif span").text("Updated fail");
+	               		$("#ip-info .update-notif span").text("変更が失敗");
 	               		
 	               	}
 	               	setTimeout(function(){

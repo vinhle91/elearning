@@ -16,7 +16,7 @@
 			<div class="tab-pane active" id="tab_1_11">
 
 				<div class="nav portlet-title padding-top-8" style="padding:10px 10px 2px 10px;  height: 38px;">
-					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><span id="payment-date"><?php echo date("M Y")?></span></div>
+					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><span id="payment-date"><?php echo date("　Y年　m月")?></span></div>
 					<div class="pull-right" id="date-picker">						
 						<span>年: </span>
 						<select class=" margin-right-3" id="payment-year">
@@ -50,11 +50,11 @@
 							<tbody>
 								<tr>
 									<td class="">最初トランザクション</td>
-									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'd M Y H:m:s') : null?></td>
+									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'Y年 m月 d日 H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>最後トランザクション</td>
-									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'd M Y H:m:s') : null?></td>
+									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'Y年 m月 d日 H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>総合トランザクション</td>
@@ -99,7 +99,7 @@
 									<td><?php echo $buff['Lesson']['Title'] ?></td>
 									<td><a href="/elearning/admin/student/<?php echo $buff['Student']['Username'] ?>"><?php echo $buff['Student']['Username'] ?></a></td>
 									<td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
-									<td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "Not paid" : "Paid"  ?></span></td>
+									<td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした"  ?></span></td>
 								</tr>
 								<?php } ?>							
 							</tbody>

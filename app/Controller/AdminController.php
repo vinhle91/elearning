@@ -25,7 +25,7 @@ class AdminController extends AppController {
         $pageTitle = 'E-Learningシステム';
         $this->layout = 'admin';
 
-        $status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
+        $status = array('削除', 'アクティブ', 'ペンディング', 'ブロック', '拒否');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
 		$fa_label = array('1' => 'plus', '2' => 'bell-o');
 		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/lesson/');
@@ -147,6 +147,31 @@ class AdminController extends AppController {
 		// $this->log($new_students);
 	}
 
+    public function getNewTeacherInfo() {
+        $new_teachers = array(
+            'Total' => $this->User->find("count", array(
+                    'conditions' => array(
+                        'AND' => array(
+                            'created >' => date('Y-m-d',strtotime("-1 months")),
+                            'UserType' => '2'
+                        ),
+                        'NOT' => array(
+                            'Status' => '0',
+                        )
+                    )
+                )),
+            'Data' => $this->User->find("all", array(
+                    'conditions' => array(
+                        'AND' => array(
+                            'created >' => date('Y-m-d',strtotime("-1 months")),
+                            'UserType' => '2'
+                        )
+                    )
+                ))
+        );
+        $this->set(compact('new_teachers'));
+    }
+
 	public function payment($param = null) {
 		$CONFIG_COURSE_FEE = $this->Config->getConfig("CourseFee") ?  $this->Config->getConfig("CourseFee") : 20000;
 		$CONFIG_SHARING_RATE = $this->Config->getConfig("SharingRate") ? $this->Config->getConfig("SharingRate") : 40;
@@ -157,8 +182,7 @@ class AdminController extends AppController {
 
 			//breadcrumb cho trang
 			$page_breadcrumb = array();
-			$page_breadcrumb['title'] = __('支払い概要
-			y');
+			$page_breadcrumb['title'] = __('支払い概要');
 			$page_breadcrumb['direct'] = array('ホーム', '支払い');
 			$this->set(compact('page_breadcrumb'));
 			//end breadcrumb cho trang
@@ -711,6 +735,7 @@ class AdminController extends AppController {
 			}
 
 			if ($param == "removeIp") {
+				
 				if ($this->Ip->removeIp($data['IpAddress']) == 1)
 					$ret['result'] = "Success";
 				else 
