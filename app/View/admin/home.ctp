@@ -30,7 +30,7 @@ $paid_label = array('warning', 'success');
 		<div class="tab-pane active" id="tab_1_11">
 
 				<div class="nav portlet-title padding-top-8" style="padding:10px 10px 2px 10px;  height: 38px;">
-					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><span id="payment-date"><?php echo date("M Y")?></span></div>
+					<div class="caption"><i class="fa fa-calendar margin-right-5"></i><span id="payment-date"><?php echo date("　Y年　m月")?></span></div>
 					<div class="pull-right" id="date-picker">						
 						<span>年: </span>
 						<select class=" margin-right-3" id="payment-year">
@@ -63,11 +63,11 @@ $paid_label = array('warning', 'success');
 							<tbody>
 								<tr>
 									<td class="">最初トランザクション</td>
-									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'd M Y H:m:s') : null?></td>
+									<td class="col-md-5" id="payment-first"><?php echo ($payment_summary['Start']) ? date_format(date_create($payment_summary['Start']), 'Y年 m月 d日 H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>最後トランザクション </td>
-									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'd M Y H:m:s') : null?></td>
+									<td id="payment-last"><?php echo $payment_summary['End'] ? date_format(date_create($payment_summary['End']), 'Y年 m月 d日 H:m:s') : null?></td>
 								</tr>
 								<tr>
 									<td>総トランザクション</td>
@@ -112,7 +112,7 @@ $paid_label = array('warning', 'success');
 									<td><?php echo $buff['Lesson']['Title'] ?></td>
 									<td><a href="/elearning/admin/student/<?php echo $buff['Student']['Username'] ?>"><?php echo $buff['Student']['Username'] ?></a></td>
 									<td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
-									<td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "Not paid" : "Paid"  ?></span></td>
+									<td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした"  ?></span></td>
 								</tr>
 								<?php } ?>							
 							</tbody>
@@ -137,9 +137,6 @@ $paid_label = array('warning', 'success');
 			<div class="portlet-title">
 				<div class="caption">
 					 <i class="fa fa-bookmark"></i> 概要
-				</div>
-				<div class="tools">
-					<a class="reload" href="javascript:;"></a>
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -181,7 +178,7 @@ $paid_label = array('warning', 'success');
 							 報酬％
 						</span>
 						<span class="sale-num" style="font-size: 14px;">
-							 <?php echo $CONFIG_SHARING_RATE?> %
+                            <?php echo number_format($CONFIG_SHARING_RATE)?>%
 						</span>
 					</li>
 				</ul>
@@ -192,9 +189,6 @@ $paid_label = array('warning', 'success');
 	<div class="portlet">
 		<div class="portlet-title">
 			<div class="caption"><i class="fa fa-user"></i>今日中新しい学生</div>
-			<div class="tools">
-				<a href="javascript:;" class="reload"></a>
-			</div>
 		</div>
 		<?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
 		<div class="portlet-body">
@@ -221,10 +215,44 @@ $paid_label = array('warning', 'success');
 		</div>
 		<?php }  else { ?>
 		<div class="portlet-body">
-			今日は新しい学生がいません。
+            最近は新しい学生がいません。
 		</div>
 		<?php } ?>
 	</div>
+
+    <div class="portlet">
+        <div class="portlet-title">
+            <div class="caption"><i class="fa fa-user"></i>今日中新しい先生</div>
+        </div>
+        <?php if (isset($new_teachers) && $new_teachers['Total'] != 0) { ?>
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>氏名</th>
+                            <th>ユーザー名</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($new_teachers['Data'] as $key => $new_teachers) { ?>
+                            <tr>
+                                <td><a href="/elearning/admin/student/<?php echo $new_teachers['User']['Username']?>"><?php echo $new_teachers['User']['FullName']?></a></td>
+                                <td><a href="/elearning/admin/student/<?php echo $new_teachers['User']['Username']?>"><?php echo $new_teachers['User']['Username']?></a></td>
+                                <td><span class="label label-sm label-<?php echo $status_label[$new_teachers['User']['Status']]?> line-6"><?php echo $status[$new_teachers['User']['Status']]?></span></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php }  else { ?>
+            <div class="portlet-body">
+                最近は新しい先生がいません。
+            </div>
+        <?php } ?>
+    </div>
 </div>
 <script>
 function getTransInMonth(year, month){

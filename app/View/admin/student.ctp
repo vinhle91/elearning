@@ -116,8 +116,8 @@
 							<a href="">Y</a>&nbsp; 
 						
 							<a href="">Z</a>&nbsp; 
-						
-							<a href="">Other</a>&nbsp; 
+
+							<a href="">ほかの</a>&nbsp;
 						</strong>
 					</div>
 				</div>
@@ -146,7 +146,7 @@
 								<td><a href="/elearning/admin/student/<?php echo $student['User']['Username']?>"><?php echo $student['User']['Username']?></a></td>
 								<td><?php echo $student['User']['Email']?></td>
 								<td><?php echo $student['User']['FullName']?></td>
-								<td><?php echo $student['User']['Birthday']?></td>
+								<td><?php echo $student['User']['Birthday'] ? date_format(date_create($student['User']['Birthday']), 'Y年m月d日') : null?></td>
 								<td><?php echo $student['User']['Gender'] == 0 ? __("Female") : __("Male")?></td>
 								<td><?php echo $student['User']['Phone']?></td>
 								<td><?php echo $student['User']['created']?></td>
@@ -395,7 +395,7 @@
 
 			if (!checkEmailValidate($('#Email').text())) {
 				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-				$(".update-notif span").text("Invalid Email!");
+				$(".update-notif span").text("メールが正しくない!");
 				setTimeout(function(){
 	   				$('.update-notif span').fadeTo(500, 0, function(){
 					  	$('.update-notif span').css("visibility", "hidden");   
@@ -406,7 +406,7 @@
 
 			if (!checkDateValidate($('#Birthday').text())) {
 				$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-				$(".update-notif span").text("Invalid Birthday!");
+				$(".update-notif span").text("生年月日が正しくない!");
 				setTimeout(function(){
 	   				$('.update-notif span').fadeTo(500, 0, function(){
 					  	$('.update-notif span').css("visibility", "hidden");   
@@ -416,7 +416,7 @@
 			}
 			
 			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-			$(".user-info .update-notif span").text("Updating infomation...");
+			$(".user-info .update-notif span").text("情報が更新...");
 			$(".ajax-loader").fadeIn(10);
 			$(".button-save").addClass("disabled");
 
@@ -429,7 +429,7 @@
 						$(".ajax-loader").fadeOut(10);
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-	               			$(".user-info .update-notif span").text("Updated successfully");
+	               			$(".user-info .update-notif span").text("更新が成功した");
 	               			setTimeout(function(){
 	               				//$(".user-info .update-notif span").text("");
 	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
@@ -437,7 +437,7 @@
 								});
 	               			}, 2000);
 		               	} else if (data.result == "Fail") {
-	               			$(".user-info .update-notif span").text("Updated fail");
+	               			$(".user-info .update-notif span").text("更新が失敗した");
 		               		setTimeout(function(){
 	               				//$(".user-info .update-notif span").text("");
 	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
@@ -454,7 +454,7 @@
 		$(".reset-pw").on("click", function(e){
 			e = $.event.fix(e);
 			e.preventDefault();
-			if (confirm("Do you want to reset <?php echo $studentInfo['FullName']?>'s password?") == true) {
+			if (confirm("<?php echo $studentInfo['FullName']?>のパスワードをリセットしたいですか?") == true) {
 				var url = "/elearning/admin/resetPassword";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -468,9 +468,9 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo $studentInfo['FullName']?>'s password has been reset to Initial password!");
+			               		alert("<?php echo $studentInfo['FullName']?>のパスワードは最初パスワードをリセットした！");
 			               	} else if (data.result == "Fail") {
-			               		alert("Reset password failed!");
+			               		alert("パスワードをリセットすることが失敗した");
 			               	}
 			           }
 			         });
@@ -482,7 +482,7 @@
 		$(".reset-ver-cod").on("click", function(e){
 			e = $.event.fix(e);
 			e.preventDefault();
-			if (confirm("Do you want to reset <?php echo $studentInfo['FullName']?>'s verify code?") == true) {
+			if (confirm("<?php echo $studentInfo['FullName']?>の verify codeをリセットしたいですか?") == true) {
 				var url = "/elearning/admin/resetVerifyCode";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -496,9 +496,9 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo $studentInfo['FullName']?>'s verify code has been reset!");
+			               		alert("<?php echo $studentInfo['FullName']?>の verify codeをリセットした");
 			               	} else if (data.result == "Fail") {
-			               		alert("Reset password failed!");
+			               		alert("verify codeをリセットすることが失敗っした!");
 			               	}
 			           }
 			         });
@@ -510,7 +510,7 @@
 		$(".update-block").on("click", function(e){
 			e = $.event.fix(e);
 			e.preventDefault();
-			if (confirm("Do you want to block <?php echo $studentInfo['FullName']?>'s account?") == true) {
+			if (confirm("<?php echo $studentInfo['FullName']?>のアカウントをブロックしますか") == true) {
 				var url = "/elearning/admin/updateUserInfo/block";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -524,7 +524,7 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo $studentInfo['FullName']?>'s account has been blocked!");
+			               		alert("<?php echo $studentInfo['FullName']?>のアカウントをブロックした");
 			               		location.reload();
 			               	} else if (data.result == "Fail") {
 
@@ -539,7 +539,7 @@
 		$(".update-delete").on("click", function(e){
 			e = $.event.fix(e);
 			e.preventDefault();
-			if (confirm("Do you want to delete <?php echo $studentInfo['FullName']?>'s account?") == true) {
+			if (confirm("<?php echo $studentInfo['FullName']?>のアカウントを削除しますか") == true) {
 				var url = "/elearning/admin/updateUserInfo/delete";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -553,7 +553,7 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo $studentInfo['FullName']?>'s account has been delete!");
+			               		alert("<?php echo $studentInfo['FullName']?>のアカウントを削除した!");
 			               		location.reload();
 			               	} else if (data.result == "Fail") {
 
@@ -584,7 +584,7 @@
 
 		               		location.reload();
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+		               		alert("ユーザーを回復は失敗!");
 		               	}
 		           }
 		         });

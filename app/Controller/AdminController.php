@@ -25,7 +25,7 @@ class AdminController extends AppController {
         $pageTitle = 'E-Learningシステム';
         $this->layout = 'admin';
 
-        $status = array('Deleted', 'Active', 'Pending', 'Blocked', 'Denied');
+        $status = array('削除', 'アクティブ', 'ペンディング', 'ブロック', '拒否');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
 		$fa_label = array('1' => 'plus', '2' => 'bell-o');
 		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/lesson/');
@@ -145,6 +145,31 @@ class AdminController extends AppController {
 		$this->set(compact('new_students'));
 		// $this->log($new_students);
 	}
+
+    public function getNewTeacherInfo() {
+        $new_teachers = array(
+            'Total' => $this->User->find("count", array(
+                    'conditions' => array(
+                        'AND' => array(
+                            'created >' => date('Y-m-d',strtotime("-1 months")),
+                            'UserType' => '2'
+                        ),
+                        'NOT' => array(
+                            'Status' => '0',
+                        )
+                    )
+                )),
+            'Data' => $this->User->find("all", array(
+                    'conditions' => array(
+                        'AND' => array(
+                            'created >' => date('Y-m-d',strtotime("-1 months")),
+                            'UserType' => '2'
+                        )
+                    )
+                ))
+        );
+        $this->set(compact('new_teachers'));
+    }
 
 	public function payment($param = null) {
 		$CONFIG_COURSE_FEE = $this->Config->getConfig("CourseFee") ?  $this->Config->getConfig("CourseFee") : 20000;
