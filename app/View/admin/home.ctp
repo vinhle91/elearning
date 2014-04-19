@@ -88,7 +88,7 @@ $paid_label = array('warning', 'success');
 							</tbody>
 						</table>
 
-						<a type="reset" class="btn btn-sm btn-info cancel pull-right" style="margin-top: -50px; margin-right: 0px" onclick="$('#payment-data').table2TSV({output: 'popup'})"><i class="fa fa-save margin-right-5"></i>
+						<a type="reset" class="btn btn-sm btn-info cancel pull-right" style="margin-top: -50px; margin-right: 0px" onclick="$('#payment-data').table2TSV({output: 'popup', year: $('#payment-year').val(), month: $('#payment-month').val()})"><i class="fa fa-save margin-right-5"></i>
 							<span>ファイルに保存</span>
 						</a>
 						<div class="clear-fix"></div>

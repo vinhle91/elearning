@@ -64,13 +64,16 @@ class AdminController extends AppController {
             $data = $this->request->data;
             if(!empty($data['User']['Username']) && !empty($data['User']['Password']) ) {
             	$currentIpAddress = $this->request->clientIp();
+            	$currentIpAddress = '127.0.0.1';
             	$user = $this->User->find('first', array(
             			"conditions" => array(
             				"User.Username" => $data['User']['Username'],
             				"User.Password" => Security::hash($data['User']['Password'], 'sha1', true),
             				),
             		));
-
+            	$this->log($data['User']['Password']);
+            	$this->log(Security::hash($data['User']['Password'], 'sha1', true));
+            	$this->log($user);
             	if (empty($user)) {
             		$this->Session->setFlash("パスワードが正しくありません");
             	} else {
@@ -519,7 +522,10 @@ class AdminController extends AppController {
 
 			if ($param == "update") {
 				if (isset($data['Password'])) {
+                        $this->log($data['Password']);
+                        $data['Password'] = trim($data['Password']);
                         $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
+                        $this->log($data['Password']);
 				}
 
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
@@ -534,6 +540,17 @@ class AdminController extends AppController {
 					"Status" => "3",
 					);
 				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}				
+			}
+
+			if ($param == "remove") {
+				$this->log($data);
+				$user = $this->User->getUserByUsername($data);
+				$userId = $user['User']['UserId'];
+				if ($this->User->delete($userId) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
@@ -685,6 +702,14 @@ class AdminController extends AppController {
 					$ret['result'] = "Success";
 				else 
 					$ret['result'] = "Fail";
+			}
+
+			if ($param == "config") {
+				$this->log($data);
+				foreach ($data as $key => $config) {
+					$this->Config->updateAll(array('ConfigValue' => $config), array('ConfigId' => $key));
+				}
+				$ret['result'] = "Success";
 				
 			}
 			
@@ -761,6 +786,20 @@ class AdminController extends AppController {
 			$this->log($log);
 			echo json_encode($ret);
 			die;
+		}
+	}
+
+	public function exportPayment() {
+		if ($this->request->is('post') && !empty($this->request->data)) {
+			$this->layout = null;
+			$data = $this->request->data;
+			$this->log($data);
+			$this->log(ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS . date('Y-m-d').'.txt');
+			$file = ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS .$data['year']."-".$data['month'].'.txt';
+			$fh = fopen($file, 'w');
+			fwrite($fh, $data['data']);
+			fclose($fh);
+			die;	
 		}
 	}
 

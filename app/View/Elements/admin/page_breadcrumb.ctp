@@ -1,6 +1,8 @@
 <?php
-$page_breadcrumb_title = isset($page_breadcrumb['title']) ? $page_breadcrumb['title'] : "page_breadcrumb_title is not set";
-$page_breadcrumb_direct = isset($page_breadcrumb['direct']) ? $page_breadcrumb['direct'] : array('Home', 'Your_Page_Here');
+// $page_breadcrumb_title = isset($page_breadcrumb['title']) ? $page_breadcrumb['title'] : "page_breadcrumb_title is not set";
+$page_breadcrumb_title = isset($page_breadcrumb['title']) ? $page_breadcrumb['title'] : "";
+// $page_breadcrumb_direct = isset($page_breadcrumb['direct']) ? $page_breadcrumb['direct'] : array('Home', 'Your_Page_Here');
+$page_breadcrumb_direct = isset($page_breadcrumb['direct']) ? $page_breadcrumb['direct'] : array('Home', '');
 ?>
 
 <div class="row">
