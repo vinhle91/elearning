@@ -13,15 +13,15 @@
 						<li>
 							<ul class="dropdown-menu-list no-space no-list-style">
 								<li>  
-									<a link="" onclick="block_file(this, event)">
+									<a link onclick="block_file(this, event)">
 									<span class="label label-sm label-icon label-warning"><i class="fa fa-ban"></i></span>
-                                        ファイルが選択されたをブロック
+                                        ファイルをブロック
 									</a>
 								</li>
 								<li>  
 									<a link="" onclick="active_file(event)">
 									<span class="label label-sm label-icon label-success"><i class="fa fa-pencil"></i></span>
-                                        ファイルが選択されたをアクティブ
+                                        ファイルをアクティブ
 									</a>
 								</li>
 							</ul>
@@ -32,33 +32,37 @@
 		</div>
 	</div>
 	<div class="portlet-body">
+		<div class="update-notif">
+			<span></span>
+			<label class="ajax-loader"></label>
+		</div>
 		<div class="table-scrollable">
 			<table class="table table-striped table-bordered table-hover" id="file-table">
 				<thead>
 					<tr>
 						<th>
-							<input type="checkbox" class="checkbox all" onclick="checkAll(this, event)">
+							<!-- <input type="checkbox" class="checkbox all" onclick="checkAll(this, event)"> -->
 						</th>
 						<th scope="col">
-                            ファイルID
+                            <a link>ファイルID</a>
 						</th>
 						<th scope="col">
-							<a link="">ファイル名</a>
+							<a link>ファイル名</a>
 						</th>
 						<th scope="col">
-                            ファイルリンク
+                            <a link> ファイルリンク</a>
 						</th>
 						<th scope="col">
-                            ファイル種類
+                            <a link>ファイル種類</a>
 						</th>
 						<th scope="col">
-							<a link="">アップロードユーザ</a>
+							<a link>アップロードユーザ</a>
 						</th>
 						<th scope="col">
-							<a link="">作成時間</a>
+							<a link>作成時間</a>
 						</th>
 						<th scope="col">
-							<a link="">最後変更</a>
+							<a link>最後変更</a>
 						</th>
 						<th scope="col">
 							<a link>状態</a>
@@ -125,6 +129,9 @@
 		if (submit_data.length == 0) { 
 			alert("No selected!");
 		} else {
+			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
+			$(".update-notif span").text("IPアドレスを変更している...");
+			$(".ajax-loader").fadeIn(10);
 			$.ajax({
 	           type: "POST",
 	           url: '/elearning/admin/updatefile/block',
@@ -134,9 +141,11 @@
 					data = $.parseJSON(data);
 					$("#file-table tbody tr").each(function(){
 						if ($(this).find("input").is(":checked")) {
-				 			$(this).find("td:last").html("<label class='label label-sm label-warning line-8' >Blocked</label>");
+				 			$(this).find("td:last").html("<label class='label label-sm label-warning line-8' >ブロック</label>");
 						}
 					});
+					$("#add-ip").removeClass("disabled");
+               		$(".update-notif span").text("変更が成功");
 	           }
 	       	});
 		}
@@ -159,10 +168,9 @@
            data: {'data':submit_data },
            success: function(data)
            {
-				data = $.parseJSON(data);
 				$("#file-table tbody tr").each(function(){
 					if ($(this).find("input").is(":checked")) {
-						$(this).find("td:last").html("<label class='label label-sm label-success line-8' >Active</label>");
+						$(this).find("td:last").html("<label class='label label-sm label-success line-8' >アクティブ</label>");
 					}
 				});
 
@@ -181,7 +189,8 @@
 	})
 
 	function checkAll(checkbox, e) {
-		checkbox = $(checkbox);
-		$("input[type='checkbox']").prop("checked", checkbox.prop("checked"));
+		// checkbox = $(checkbox);
+		// $("input[type='checkbox']").prop("checked", checkbox.prop("checked"));
+		// checkbox.prop("checked", !checkbox.prop("checked"));
 	};
 </script>

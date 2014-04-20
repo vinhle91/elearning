@@ -807,7 +807,7 @@ class AdminController extends AppController {
 			$this->layout = null;
 			$data = $this->request->data;
 			$ret = array();
-			
+			$this->log($data);
 
 			if ($param == "block") {
 				$this->File->blockFile($data);
@@ -815,13 +815,13 @@ class AdminController extends AppController {
 			} 
 
 			if ($param == "active") {
-				$this->File->activeLesson($data);
+				$this->File->activeFile($data);
 				$ret['result'] = "Success";
 			}
 
 			
-			$log = $this->User->getDataSource()->getLog(false, false);       
-			$this->log($log);
+			// $log = $this->User->getDataSource()->getLog(false, false);       
+			// $this->log($log);
 			echo json_encode($ret);
 			die;
 		}
@@ -835,7 +835,7 @@ class AdminController extends AppController {
 			$this->log(ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS . date('Y-m-d').'.txt');
 			$file = ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS .$data['year']."-".$data['month'].'.txt';
 			$fh = fopen($file, 'w');
-			fwrite($fh, $data['data']);
+			fwrite($fh, $data['0']);
 			fclose($fh);
 			die;	
 		}

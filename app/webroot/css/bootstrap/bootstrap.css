@@ -2637,6 +2637,13 @@ fieldset[disabled] .btn-link:focus {
   border-radius: 3px;
 }
 
+.btn-xxs {
+  padding: 1px 5px;
+  font-size: 10px;
+  line-height: 2;
+  border-radius: 3px;
+}
+
 .btn-block {
   display: block;
   width: 100%;

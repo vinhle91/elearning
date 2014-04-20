@@ -34,7 +34,8 @@
 			'typeahead.jquery',
 			'bloodhound',
 			'livequery',
-			'bootstrap-typeahead'
+			'bootstrap-typeahead',
+			'jquery.validate.min'
 		)); 
 	?>
 </head>

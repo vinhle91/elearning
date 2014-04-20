@@ -7,7 +7,7 @@
 
 <?php if (!isset($moderatorInfo)) { ?>
 <div class="user-info">		
-	<div class="col-md-8">
+	<div class="col-md-6">
 		<div class="portlet">
 			<div class="nav portlet-title padding-top-8">
 				<div class="caption">すべての管理者</div>
@@ -25,10 +25,10 @@
 						<thead>
 							<tr>
 								<th class="col-md-1">#</th>
-								<th class="col-md-3">ユーザー名</th>
+								<th class="col-md-4">ユーザー名</th>
 								<th>登録日時</th>
-								<th class="col-md-3">状態</th>
-								<th class="col-md-3"></th>
+								<!-- <th class="col-md-3">状態</th> -->
+								<th class="col-md-5"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -37,7 +37,7 @@
 								<td><?php echo $key + 1?></td>
 								<td><a href="/elearning/admin/moderator/<?php echo $moderator['User']['Username']?>"><?php echo $moderator['User']['Username']?></a></td>
 								<td><?php echo $moderator['User']['created']?></td>
-								<td><label class="line-8 label label-sm label-<?php echo $moderator['User']['IsOnline'] == 1 ? "success" : "default disabled"?>"><?php echo $moderator['User']['IsOnline'] == 1 ? "Online" : "Offline"?></label></td>
+								<!-- <td><label class="line-8 label label-sm label-<?php echo $moderator['User']['IsOnline'] == 1 ? "success" : "default disabled"?>"><?php echo $moderator['User']['IsOnline'] == 1 ? "Online" : "Offline"?></label></td> -->
 								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>	
 							<?php } ?>
@@ -65,10 +65,9 @@
 		var next = parseInt($("#mod-tbl tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td>' + next + '</td>'
-						+ '<td><input type="text" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
+						+ '<td class="col-md-4"><input type="text" name="" rows="1" class="no-border mod-info name" style="resize: none" id="" placeholder="username"></input></td>'
 						+ '<td><input type="password" name="" rows="1" class="no-border mod-info password" style="resize: none" id="" placeholder="password"></input></td>'
 						+ '<td><a href="#" class="btn btn-xs btn-success" onclick="submitNewMod(event)"><?php echo __("Save") ?></a><a href="#" class="btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("Cancel")?></a></td>'
-						+ '<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a></td>'
 						+ '</tr>';
 		$("#add-new-mod").addClass("disabled");
 		$("#mod-tbl tr:last").after(buff);
@@ -151,7 +150,7 @@
                			$(".user-info .update-notif span").text("更新することは成功した");
                			$("#mod-tbl tr:last td:eq(1)").html('<a href="">' + $("#mod-tbl tr:last td:eq(1) input").val() + '</a>');
 						$("#mod-tbl tr:last td:eq(2)").html(time);
-						$("#mod-tbl tr:last td:eq(3)").html('<label class="label label-sm label-default disabled">Offline</label>');
+						// $("#mod-tbl tr:last td:eq(3)").html('<label class="label label-sm label-default disabled">Offline</label>');
 						$("#add-mod").removeClass("disabled");
                			setTimeout(function(){
                				$(".user-info .update-notif span").text("");
