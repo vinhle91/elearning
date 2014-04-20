@@ -13,9 +13,6 @@
 					<div class="portlet">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
-							<div class="tools">
-								<a href="javascript:;" class="reload"></a>
-							</div>
 						</div>
 						<?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
 						<div class="portlet-body">
@@ -55,71 +52,9 @@
 
 			<div class="portlet">
 				<div class="portlet-title">
-					<div class="caption">#すべてのユ学生</div>
-					
-					<div class="tools">
-						<a href="javascript:;" class="reload"></a>
-					</div>
-					<div class="pull-right">
-						<strong style="font-size: `.95em;">
-		
-							<a href="">すべて</a>&nbsp;
-						
-							<a href="">A</a>&nbsp; 
-						
-							<a href="">B</a>&nbsp; 
-						
-							<a href="">C</a>&nbsp; 
-						
-							<a href="">D</a>&nbsp; 
-						
-							<a href="">E</a>&nbsp; 
-						
-							<a href="">F</a>&nbsp; 
-						
-							<a href="">G</a>&nbsp; 
-						
-							<a href="">H</a>&nbsp; 
-						
-							<a href="">I</a>&nbsp; 
-						
-							<a href="">J</a>&nbsp; 
-						
-							<a href="">K</a>&nbsp; 
-						
-							<a href="">L</a>&nbsp; 
-						
-							<a href="">M</a>&nbsp; 
-						
-							<a href="">N</a>&nbsp; 
-						
-							<a href="">O</a>&nbsp; 
-						
-							<a href="">P</a>&nbsp; 
-						
-							<a href="">Q</a>&nbsp; 
-						
-							<a href="">R</a>&nbsp; 
-						
-							<a href="">S</a>&nbsp; 
-						
-							<a href="">T</a>&nbsp; 
-						
-							<a href="">U</a>&nbsp; 
-						
-							<a href="">V</a>&nbsp; 
-						
-							<a href="">W</a>&nbsp; 
-						
-							<a href="">X</a>&nbsp; 
-						
-							<a href="">Y</a>&nbsp; 
-						
-							<a href="">Z</a>&nbsp; 
+					<div class="caption">すべてのユ学生</div>
 
-							<a href="">ほかの</a>&nbsp;
-						</strong>
-					</div>
+
 				</div>
 				<div class="portlet-body flip-scroll" style="display: block; overflow: auto">
 					<?php if (isset($all_students) && $all_students['Total'] != 0) { ?>

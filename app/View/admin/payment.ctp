@@ -164,9 +164,6 @@
 				<div class="caption">
 					 <i class="fa fa-bookmark"></i> 概要
 				</div>
-				<div class="tools">
-					<a class="reload" href="javascript:;"></a>
-				</div>
 			</div>
 			<div class="portlet-body">
 				<ul class="list-unstyled">
