@@ -206,7 +206,7 @@ class UsersController extends AppController
                             $this->setNumberOfFailedLogin($this->getNumberOfFailedLogin($user['User']['Username']) + 1, $user['User']['Username']);
                             $numberFailedLogin = $this->getNumberOfFailedLogin($user['User']['Username']);
                             //debug($numberFailedLogin);
-                            $maxFailed = (int)$this->Config->getConfig('FailNumber');
+                            $maxFailed = (int)$this->Config->getLoginBlockTimes();
 
                             if ($numberFailedLogin >= $maxFailed - 1) {
                                 //block user
@@ -226,7 +226,9 @@ class UsersController extends AppController
                 } else {
 
                     if ($remainBlockTime > 0) {
-                        $this->Session->setFlash(__('３回に間違ったパスワードが入力されます。１分間待ってログインします。'));
+                        $blockSeconds = (int)$this->Config->getLoginBlockSeconds();
+                        $maxFailed = (int)$this->Config->getLoginBlockTimes();
+                        $this->Session->setFlash(__($maxFailed .'回に間違ったパスワードが入力されます。'.$blockSeconds.'秒待ってログインします。'));
                         $this->blockUser($user['User']['Username']);
 
                     } else {
@@ -554,7 +556,10 @@ class UsersController extends AppController
     public function blockUserLogin($username)
     {
         $today = new DateTime();
-        $blockTime = $today->add(new DateInterval('PT1M'));
+
+        $blockSeconds = (int)$this->Config->getLoginBlockSeconds();
+
+        $blockTime = $today->add(new DateInterval('PT'.$blockSeconds.'S'));
         $this->Session->write('Block' . $username, $blockTime);
     }
 
@@ -573,7 +578,8 @@ class UsersController extends AppController
     {
         $n = $this->Session->read('NumberOfFailedLogin' . $username);
         if (is_null($n)) {
-            return 1;
+            $this->setNumberOfFailedLogin(0, $username);
+            $n = 0;
         }
         return $n;
     }
