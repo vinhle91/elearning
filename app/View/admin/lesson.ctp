@@ -4,7 +4,6 @@
 			<i class="fa fa-book"></i>アップロードされた授業
 		</div>
 		<div class="tools">
-			<span class="pull-left" style="padding-right: 20px">ソート: 最後変更</span>
 			<div class="pull-right no-list-style">
 				<li class="dropdown menu-right" id="header_notification_bar">
 					<span href="#" class="btn btn-info btn-xs" id="edit" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"><i class="fa fa-cog"></i>Options</span>
@@ -15,19 +14,19 @@
 								<li>  
 									<a link="" onclick="block_lesson(this, event)">
 									<span class="label label-sm label-icon label-warning"><i class="fa fa-ban"></i></span>
-                                        授業が選択されたをブロック
+                                        授業をブロック
 									</a>
 								</li>
 								<li>  
 									<a link="" onclick="active_lesson(event)">
 									<span class="label label-sm label-icon label-success"><i class="fa fa-pencil"></i></span>
-                                        授業が選択されたをアクティブ
+                                        授業をアクティブ
 									</a>
 								</li>
 								<li>  
 									<a link="" onclick="report_lesson(event)">
 									<span class="label label-sm label-icon label-danger"><i class="fa fa-bell-o"></i></span>
-                                        授業が選択されたをレポート
+                                        授業をレポート
 									</a>
 								</li>
 							</ul>
