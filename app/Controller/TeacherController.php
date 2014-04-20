@@ -75,7 +75,7 @@ class TeacherController extends AppController
         $this->set('Category', $Category);
 
         //Get top lesson
-        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
+        if (!isset($this->request->query['top']) || $this->request->query['top'] == 'lesson') {
             $this->Lesson->virtualFields = array(
                 'Author' => 'User.Username'
             );
