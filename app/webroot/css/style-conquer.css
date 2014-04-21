@@ -304,7 +304,7 @@ input[disabled],
 select[disabled],
 textarea[disabled] {
   cursor: not-allowed;
-  background-color: #F4F4F4 !important;
+  /*background-color: #F4F4F4 !important;*/
 }
 
 input[readonly],

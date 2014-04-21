@@ -207,8 +207,20 @@ Tools
   border: none !important;
 }
 
+.width-100 {
+  width: 100px !important;
+}
+
+.width-150 {
+  width: 150px !important;
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
 .inline-block {
-  display: inline-block;
+  display: inline-block !important;
 }
 
 .no-border {

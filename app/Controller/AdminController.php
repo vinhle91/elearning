@@ -730,6 +730,16 @@ class AdminController extends AppController {
 				}
 			}
 
+			if ($param == "changeIp") {
+				$submit_data['IpId'] = $data['IpId'];
+				$submit_data['IpAddress'] = $data['IpAddress'];
+				if ($this->Ip->updateAll($submit_data, array('Ip.IpId' => $data['IpId']))) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
+			}
+
 			if ($param == "removeIp") {
 				
 				if ($this->Ip->removeIp($data['IpAddress']) == 1)
