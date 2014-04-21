@@ -681,7 +681,7 @@
                         data = $.parseJSON(data);
                         if (data.result == "Success") {
                             alert("<?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s account has been delete!");
-                            location.reload();
+                            location.assign("/elearning/admin/teacher");
                         } else if (data.result == "Fail") {
 
                         }
