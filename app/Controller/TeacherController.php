@@ -657,6 +657,17 @@ class TeacherController extends AppController
     {
         $this->pageTitle = 'Edit Lesson';
         $userId = $this->Auth->user('UserId');
+         // Get list tag
+        $params = array(
+            'fields' => array('TagId', 'TagContent'),
+            'order' => array('Category.tagId' => 'Asc'),
+        );
+        $tag = $this->Tag->find('all');
+        $tmp ='';
+        foreach ($tag as $key => $value) {
+            $tmp = $tmp.'"'.$value['Tag']['TagContent'].'"'.',';
+        }
+        $this->set(compact('tmp'));
         // Get list category 
         $params = array(
             'conditions' => array('Category.IsDeleted' => '0'),
@@ -687,7 +698,10 @@ class TeacherController extends AppController
 	            ));
 	            $list_tag = '';
 	            foreach ($tag as $key => $value) {
-	            	$list_tag = $list_tag.$value['Tag']['TagContent'].',';
+                    if(!empty($list_tag)){
+                        $list_tag = $list_tag.','.$value['Tag']['TagContent'];
+                    }
+	            	$list_tag = $list_tag.$value['Tag']['TagContent'];
 	            }
 	            $this->set(compact('list_tag'));
 	            // debug($list_tag);
