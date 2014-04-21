@@ -265,18 +265,23 @@ class UsersController extends AppController
                 $initialPassword = $data['User']['Username'] . $data['User']['Password'];
                 $data['User']['InitialPassword'] = $data['User']['Password'];
                 $data['User']['Status'] = 2;
-
                 if ($data['User']['UserType'] == 2) {
                     if (empty($data['User']['BankInfo'])) {
-                        $this->Session->setFlash(__('A bank infor is required'));
-                        $this->redirect(array('action' => 'sign_up', $userType));
+                        $this->Session->setFlash(__('銀行の情報が必要です'));
+                        //$this->redirect(array('action' => 'sign_up', $userType));
+                        return;
+                    }else{
+                        if(!is_numeric($data['User']['BankInfor'])){
+                            $this->Session->setFlash(__('銀行の情報は数字だけ'));
+                            return;
+                        }
                     }
                     if (empty($data['User']['VerifyCodeAnswer'])) {
-                        $this->Session->setFlash(__('A VerifyCodeAnswer infor is required'));
+                        $this->Session->setFlash(__('A VerifyCodeAnswer is required'));
                         $this->redirect(array('action' => 'sign_up', $userType));
                     }
                     if (empty($data['User']['VerifyCodeQuestion'])) {
-                        $this->Session->setFlash(__('A VerifyCodeQuestion infor is required'));
+                        $this->Session->setFlash(__('A VerifyCodeQuestion is required'));
                         $this->redirect(array('action' => 'sign_up', $userType));
                     }
                     $initialCodeQuestion = $data['User']['Username'] . $data['User']['VerifyCodeQuestion'];
@@ -287,8 +292,15 @@ class UsersController extends AppController
                     $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer'];
                 } else {
                     if (empty($data['User']['CreditCard'])) {
-                        $this->Session->setFlash(__('A CreditCard infor is required'));
-                        $this->redirect(array('action' => 'sign_up', $userType));
+                        $this->Session->setFlash(__('クレジットカード情報が必要となります'));
+                        // $this->redirect(array('action' => 'sign_up', $userType));
+                        return;
+                    }else{
+                        if(!is_numeric($data['User']['CreditCard'])){
+                            $this->Session->setFlash(__('クレジットカードは数字だけ'));
+                             return;
+                        }
+                       
                     }
                 }
                 // debug($data);

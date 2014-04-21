@@ -73,10 +73,6 @@ class User extends AppModel
                 'rule' => array('notEmpty'),
                 'message' => '名前が必要です'
             ),
-            'between' => array(
-                'rule' => array('between', 6, 60),
-                'message' => '名前6から60文字の間でなければなりません'
-            )
         ),
     );
 
