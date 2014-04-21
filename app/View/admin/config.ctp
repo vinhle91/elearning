@@ -15,8 +15,8 @@
 						<thead>
 							<tr>
 								<th class="col-md-1">番号</th>
-								<th class="col-md-2">IP</th>
-								<th class="col-md-4">ユーザー</th>
+								<th class="col-md-3">IP</th>
+								<th class="col-md-3">ユーザー</th>
 								<th class="col-md-3"></th>
 							</tr>
 						</thead>
@@ -163,9 +163,9 @@
 		var next = parseInt($("#ip-table tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td class="col-md-1">' + next + '</td>'
-						+ '<td class="col-md-2"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-ip" placeholder="IPアドレス"></input></td>'
-						+ '<td class="col-md-4"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none" id="new-user" placeholder="ユーザー"></input></td>'
-						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xxs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("キャンセル")?></a><a class="pull-right btn btn-xxs btn-success" onclick="submitNewIp()"><?php echo __("保存") ?></a></td>'
+						+ '<td class="col-md-2"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none; width: 130px;" id="new-ip" placeholder="IPアドレス"></input></td>'
+						+ '<td class="col-md-3"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none; width: 130px;" id="new-user" placeholder="ユーザー"></input></td>'
+						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("キャンセル")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("保存") ?></a></td>'
 						+ '</tr>';
 		$("#add-ip").addClass("disabled");
 		$("#ip-table tr:last").after(buff);
@@ -360,31 +360,31 @@
 	    },
 	    messages: {
 	        session_timeout: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "自動セッション終了時間 は必須です",
 	        },
 	        auto_backup: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "自動バックアップ時刻 は必須です",
 	        },
 	        login_fail: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "ログイン誤り回数 は必須です",
 	        },
 	        lock_time: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "ロッグ時間 は必須です",
 	        },
 	        lesson_cost: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "一回受講料 は必須です",
 	        },
 	        test_time: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "受講可能時間 は必須です",
 	        },
 	        share_rate: {
-	            number: "Please enter valid variable.",
+	            number: "番号を入力してください。",
 	            required: "報酬% は必須です",
 	        },
 	    },

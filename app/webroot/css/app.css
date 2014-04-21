@@ -511,6 +511,25 @@ Profile Page
   margin-top:2px !important;
 }
 
+.user-info table#user tbody tr>td:nth-child(1) {
+  width: 30%;
+}
+
+.user-info table#user tbody tr>td:nth-child(2) {
+  width: 70%;
+}
+
+.user-info input[type='text'] {
+  border: 1px #fefefe;
+  width: 250px;
+  padding: 2px 5px 2px 5px; 
+  background-color: transparent;
+}
+
+.user-info select {
+  margin-left: 5px;
+}
+
 .user-info .gender {
   display: inline-block; 
   width: 20px; 
@@ -565,8 +584,8 @@ Profile Page
 
 .update-notif span, .user-info .update-notif span {
   color: #B94A48;
-  font-size: 13px;
-  font-style: italic;
+  font-size: 14px;
+  /*font-style: italic;*/
   margin: 0;
   text-align: center;
 }
@@ -624,7 +643,7 @@ Config Page
 
 .ui-autocomplete li {
   margin-left: -40px;
-  background-color: #fff ;
+  background-color: #fefefe ;
   width: 160px;
   padding: 5px;
 }
@@ -642,8 +661,10 @@ Config Page
 }
 
 .validate-error, .error {
+  padding: 3px;
   color: #B94A48;
-  font-size: 13px;
-  font-style: italic;
+  font-size: 12px;
+  /*font-style: italic;*/
   margin: 0;
 }
+

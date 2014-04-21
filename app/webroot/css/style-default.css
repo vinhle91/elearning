@@ -207,6 +207,10 @@ Tools
   border: none !important;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .no-border {
   border: none !important;
 }
