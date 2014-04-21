@@ -598,7 +598,7 @@ class AdminController extends AppController {
 				$buff = array(
 					"Status" => "0",
 					);
-				if ($this->User->updateAll($buff, array('UserId' => $data['UserId'])) == 1) {
+				if ($this->User->deleteAll(array('UserId' => $data['UserId']),true) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
