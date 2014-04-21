@@ -132,6 +132,11 @@
 						 アクティブ
 					</span>
 				</button>
+				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
+					<span>
+						 Deny
+					</span>
+				</button>
 			</div>			
 			<?php } ?>
 			<?php if ($studentInfo['Status'] == 0) { ?>
