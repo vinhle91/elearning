@@ -9,26 +9,25 @@
 		echo $this->Html->css(array(
 			'reset',
 			'common',
-			// 'fancybox/jquery.fancybox.css?v=2.1.5'
 		));
+
 		// Js file
 		echo $this->Html->script(array(
 			'jquery-1.9.0.min',
 			'main',
-			// 'jquery.fancybox.js?v=2.1.5'
-			//onLoad="disableContextMenu()"
+			'select2/select2',
 		)); 
 	?>
+	<link rel="stylesheet" type="text/css" href="/elearning/js/select2/select2.css">
 	<script type="text/javascript"> 
-	function disableContextMenu()
-	  {
-	    window.frames["fraDisabled"].document.oncontextmenu = function(){alert("No way!"); return false;};   
-	  }
+	 	function disableContextMenu()
+	   	{
+	     	window.frames["fraDisabled"].document.oncontextmenu = function(){alert("No way!"); return false;};   
+		}
 	</script>
-
 	<style type="text/css"> @media print { body { display:none } } </style>
 </head>
-<body onload="disableContextMenu();">
+<body onload="disableContextMenu()" >
 <!-- <?php echo $this->element('sql_dump'); ?>  -->
 	<div id="body">
 		<!--Start header-->

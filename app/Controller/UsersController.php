@@ -107,7 +107,8 @@ class UsersController extends AppController
                 //for test
                 $this->request->data['User']['Password'] = $data['User']['Username'] . $data['User']['Password'];
                 // debug($data['User']['Password']);
-                $currentIpAddress = '123.1.1.125';
+                $currentIpAddress = '123.1.1.124';
+                // $currentIpAddress = '123.1.1.125';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
                 // debug($user);

@@ -1,5 +1,4 @@
 <div id="contents">
-    <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
         <div class="t_title">
             <div class="left">

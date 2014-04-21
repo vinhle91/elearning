@@ -102,7 +102,6 @@
         </div>
     </div>
 
-
 <?php } else { //end if !isset($studentInfo) ?>
 <?php //have $studentInfo?>
 	<div class="row">
@@ -134,7 +133,7 @@
 				</button>
 				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
 					<span>
-						 Deny
+						 拒否
 					</span>
 				</button>
 			</div>			
@@ -163,7 +162,7 @@
 							<ul class="dropdown-menu extended" style="width: auto !important; margin-left: 77px; margin-top: -50px;">
 								<li>
 									<ul class="dropdown-menu-list no-space no-list-style">
-										<!-- <li>  
+										<li>  
 											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">パスワードをリセット</span>
@@ -173,12 +172,6 @@
 											<a class="reset-ver-cod" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">verifycodeをリセット<span>
-											</a>
-										</li> -->
-										<li>  
-											<a class="reset-ver-cod">
-											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-key"></i></span>
-                                            <span class="inline-block">パスワードを変更する</span>
 											</a>
 										</li>
 										<?php if ($studentInfo['Username'] != $this->Session->read('User.Username')) { ?>
@@ -449,7 +442,7 @@
 	            required: true,
 	        },
 	        Email: {
-	            required: true,
+	            // required: true,
 	            email: true,
 	        },
 	        BankInfo: {
@@ -502,55 +495,55 @@
 
 	$("#user-info-form").live("submit", function(e){
 		if ($("#user-info-form").validate().checkForm() == false) {
-			return;
+			return false;
 		} else {
 			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
-			var url = "/elearning/admin/updateUserInfo/update";
-			var submit_data = {
-				UserId: "<?php echo $studentInfo['UserId']?>",
-			};
-			// submit_data.Password = $('#Password').text();
-			submit_data.Birthday = "'"+$("#BirthdayYear").val()+'-'+$("#BirthdayMonth").val()+'-'+$("#BirthdayDay").val()+"'";
-			submit_data.FullName = "'"+$('#FullName').val().trim()+"'";
-			submit_data.Gender = "'"+$('#Gender').val().trim()+"'";
-			submit_data.Email = "'"+$('#Email').val().trim()+"'";
-			submit_data.BankInfo = "'"+$('#BankInfo').val().trim()+"'";
-			submit_data.Address = "'"+$('#Address').val().trim()+"'";
-			console.log(submit_data);
+			// $("li.dropdown#options").removeClass("open");
+			// var url = "/elearning/admin/updateUserInfo/update";
+			// var submit_data = {
+			// 	UserId: "<?php echo $studentInfo['UserId']?>",
+			// };
+			// // submit_data.Password = $('#Password').text();
+			// submit_data.Birthday = "'"+$("#BirthdayYear").val()+'-'+$("#BirthdayMonth").val()+'-'+$("#BirthdayDay").val()+"'";
+			// submit_data.FullName = "'"+$('#FullName').val().trim()+"'";
+			// submit_data.Gender = "'"+$('#Gender').val().trim()+"'";
+			// submit_data.Email = "'"+$('#Email').val().trim()+"'";
+			// submit_data.BankInfo = "'"+$('#BankInfo').val().trim()+"'";
+			// submit_data.Address = "'"+$('#Address').val().trim()+"'";
+			// console.log(submit_data);
 
-			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-			$(".user-info .update-notif span").text("情報が更新...");
-			$(".ajax-loader").fadeIn(10);
-			$(".button-save").addClass("disabled");
+			// $(".update-notif span").css({"visibility": "visible", "opacity": 1});
+			// $(".user-info .update-notif span").text("情報が更新...");
+			// $(".ajax-loader").fadeIn(10);
+			// $(".button-save").addClass("disabled");
 
-		    $.ajax({
-		           type: "POST",
-		           url: url,
-		           data: submit_data, 
-		           success: function(data)
-		           {
-						$(".ajax-loader").fadeOut(10);
-						data = $.parseJSON(data);
-		               	if (data.result == "Success") {
-	               			$(".user-info .update-notif span").text("更新が成功した。");
-	               			setTimeout(function(){
-	               				//$(".user-info .update-notif span").text("");
-	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
-								  	$('.user-info .update-notif span').css("visibility", "hidden");   
-								});
-	               			}, 2000);
-		               	} else if (data.result == "Fail") {
-	               			$(".user-info .update-notif span").text("更新が失敗した。");
-		               		setTimeout(function(){
-	               				//$(".user-info .update-notif span").text("");
-	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
-								  	$('.user-info .update-notif span').css("visibility", "hidden");   
-								});
-	               			}, 2000);
-		               	}
-		           }
-		         });
+		 //    $.ajax({
+		 //           type: "POST",
+		 //           url: url,
+		 //           data: submit_data, 
+		 //           success: function(data)
+		 //           {
+			// 			$(".ajax-loader").fadeOut(10);
+			// 			data = $.parseJSON(data);
+		 //               	if (data.result == "Success") {
+	  //              			$(".user-info .update-notif span").text("更新が成功した。");
+	  //              			setTimeout(function(){
+	  //              				//$(".user-info .update-notif span").text("");
+	  //              				$('.user-info .update-notif span').fadeTo(500, 0, function(){
+			// 					  	$('.user-info .update-notif span').css("visibility", "hidden");   
+			// 					});
+	  //              			}, 2000);
+		 //               	} else if (data.result == "Fail") {
+	  //              			$(".user-info .update-notif span").text("更新が失敗した。");
+		 //               		setTimeout(function(){
+	  //              				//$(".user-info .update-notif span").text("");
+	  //              				$('.user-info .update-notif span').fadeTo(500, 0, function(){
+			// 					  	$('.user-info .update-notif span').css("visibility", "hidden");   
+			// 					});
+	  //              			}, 2000);
+		 //               	}
+		 //           }
+		 //         });
 			e.preventDefault();
 		    return false;
 		}
@@ -560,8 +553,8 @@
 		var origin = {};
 		birthday = new Date("<?php echo $studentInfo['Birthday']?>");
 		$("#BirthdayYear").val(birthday.getFullYear());
-		$("#BirthdayMonth").val(birthday.getMonth());
-		$("#BirthdayDay").val(birthday.getDay());
+		$("#BirthdayMonth").val(birthday.getMonth()+1);
+		$("#BirthdayDay").val(birthday.getDate());
 
 		$(".edit-btn").on("click", function() {
 			editElm = $(this).closest("td").find("input");
@@ -681,7 +674,7 @@
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
 			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s account has been delete!");
-			               		location.reload();
+			               		location.assign("/elearning/admin/student");
 			               	} else if (data.result == "Fail") {
 
 			               	}

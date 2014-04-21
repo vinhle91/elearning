@@ -22,7 +22,7 @@ $page_breadcrumb_direct = isset($page_breadcrumb['direct']) ? $page_breadcrumb['
 			?>
 			<li>
 				<i class="fa fa-angle-right"></i>
-				<a href="/elearning/admin/<?php echo $buff == 'Your_Page_Here' ? 'home' : $buff?>"><?php echo $buff?></a>				
+				<a href="#"><?php echo $buff?></a>				
 			</li>
 			<?php
 				}
