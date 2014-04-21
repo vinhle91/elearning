@@ -120,6 +120,7 @@ class AdminController extends AppController {
 
 		$this->getPaymentInfo();
 		$this->getNewStudentInfo();
+                $this->getNewTeacherInfo();
 	}
 
 	public function getNewStudentInfo() {

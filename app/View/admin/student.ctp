@@ -738,6 +738,7 @@
 		               	} else if (data.result == "Fail") {
 
 		               	}
+                                location.reload();
 		           }
 		         });
 
