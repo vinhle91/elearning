@@ -89,7 +89,7 @@ $("#change-password-form").live("submit", function(e){
 	if ($("#change-password-form").validate().checkForm() == false) {
 		return;
 	} else {
-		var url = "/elearning/admin/updateUserInfo/update";
+			var url = "/elearning/admin/updateUserInfo/update";
 		var submit_data = {
 			UserId: "<?php echo $moderatorInfo['UserId']?>",
 		};

@@ -38,7 +38,7 @@
 									<td class="col-md-3"><a href="/elearning/admin/moderator/<?php echo $moderator['User']['Username']?>"><?php echo $moderator['User']['Username']?></a></td>
 									<td class="col-md-3"><?php echo $moderator['User']['created']?></td>
 									<!-- <td><label class="line-8 label label-sm label-<?php echo $moderator['User']['IsOnline'] == 1 ? "success" : "default disabled"?>"><?php echo $moderator['User']['IsOnline'] == 1 ? "Online" : "Offline"?></label></td> -->
-									<td class="col-md-3"><a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeUser(event)"><span>削除</span></a></td>
+									<td class="col-md-3"><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($moderator['User']['Username'] == $this->Session->read('User.Username')) echo "disabled"?>" onclick="removeUser(event)"><span>削除</span></a></td>
 								</tr>	
 								<?php } ?>
 							</tbody>
