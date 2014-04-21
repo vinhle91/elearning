@@ -45,6 +45,27 @@ class Config extends AppModel {
         return $rate['Config']['ConfigValue'];
     }
 
+    public function getLoginBlockTimes() {
+        $rate = $this->find('first', array(
+            'conditions' => array(
+                'ConfigId =' => $this->configName['fail_login']
+            ),
+            'fields' => 'ConfigValue'
+        ));
+        return $rate['Config']['ConfigValue'];
+    }
+
+    public function getLoginBlockSeconds() {
+        $rate = $this->find('first', array(
+            'conditions' => array(
+                'ConfigId =' => $this->configName['log']
+            ),
+            'fields' => 'ConfigValue'
+        ));
+        return $rate['Config']['ConfigValue'];
+    }
+
+
 }
 
 ?>

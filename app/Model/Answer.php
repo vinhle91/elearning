@@ -13,5 +13,5 @@
  */
 class Answer extends AppModel{
     //put your code here
-    
+    public $primaryKey = 'AnswerId';
 }

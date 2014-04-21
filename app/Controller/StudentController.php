@@ -147,7 +147,7 @@ class StudentController extends AppController {
                 ),
             )
         );
-        if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
+        if (!isset($this->request->query['top']) || $this->request->query['top'] == 'lesson') {
             $this->Lesson->virtualFields = array(
                 'Author' => 'User.Username'
             );
@@ -183,7 +183,7 @@ class StudentController extends AppController {
                 $topLessons[$key]['Lesson']['isStudying'] = $isStudying;
             }
             $this->set('topLessons', $topLessons);
-        } else {
+        } elseif(isset($this->request->query['top']) && $this->request->query['top'] == 'teacher') {
             $this->User->virtualFields = array(
                 'totalLesson' => 'Count(Lesson.LessonId)',
                 'totalLike' => 'Sum(Lesson.LikeNumber)',
@@ -191,8 +191,7 @@ class StudentController extends AppController {
             );
             $topTeachers = $this->Paginator->paginate('User');
             $this->set('topTeachers', $topTeachers);
-        }
-        
+        } 
     }
 
     public function view_lesson($lesson_id = null, $file_id = null) {
