@@ -82,7 +82,7 @@
 								<td><?php echo $teacher['User']['Email']?></td>
 								<td><?php echo $teacher['User']['FullName']?></td>
 								<td><?php echo $teacher['User']['Birthday'] ? date_format(date_create($teacher['User']['Birthday']), 'Y年m月d日') : null?></td>
-								<td><?php echo $teacher['User']['Gender'] == 0 ? __("Female") : __("Male")?></td>
+								<td><?php echo $teacher['User']['Gender'] == 1 ? __("男") : __("女")?></td>
 								<td><?php echo $teacher['User']['Phone']?></td>
 								<td><?php echo $teacher['User']['created']?></td>
 								<td><?php echo $teacher['User']['modified']?></td>
@@ -134,7 +134,7 @@
 				</button>
 				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
 					<span>
-						 Deny
+						 拒否
 					</span>
 				</button>
 			</div>			

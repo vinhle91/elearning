@@ -27,7 +27,7 @@
 								<td><?php echo $key + 1?></td>
 								<td><?php echo $ip['Ip']['IpAddress']?></td>
 								<td><a href="/elearning/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
-								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp')) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
+								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp') && $ip['User']['Username'] == $this->Session->read("User.Username")) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>
 							<?php } ?>
 						</tbody>
@@ -354,7 +354,8 @@
 	        },
 	        share_rate: {
 	            required: true,
-	            number: true
+	            number: true,
+	            range: [1, 100],
 	        },
 
 	    },
@@ -386,6 +387,7 @@
 	        share_rate: {
 	            number: "番号を入力してください。",
 	            required: "報酬% は必須です",
+	            range: "1から100までを入力してください。"
 	        },
 	    },
 	    errorPlacement: function (error, element) {
@@ -416,7 +418,7 @@
 			console.log(submit_data);
 			
 			$("#config-info .update-notif span").css({"visibility": "visible", "opacity": 1});
-			$("#config-info .update-notif span").text("Updating infomation...");
+			$("#config-info .update-notif span").text("情報を更新している...");
 			$("#config-info .ajax-loader").fadeIn(10);
 			// $("#config-info .button-save").addClass("disabled");
 
@@ -430,14 +432,14 @@
 						data = $.parseJSON(data);
 						console.log(data);
 		               	if (data.result == "Success") {
-		           			$("#config-info .update-notif span").text("Updated successfully");
+		           			$("#config-info .update-notif span").text("更新が成功した");
 		           			setTimeout(function(){
 		           				$('#config-info .update-notif span').fadeTo(500, 0, function(){
 								  	$('#config-info .update-notif span').css("visibility", "hidden");   
 								});
 		           			}, 2000);
 		               	} else if (data.result == "Fail") {
-		           			$("#config-info .update-notif span").text("Updated fail");
+		           			$("#config-info .update-notif span").text("更新が失敗した");
 		               		setTimeout(function(){
 		           				$('#config-info .update-notif span').fadeTo(500, 0, function(){
 								  	$('#config-info .update-notif span').css("visibility", "hidden");   

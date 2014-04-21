@@ -82,7 +82,7 @@
 								<td><?php echo $student['User']['Email']?></td>
 								<td><?php echo $student['User']['FullName']?></td>
 								<td><?php echo $student['User']['Birthday'] ? date_format(date_create($student['User']['Birthday']), 'Y年m月d日') : null?></td>
-								<td><?php echo $student['User']['Gender'] == 0 ? __("Female") : __("Male")?></td>
+								<td><?php echo $student['User']['Gender'] == 1 ? __("男") : __("女")?></td>
 								<td><?php echo $student['User']['Phone']?></td>
 								<td><?php echo $student['User']['created']?></td>
 								<td><?php echo $student['User']['modified']?></td>
@@ -134,7 +134,7 @@
 				</button>
 				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
 					<span>
-						 Deny
+						 拒否
 					</span>
 				</button>
 			</div>			
@@ -163,7 +163,7 @@
 							<ul class="dropdown-menu extended" style="width: auto !important; margin-left: 77px; margin-top: -50px;">
 								<li>
 									<ul class="dropdown-menu-list no-space no-list-style">
-										<!-- <li>  
+										<li>  
 											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">パスワードをリセット</span>
@@ -173,12 +173,6 @@
 											<a class="reset-ver-cod" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">verifycodeをリセット<span>
-											</a>
-										</li> -->
-										<li>  
-											<a class="reset-ver-cod">
-											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-key"></i></span>
-                                            <span class="inline-block">パスワードを変更する</span>
 											</a>
 										</li>
 										<?php if ($studentInfo['Username'] != $this->Session->read('User.Username')) { ?>
