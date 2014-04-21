@@ -1,13 +1,5 @@
 <div id="contents">
-    <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
-       <!--  <div id="news">
-            <span><a href="javascript:void(0)"><?php echo $this->Html->image('new1.jpg', array('alt' => 'New')); ?></a></span>
-            <span><a href="javascript:void(0)"><?php echo $this->Html->image('new2.jpg', array('alt' => 'New')); ?></a></span>
-            <span><a href="javascript:void(0)"><?php echo $this->Html->image('new3.jpg', array('alt' => 'New')); ?></a></span>
-            <span><a href="javascript:void(0)"><?php echo $this->Html->image('new4.jpg', array('alt' => 'New')); ?></a></span>
-            <span><a href="javascript:void(0)"><?php echo $this->Html->image('new5.jpg', array('alt' => 'New')); ?></a></span>
-        </div> -->
         <div class="t_title">
             <div class="left">
                 <ul>

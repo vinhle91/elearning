@@ -1,5 +1,4 @@
 <div id="contents">
-    <?php echo $this->Element('cat_menu'); ?>
     <div id="content">
         <div class="title"><h3>個人的な情報</h3></div>
         <div class="box">
