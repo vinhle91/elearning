@@ -1,107 +1,106 @@
 <?php echo $this->element('admin' . DS . 'page_breadcrumb'); ?>
 <script type="text/javascript">
-	$(function() {
-		$("table").tablesorter({debug: true});
-	});
+    $(function() {
+        $("table").tablesorter({debug: true});
+    });
 </script>
 
 <?php if (!isset($studentInfo)) { ?>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row" id="new-students">
-				<div class="col-md-6">
-					<div class="portlet">
-						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
-						</div>
-						<?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
-						<div class="portlet-body">
-							<div class="table-responsive">
-								<table class="table table-hover tablesorter">
-									<thead>
-										<tr>
-											<th>#</th>
-											<th><a link>氏名</a></th>
-											<th><a link>ユーザー名</a></th>
-											<th><a link>登録日時</a></th>
-											<th><a link></a></th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php foreach ($new_students['Data'] as $key => $new_student) { ?>
-										<tr>
-											<td><?php echo ($key + 1)?></td>
-											<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['FullName']?></a></td>
-											<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['Username']?></a></td>
-											<td><?php echo $new_student['User']['created']?></td>
-											<td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']]?> line-6"><?php echo $status[$new_student['User']['Status']]?></span></td>
-										</tr>
-										<?php } ?>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<?php }  else { ?>
-						<div class="portlet-body">
-							今日は新しい学生がいません。
-						</div>
-						<?php } ?>
-					</div>
-				</div>
-			</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row" id="new-students">
+                <div class="col-md-6">
+                    <div class="portlet">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
+                        </div>
+                        <?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
+                            <div class="portlet-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover tablesorter">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th><a link>氏名</a></th>
+                                                <th><a link>ユーザー名</a></th>
+                                                <th><a link>登録日時</a></th>
+                                                <th><a link></a></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($new_students['Data'] as $key => $new_student) { ?>
+                                                <tr>
+                                                    <td><?php echo ($key + 1) ?></td>
+                                                    <td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username'] ?>"><?php echo $new_student['User']['FullName'] ?></a></td>
+                                                    <td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username'] ?>"><?php echo $new_student['User']['Username'] ?></a></td>
+                                                    <td><?php echo $new_student['User']['created'] ?></td>
+                                                    <td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']] ?> line-6"><?php echo $status[$new_student['User']['Status']] ?></span></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <?php } else { ?>
+                            <div class="portlet-body">
+                                今日は新しい学生がいません。
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
 
-			<div class="portlet">
-				<div class="portlet-title">
-					<div class="caption">すべてのユ学生</div>
+            <div class="portlet">
+                <div class="portlet-title">
+                    <div class="caption">すべてのユ学生</div>
 
 
-				</div>
-				<div class="portlet-body flip-scroll" style="display: block; overflow: auto">
-					<?php if (isset($all_students) && $all_students['Total'] != 0) { ?>
-					<table class="table table-hover table-striped table-condensed tablesorter">
-						<thead class="flip-content">
-							<tr>
-								<th><a link>ID</a></th>
-								<th><a link>ユーザー名</a></th>
-								<th><a link>メール</a></th>
-								<th class="numeric"><a link>氏名</a></th>
-								<th class="numeric"><a link>生年月日</a></th>
-								<th class="numeric"><a link>性</a></th>
-								<th class="numeric"><a link>電話番号</a></th>
-								<th class="numeric"><a link>登録日時</a></th>
-								<th class="numeric"><a link>変更</a></th>
-								<th class="numeric"><a link>レポート</a></th>
-								<th class="numeric"><a link>状態</a></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ($all_students['Data'] as $key => $student) { ?>
-							<tr>
-								<td><?php echo $key + 1?></td>
-								<td><a href="/elearning/admin/student/<?php echo $student['User']['Username']?>"><?php echo $student['User']['Username']?></a></td>
-								<td><?php echo $student['User']['Email']?></td>
-								<td><?php echo $student['User']['FullName']?></td>
-								<td><?php echo $student['User']['Birthday'] ? date_format(date_create($student['User']['Birthday']), 'Y年m月d日') : null?></td>
-								<td><?php echo $student['User']['Gender'] == 1 ? __("男") : __("女")?></td>
-								<td><?php echo $student['User']['Phone']?></td>
-								<td><?php echo $student['User']['created']?></td>
-								<td><?php echo $student['User']['modified']?></td>
-								<td class="align-right"><?php echo $student['User']['Violated'] == 0 ? null : $student['User']['Violated']; ?></td>
-								<td><label class="label label-sm label-<?php echo $status_label[$student['User']['Status']]?> line-8" ><?php echo $status[$student['User']['Status']]?></label></td>
-							</tr>
-							<?php } ?>							
-						</tbody>
-					</table>
-					<?php }  else { ?>
-					<div class="portlet-body">
-                        今日登録が新入生はありません。
-					</div>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-	</div>
-
+                </div>
+                <div class="portlet-body flip-scroll" style="display: block; overflow: auto">
+                    <?php if (isset($all_students) && $all_students['Total'] != 0) { ?>
+                        <table class="table table-hover table-striped table-condensed tablesorter">
+                            <thead class="flip-content">
+                                <tr>
+                                    <th><a link>ID</a></th>
+                                    <th><a link>ユーザー名</a></th>
+                                    <th><a link>メール</a></th>
+                                    <th class="numeric"><a link>氏名</a></th>
+                                    <th class="numeric"><a link>生年月日</a></th>
+                                    <th class="numeric"><a link>性</a></th>
+                                    <th class="numeric"><a link>電話番号</a></th>
+                                    <th class="numeric"><a link>登録日時</a></th>
+                                    <th class="numeric"><a link>変更</a></th>
+                                    <th class="numeric"><a link>レポート</a></th>
+                                    <th class="numeric"><a link>状態</a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($all_students['Data'] as $key => $student) { ?>
+                                    <tr>
+                                        <td><?php echo $key + 1 ?></td>
+                                        <td><a href="/elearning/admin/student/<?php echo $student['User']['Username'] ?>"><?php echo $student['User']['Username'] ?></a></td>
+                                        <td><?php echo $student['User']['Email'] ?></td>
+                                        <td><?php echo $student['User']['FullName'] ?></td>
+                                        <td><?php echo $student['User']['Birthday'] ? date_format(date_create($student['User']['Birthday']), 'Y年m月d日') : null ?></td>
+                                        <td><?php echo $student['User']['Gender'] == 0 ? __("他") : ($student['User']['Gender'] == 1 ? __("男") : __("女") ); ?></td>
+                                        <td><?php echo $student['User']['Phone'] ?></td>
+                                        <td><?php echo $student['User']['created'] ?></td>
+                                        <td><?php echo $student['User']['modified'] ?></td>
+                                        <td class="align-right"><?php echo $student['User']['Violated'] == 0 ? null : $student['User']['Violated']; ?></td>
+                                        <td><label class="label label-sm label-<?php echo $status_label[$student['User']['Status']] ?> line-8" ><?php echo $status[$student['User']['Status']] ?></label></td>
+                                    </tr>
+                                <?php } ?>							
+                            </tbody>
+                        </table>
+                    <?php } else { ?>
+                        <div class="portlet-body">
+                            今日登録が新入生はありません。
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <?php } else { //end if !isset($studentInfo) ?>
 <?php //have $studentInfo?>
@@ -113,7 +112,7 @@
                     		<img class="imageThumb" src="<?php echo $studentInfo['ImageProfile'] ? $studentInfo['ImageProfile'] : '/elearning/img/photo/no-avatar.jpg'?>" id="preview" width="96" height="96" style="margin-top: -50px;">
                 		</div>
 						<h4 class="block" style="margin-bottom: 0; margin-top: -10px;"><?php echo $studentInfo['FullName'] ?></h4> 
-						<span class="gender male"></span><?php echo $studentInfo['Gender'] == 1 ? "男" : "女" ?>
+						<span class="gender male"></span><?php echo $studentInfo['Gender'] == 1 ? "男" : ($studentInfo['Gender'] == 2 ? "女" : "他") ?>
 						<span class="bday"></span><?php echo $studentInfo['Birthday'] ?>
 						<span class="addr"></span><?php echo $studentInfo['Address'] ? $studentInfo['Address'] : "住所  <i class='margin-left-5'> </i>" ?>
 						<span class="phone"><label class="fa fa-phone"></label><?php echo $studentInfo['Phone'] ? $studentInfo['Phone'] : "<i class=''> </i>" ?></span>
@@ -230,7 +229,7 @@
 										<td>性</td>
 										<td>
 											<select name="Gender" id="Gender">
-												<option value="0" <?php if ($studentInfo['Gender'] == "" || $studentInfo['Gender'] == "0") echo "selected"?>>--</option>
+												<option value="0" <?php if ($studentInfo['Gender'] == "" || $studentInfo['Gender'] == "0") echo "selected"?>>他</option>
 												<option value="1" <?php if ($studentInfo['Gender'] == "1") echo "selected"?>>男</option>
 												<option value="2" <?php if ($studentInfo['Gender'] == "2") echo "selected"?>>女</option>
 											</select>
@@ -356,7 +355,7 @@
 												<option value="1902">1902</option>
 												<option value="1901">1901</option>
 												<option value="1900">1900</option>
-												</select>
+												</select>年
 											<select name="BirthdayMonth" class="birth-month" id="BirthdayMonth">
 												<option value="00">MM</option>
 												<option value="1">01</option>
@@ -371,7 +370,7 @@
 												<option value="10">10</option>
 												<option value="11">11</option>
 												<option value="12">12</option>
-											</select>
+											</select>月
 											<select name="BirthdayDay" class="birth-day" id="BirthdayDay">
 												<option value="00">DD</option>
 												<option value="1">01</option>
@@ -405,7 +404,7 @@
 												<option value="29">29</option>
 												<option value="30">30</option>
 												<option value="31">31</option>
-											</select>
+											</select>日
 										</td>
 									</tr>
 									<tr>
@@ -781,3 +780,4 @@
 </script>
 
 <?php } //end else-if !isset($studentInfo)?>
+

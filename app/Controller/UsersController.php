@@ -107,7 +107,8 @@ class UsersController extends AppController
                 //for test
                 $this->request->data['User']['Password'] = $data['User']['Username'] . $data['User']['Password'];
                 // debug($data['User']['Password']);
-                $currentIpAddress = '123.1.1.124';
+                $currentIpAddress = '123.1.1.125';
+                // $currentIpAddress = '123.1.1.125';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
                 // debug($user);
@@ -168,6 +169,10 @@ class UsersController extends AppController
                     }
 
                     if ($isValidVerifyCode) {
+
+                        $this->User->id = $user['User']['UserId'];
+                        $this->User->saveField('IpAddress', $currentIpAddress);
+
                         //login here
                         if ($this->Auth->login()) {
                             //if login success, save the ip
@@ -177,9 +182,19 @@ class UsersController extends AppController
                                 $this->set('allowVerifyCode', true);
                                 $this->set('user', $user);
                                 $notLogin = true;
+
+
+                                // if($this->Auth->user()){
+                                //     $UserType = $this->Auth->user('UserType');
+                                //     if ($UserType == 1) {
+                                //         $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+                                //     }
+                                //     if ($UserType == 2) {
+                                //         $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
+                                //     }
+                                // };
                             }
-                            $this->User->id = $user['User']['UserId'];
-                            $this->User->saveField('IpAddress', $currentIpAddress);
+
                             $this->unBlockUser($user['User']['Username']);
                             $this->setNumberOfFailedLogin(0, $user['User']['Username']);
                             if (!$notLogin) {
@@ -271,7 +286,8 @@ class UsersController extends AppController
                         //$this->redirect(array('action' => 'sign_up', $userType));
                         return;
                     }else{
-                        if(!is_numeric($data['User']['BankInfor'])){
+
+                        if(!is_numeric($data['User']['BankInfo'])){
                             $this->Session->setFlash(__('銀行の情報は数字だけ'));
                             return;
                         }
