@@ -46,12 +46,12 @@ class UsersController extends AppController
                 $this->redirect(array('controller' => 'admin', 'action' => 'home'));
             }
         };
-        $cat = $this->Category->getCategories();
-        $Category = array();
-        foreach ($cat as $key => $value) {
-            $Category[$key + 1] = $value['Category']['CatName'];
-        }
-        $this->set('Category', $Category);
+        // $cat = $this->Category->getCategories();
+        // $Category = array();
+        // foreach ($cat as $key => $value) {
+        //     $Category[$key + 1] = $value['Category']['CatName'];
+        // }
+        // $this->set('Category', $Category);
         //Get top lesson 
         if (isset($this->request->query['top']) && $this->request->query['top'] == 'lesson') {
             $this->Paginator->settings = array(
@@ -338,7 +338,6 @@ class UsersController extends AppController
                 if ($data['User']['UserType'] == 2) {
                     if (empty($data['User']['BankInfo'])) {
                         $this->Session->setFlash(__('銀行の情報が必要です'));
-                        //$this->redirect(array('action' => 'sign_up', $userType));
                         return;
                     }else{
 
@@ -346,6 +345,11 @@ class UsersController extends AppController
                             $this->Session->setFlash(__('銀行の情報は数字だけ'));
                             return;
                         }
+                        if(strlen($data['User']['BankInfo']) !=28){
+                            $this->Session->setFlash(__('銀行の情報は28文字でなければなりません'));
+                            return;
+                        }
+
                     }
                     if (empty($data['User']['VerifyCodeAnswer'])) {
                         $this->Session->setFlash(__('A VerifyCodeAnswer is required'));
@@ -370,6 +374,10 @@ class UsersController extends AppController
                         if(!is_numeric($data['User']['CreditCard'])){
                             $this->Session->setFlash(__('クレジットカードは数字だけ'));
                              return;
+                        }
+                         if(strlen($data['User']['CreditCard']) !=18){
+                            $this->Session->setFlash(__('クレジットカードは18文字でなければなりません'));
+                            return;
                         }
                        
                     }

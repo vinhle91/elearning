@@ -711,7 +711,7 @@ class TeacherController extends AppController
 	            }
 	            $this->set(compact('list_tag'));
                 $file = $this->File->find('all', array(
-                    'conditions' => array('File.LessonId' => $lesson_id),
+                    'conditions' => array('File.LessonId' => $lesson_id,'FIle.FileType'=>1),
                     'fields' => array('File.*'),
                     'order' => array('File.created' => 'Asc'),
                     'contain' => False,
@@ -770,15 +770,7 @@ class TeacherController extends AppController
 	                            $param1['File']['FileName'] = $value['path']['old_name'];
 	                            // debug($param1);
 	                            if ($this->File->save($param1)) {
-	                                $File = $this->File->find('first', array(
-	                                    'conditions' => array('File.LessonId' => $lesson_id),
-	                                    'fields' => array('File.FileId'),
-	                                    'order' => array('File.created' => 'Asc'),
-	                                    'contain' => False,
-	                                ));
-	                                if (!empty($File)) {
-	                                    $file_id = $File['File']['FileId'];
-	                                }
+	                               
 	                            } else {
 	                            	$error_msg = $this->File->validationErrors['File'];
 	                            	$this->set(compact('error_msg'));
@@ -812,6 +804,15 @@ class TeacherController extends AppController
 	                            }
 	                        }
 	                    }
+                        $File = $this->File->find('first', array(
+                            'conditions' => array('File.LessonId' => $lesson_id),
+                            'fields' => array('File.FileId'),
+                            'order' => array('File.created' => 'Asc'),
+                            'contain' => False,
+                        ));
+                        if (!empty($File)) {
+                            $file_id = $File['File']['FileId'];
+                        }
 	                    $this->redirect(array('controller' => 'teacher', 'action' => 'view_lesson', $lesson_id, $file_id));
 	                } else {
 	                    $this->Session->setFlash(__('レッスンを変更することができなかった。もう一度やり直してください。'));
