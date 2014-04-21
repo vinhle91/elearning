@@ -830,9 +830,11 @@ class AdminController extends AppController {
 			$this->log(ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS . date('Y-m-d').'.txt');
 			$file = ROOT . DS . 'app' . DS . 'webroot' . DS . 'files' .DS .'exportTSV' . DS .$data['year']."-".$data['month'].'.txt';
 			$fh = fopen($file, 'w');
+                        if($fh) {
 			fwrite($fh, $data['0']);
 			fclose($fh);
-			die;	
+			die;
+                        }
 		}
 	}
 
