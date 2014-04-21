@@ -16,6 +16,7 @@
 			'style-responsive',
 			'default-theme',
 			'app',
+			'jquery.fancybox'
 		));
 		// Js file
 		echo $this->Html->script(array(
@@ -30,12 +31,11 @@
 			'jquery.tablesorter',
 			'jquery.tablesorter.min',
 			'jquery.slimscroll.min',
-			'typeahead.bundle',
-			'typeahead.jquery',
-			'bloodhound',
 			'livequery',
 			'bootstrap-typeahead',
-			'jquery.validate.min'
+			'jquery.validate.min',
+			'jquery.fancybox',
+			'jquery.fancybox.pack'
 		)); 
 	?>
 </head>

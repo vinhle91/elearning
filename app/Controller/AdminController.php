@@ -558,13 +558,6 @@ class AdminController extends AppController {
 			$ret = array();
 
 			if ($param == "update") {
-				if (isset($data['Password'])) {
-                        $this->log($data['Password']);
-                        $data['Password'] = trim($data['Password']);
-                        $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
-                        $this->log($data['Password']);
-				}
-
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
 					$ret['result'] = "Success";
 				} else {
@@ -865,6 +858,27 @@ class AdminController extends AppController {
 					$ret['result'] = "Fail";
 				}
 			} 
+
+			echo json_encode($ret);
+			die;
+		}
+	}
+
+	public function changePassword() {
+		$this->layout = null;
+
+		if ($this->request->is('post') && !empty($this->request->data)) {
+
+			$data = $this->request->data;
+			$this->log($data);
+			$ret = array();
+
+			if (isset($data['Password'])) {
+                    $this->log($data['Password']);
+                    $data['Password'] = trim($data['Password']);
+                    $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
+                    $this->log($data['Password']);
+			}
 
 			echo json_encode($ret);
 			die;
