@@ -1012,14 +1012,19 @@ class TeacherController extends AppController
         if ($messages != null)
             $this->set("messages", $messages);
     }
-    public function delete_file($lesson_id,$file_id)
+    public function delete_file($file_id)
     {
-        $this->File->deleteAll(array('File.FileId' => $file_id), false);
+         $File = $this->File->find('first', array(
+            'conditions' => array('File.FileId' => $file_id),
+            'fields' => array('File.*'),
+            'order' => array('File.created' => 'Asc'),
+            'contain' => False,
+        ));
+
+        $this->File->deleteAll(array('File.FileId' => $file_id));
         $this->Session->setFlash(__('このファイルには、正常な削除してしまった。'));
         $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
-       
-
-       
+   
     }
 
 }

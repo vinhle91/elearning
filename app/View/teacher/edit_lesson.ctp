@@ -64,7 +64,7 @@
                                 <tr>
                                     <td><div class="td_text"></div></td>
                                     <td><h3 style="display:inline-block;"><?php echo $this->Html->image('icon/yes.png'); ?><?php echo $value['File']['FileName']?></h3>
-                                        <?php echo $this->Html->link('ファイルの削除',array('controller'=>'Teacher','action'=>'delete_file',$value['File']['LessonId'],$value['File']['FileId']),array('class'=>'btn','style'=>'display:inline-block;margin-left:10px;'));?>
+                                        <?php echo $this->Html->link('ファイルの削除',array('controller'=>'Teacher','action'=>'delete_file',$value['File']['FileId']),array('class'=>'btn','style'=>'display:inline-block;margin-left:10px;'));?>
                                     </td>
                                 </tr>
                                 <?php endforeach;?> 
