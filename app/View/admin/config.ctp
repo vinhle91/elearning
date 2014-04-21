@@ -31,7 +31,7 @@
 										<a class="btn btn-xxs btn-default pull-right display-none editIp" onclick="editIp(event)"><span>エディット</span></a>
 									<?php }?>
 									</td>
-								<td><a href="/elearning/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
+								<td><a href="/elearning/admin/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
 								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp') && $ip['User']['Username'] == $this->Session->read("User.Username")) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>
 							<?php } ?>
