@@ -27,7 +27,6 @@
 		'jquery.fancybox.pack'
 	)); 
 ?>
-
 <div class="change-password">
 	<form class="change-password-form">
 
@@ -38,15 +37,19 @@
 					<td><input type="password" name="password1" class="form-control placeholder-no-fix" placeholder="" id="password1"></input></td>
 				</tr>
 				<tr>
-					<td></td>
-					<td><input type="password" name="password2" class="form-control placeholder-no-fix" placeholder="" id="password2"></input></td>
-				</tr>
-				<tr>
 					<td>新しいパスワード</td>
 					<td><input type="password" name="new_password" class="form-control placeholder-no-fix" placeholder="" id="new_password"></input></td>
 				</tr>
+				<tr>
+					<td></td>
+					<td><input type="password" name="new_password2" class="form-control placeholder-no-fix" placeholder="" id="new_password2"></input></td>
+				</tr>
 			</tbody>
 		</table>
+		<div class="update-notif">
+			<span></span>
+			<label class="ajax-loader"></label>
+		</div>
 		<input type="submit" class="btn btn-info btn-sm button-save pull-right" value="保存"></input>
 	</form>
 </div>
@@ -57,26 +60,26 @@ $(".change-password-form").validate({
         password1: {
             required: true,
         },
-        password2: {
-            required: true,
-        },
         new_password: {
             required: true,
             maxlength: 16,
             minlength: 4,
+        },
+        new_password2: {
+            required: true,
         },
     },
     messages: {
         password1: {
         	required: "古いパスワードを入力してください！",
         },
-        password2: {
-            required: "もう一度古いパスワードを入力してください！",
-        },
         new_password: {
             required: "新しいパスワードを入力してください！",
             minlength: "少なくとも4文字を入力してください。",
             maxlength: "これ以上16文字以内で入力してください。"
+        },
+        new_password2: {
+            required: "新しいパスワードを入力してください！",
         },
     },
     errorPlacement: function (error, element) {
@@ -85,27 +88,31 @@ $(".change-password-form").validate({
 
 });
 
-$("#change-password-form").live("submit", function(e){
-	if ($("#change-password-form").validate().checkForm() == false) {
-		return;
+$(".change-password-form").live("submit", function(e){
+	if ($(".change-password-form").validate().checkForm() == false) {
+		return false;
 	} else {
-			var url = "/elearning/admin/updateUserInfo/update";
-		var submit_data = {
-			UserId: "<?php echo $moderatorInfo['UserId']?>",
-		};
-		// submit_data.Password = $('#Password').text();
-		submit_data.Birthday = "'"+$("#BirthdayYear").val()+'-'+$("#BirthdayMonth").val()+'-'+$("#BirthdayDay").val()+"'";
-		submit_data.FullName = "'"+$('#FullName').val().trim()+"'";
-		submit_data.Gender = "'"+$('#Gender').val().trim()+"'";
-		submit_data.Email = "'"+$('#Email').val().trim()+"'";
-		submit_data.BankInfo = "'"+$('#BankInfo').val().trim()+"'";
-		submit_data.Address = "'"+$('#Address').val().trim()+"'";
-		console.log(submit_data);
+		e.preventDefault();
+		var url = "/elearning/admin/changePassword";
+		var submit_data = {};
+
+		submit_data.UserId = "<?php echo $userid?>";
+		submit_data.old_password = $('#password1').val().trim();
+		submit_data.new_password = $('#new_password').val().trim();
+
+		if (submit_data.new_password != $('#new_password2').val().trim()) {
+			$(".update-notif span").text("新しいパスワードが一致しない。");
+           		setTimeout(function(){
+       				$('.update-notif span').fadeTo(500, 0, function(){
+					  	$('.update-notif span').css("visibility", "hidden");   
+					});
+       			}, 3000);
+       		return false;
+		}
 
 		$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-		$(".user-info .update-notif span").text("情報が更新...");
+		$(".update-notif span").text("情報が更新...");
 		$(".ajax-loader").fadeIn(10);
-		$(".button-save").addClass("disabled");
 
 	    $.ajax({
 	           type: "POST",
@@ -116,26 +123,25 @@ $("#change-password-form").live("submit", function(e){
 					$(".ajax-loader").fadeOut(10);
 					data = $.parseJSON(data);
 	               	if (data.result == "Success") {
-               			$(".user-info .update-notif span").text("更新が成功した。");
+               			$(".update-notif span").text("更新が成功した。");
                			setTimeout(function(){
-               				//$(".user-info .update-notif span").text("");
-               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
-							  	$('.user-info .update-notif span').css("visibility", "hidden");   
+               				$('.update-notif span').fadeTo(500, 0, function(){
+							  	$('.update-notif span').css("visibility", "hidden");   
 							});
-               			}, 2000);
+                            parent.$.fancybox.close();
+               			}, 3000);
 	               	} else if (data.result == "Fail") {
-               			$(".user-info .update-notif span").text("更新が失敗した。");
+               			$(".update-notif span").text("更新が失敗した！");
+               			$(".update-notif span").append("<p>"+data.msg+"</p>");
 	               		setTimeout(function(){
-               				//$(".user-info .update-notif span").text("");
-               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
-							  	$('.user-info .update-notif span').css("visibility", "hidden");   
+               				$('.update-notif span').fadeTo(500, 0, function(){
+							  	$('.update-notif span').css("visibility", "hidden");   
 							});
-               			}, 2000);
+             3 			}, 2000);
 	               	}
 	           }
 	         });
-		e.preventDefault();
-	    return false;
+		return false;
 	}
 });
 
