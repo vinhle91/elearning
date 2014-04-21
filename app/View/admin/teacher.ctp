@@ -1,8 +1,8 @@
 <?php echo $this->element('admin' . DS . 'page_breadcrumb'); ?>
 <script type="text/javascript">
-	$(function() {
-		$("table").tablesorter({debug: true});
-	});
+    $(function() {
+        $("table").tablesorter({debug: true});
+    });
 </script>
 
 <?php if (!isset($teacherInfo)) { ?>
@@ -12,10 +12,7 @@
 				<div class="col-md-6">
 					<div class="portlet">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-user"></i>今月中新しい先生</div>
-							<div class="tools">
-								<a href="javascript:;" class="reload"></a>
-							</div>
+							<div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
 						</div>
 						<?php if (isset($new_teachers) && $new_teachers['Total'] != 0) { ?>
 						<div class="portlet-body">
@@ -46,7 +43,7 @@
 						</div>
 						<?php }  else { ?>
 						<div class="portlet-body">
-							今日は新しい先生がいません。
+							今日は新しい学生がいません。
 						</div>
 						<?php } ?>
 					</div>
@@ -55,7 +52,9 @@
 
 			<div class="portlet">
 				<div class="portlet-title">
-					<div class="caption">すべてのユ先生</div>
+					<div class="caption">すべてのユ学生</div>
+
+
 				</div>
 				<div class="portlet-body flip-scroll" style="display: block; overflow: auto">
 					<?php if (isset($all_teachers) && $all_teachers['Total'] != 0) { ?>
@@ -70,8 +69,8 @@
 								<th class="numeric"><a link>性</a></th>
 								<th class="numeric"><a link>電話番号</a></th>
 								<th class="numeric"><a link>登録日時</a></th>
-                                <th class="numeric"><a link>変更</a></th>
-                                <th class="numeric"><a link>レポート</a></th>
+								<th class="numeric"><a link>変更</a></th>
+								<th class="numeric"><a link>レポート</a></th>
 								<th class="numeric"><a link>状態</a></th>
 							</tr>
 						</thead>
@@ -82,8 +81,8 @@
 								<td><a href="/elearning/admin/teacher/<?php echo $teacher['User']['Username']?>"><?php echo $teacher['User']['Username']?></a></td>
 								<td><?php echo $teacher['User']['Email']?></td>
 								<td><?php echo $teacher['User']['FullName']?></td>
-                                <td><?php echo $teacher['User']['Birthday'] ? date_format(date_create($teacher['User']['Birthday']), 'Y年m月d日') : null?></td>
-								<td><?php echo $teacher['User']['Gender'] == 0 ? __("男") : __("女")?></td>
+								<td><?php echo $teacher['User']['Birthday'] ? date_format(date_create($teacher['User']['Birthday']), 'Y年m月d日') : null?></td>
+								<td><?php echo $teacher['User']['Gender'] == 0 ? __("他"): ($teacher['User']['Gender'] == 1 ? __("男") : __("女"))?></td>
 								<td><?php echo $teacher['User']['Phone']?></td>
 								<td><?php echo $teacher['User']['created']?></td>
 								<td><?php echo $teacher['User']['modified']?></td>
@@ -95,7 +94,7 @@
 					</table>
 					<?php }  else { ?>
 					<div class="portlet-body">
-                        今日登録が新しい先生はありません。
+                        今日登録が新入生はありません。
 					</div>
 					<?php } ?>
 				</div>
@@ -114,7 +113,7 @@
                     		<img class="imageThumb" src="<?php echo $teacherInfo['ImageProfile'] ? $teacherInfo['ImageProfile'] : '/elearning/img/photo/no-avatar.jpg'?>" id="preview" width="96" height="96" style="margin-top: -50px;">
                 		</div>
 						<h4 class="block" style="margin-bottom: 0; margin-top: -10px;"><?php echo $teacherInfo['FullName'] ?></h4> 
-						<span class="gender male"></span><?php echo $teacherInfo['Gender'] == 1 ? "男" : "女" ?>
+						<span class="gender male"></span><?php echo $teacherInfo['Gender'] == 1 ? "男" : ($teacherInfo['Gender'] == 2 ? "女" : "他") ?>
 						<span class="bday"></span><?php echo $teacherInfo['Birthday'] ?>
 						<span class="addr"></span><?php echo $teacherInfo['Address'] ? $teacherInfo['Address'] : "住所  <i class='margin-left-5'> </i>" ?>
 						<span class="phone"><label class="fa fa-phone"></label><?php echo $teacherInfo['Phone'] ? $teacherInfo['Phone'] : "<i class=''> </i>" ?></span>
@@ -131,6 +130,11 @@
 				<button class="btn btn-sm btn-success margin-right-5 pull-right" id = "first-active">
 					<span>
 						 アクティブ
+					</span>
+				</button>
+				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
+					<span>
+						 Deny
 					</span>
 				</button>
 			</div>			
@@ -159,7 +163,7 @@
 							<ul class="dropdown-menu extended" style="width: auto !important; margin-left: 77px; margin-top: -50px;">
 								<li>
 									<ul class="dropdown-menu-list no-space no-list-style">
-										<li>  
+										<!-- <li>  
 											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">パスワードをリセット</span>
@@ -169,6 +173,12 @@
 											<a class="reset-ver-cod" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">verifycodeをリセット<span>
+											</a>
+										</li> -->
+										<li>  
+											<a class="reset-ver-cod">
+											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-key"></i></span>
+                                            <span class="inline-block">パスワードを変更する</span>
 											</a>
 										</li>
 										<?php if ($teacherInfo['Username'] != $this->Session->read('User.Username')) { ?>
@@ -226,7 +236,7 @@
 										<td>性</td>
 										<td>
 											<select name="Gender" id="Gender">
-												<option value="" <?php if ($teacherInfo['Gender'] == "" || $teacherInfo['Gender'] == "0") echo "selected"?>>--</option>
+												<option value="0" <?php if ($teacherInfo['Gender'] == "" || $teacherInfo['Gender'] == "0") echo "selected"?>>他</option>
 												<option value="1" <?php if ($teacherInfo['Gender'] == "1") echo "selected"?>>男</option>
 												<option value="2" <?php if ($teacherInfo['Gender'] == "2") echo "selected"?>>女</option>
 											</select>
@@ -236,7 +246,7 @@
 										<td>生年月日</td>
 										<td>
 											<select name="BirthdayYear" class="birth-year" id="BirthdayYear">
-												<option value="">YY</option>
+												<option value="0000">YY</option>
 												<option value="2014">2014</option>
 												<option value="2013">2013</option>
 												<option value="2012">2012</option>
@@ -352,9 +362,9 @@
 												<option value="1902">1902</option>
 												<option value="1901">1901</option>
 												<option value="1900">1900</option>
-												</select>
+												</select>年
 											<select name="BirthdayMonth" class="birth-month" id="BirthdayMonth">
-												<option value="">MM</option>
+												<option value="00">MM</option>
 												<option value="1">01</option>
 												<option value="2">02</option>
 												<option value="3">03</option>
@@ -367,9 +377,9 @@
 												<option value="10">10</option>
 												<option value="11">11</option>
 												<option value="12">12</option>
-											</select>
+											</select>月
 											<select name="BirthdayDay" class="birth-day" id="BirthdayDay">
-												<option value="">DD</option>
+												<option value="00">DD</option>
 												<option value="1">01</option>
 												<option value="2">02</option>
 												<option value="3">03</option>
@@ -401,7 +411,7 @@
 												<option value="29">29</option>
 												<option value="30">30</option>
 												<option value="31">31</option>
-											</select>
+											</select>日
 										</td>
 									</tr>
 									<tr>
@@ -490,207 +500,240 @@
 	    },
 	});
 
-	$("#user-info-form").live("submit", function(e){
-		if ($("#user-info-form").validate().checkForm() == false) {
-			return;
-		} else {
-			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
-			var url = "/elearning/admin/updateUserInfo/update";
-			var submit_data = {
-				UserId: "<?php echo $teacherInfo['UserId']?>",
-			};
-			// submit_data.Password = $('#Password').text();
-			submit_data.Birthday = "'"+$("#BirthdayYear").val()+'-'+$("#BirthdayMonth").val()+'-'+$("#BirthdayDay").val()+"'";
-			submit_data.FullName = "'"+$('#FullName').val().trim()+"'";
-			submit_data.Gender = "'"+$('#Gender').val().trim()+"'";
-			submit_data.Email = "'"+$('#Email').val().trim()+"'";
-			submit_data.BankInfo = "'"+$('#BankInfo').val().trim()+"'";
-			submit_data.Address = "'"+$('#Address').val().trim()+"'";
-			console.log(submit_data);
+                                                                $("#user-info-form").live("submit", function(e) {
+                                                                    if ($("#user-info-form").validate().checkForm() == false) {
+                                                                        return;
+                                                                    } else {
+                                                                        e.preventDefault();
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        var url = "/elearning/admin/updateUserInfo/update";
+                                                                        var submit_data = {
+                                                                            UserId: "<?php echo $teacherInfo['UserId'] ?>",
+                                                                        };
+                                                                        // submit_data.Password = $('#Password').text();
+                                                                        submit_data.Birthday = "'" + $("#BirthdayYear").val() + '-' + $("#BirthdayMonth").val() + '-' + $("#BirthdayDay").val() + "'";
+                                                                        submit_data.FullName = "'" + $('#FullName').val().trim() + "'";
+                                                                        submit_data.Gender = "'" + $('#Gender').val().trim() + "'";
+                                                                        submit_data.Email = "'" + $('#Email').val().trim() + "'";
+                                                                        submit_data.BankInfo = "'" + $('#BankInfo').val().trim() + "'";
+                                                                        submit_data.Address = "'" + $('#Address').val().trim() + "'";
+                                                                        console.log(submit_data);
 
-			$(".update-notif span").css({"visibility": "visible", "opacity": 1});
-			$(".user-info .update-notif span").text("情報が更新...");
-			$(".ajax-loader").fadeIn(10);
-			$(".button-save").addClass("disabled");
+                                                                        $(".update-notif span").css({"visibility": "visible", "opacity": 1});
+                                                                        $(".user-info .update-notif span").text("情報が更新...");
+                                                                        $(".ajax-loader").fadeIn(10);
+                                                                        $(".button-save").addClass("disabled");
 
-		    $.ajax({
-		           type: "POST",
-		           url: url,
-		           data: submit_data, 
-		           success: function(data)
-		           {
-						$(".ajax-loader").fadeOut(10);
-						data = $.parseJSON(data);
-		               	if (data.result == "Success") {
-	               			$(".user-info .update-notif span").text("更新が成功した。");
-	               			setTimeout(function(){
-	               				//$(".user-info .update-notif span").text("");
-	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
-								  	$('.user-info .update-notif span').css("visibility", "hidden");   
-								});
-	               			}, 2000);
-		               	} else if (data.result == "Fail") {
-	               			$(".user-info .update-notif span").text("更新が失敗した。");
-		               		setTimeout(function(){
-	               				//$(".user-info .update-notif span").text("");
-	               				$('.user-info .update-notif span').fadeTo(500, 0, function(){
-								  	$('.user-info .update-notif span').css("visibility", "hidden");   
-								});
-	               			}, 2000);
-		               	}
-		           }
-		         });
-			e.preventDefault();
-		    return false;
-		}
-	});
+                                                                        $.ajax({
+                                                                            type: "POST",
+                                                                            url: url,
+                                                                            data: submit_data,
+                                                                            success: function(data)
+                                                                            {
+                                                                                $(".ajax-loader").fadeOut(10);
+                                                                                data = $.parseJSON(data);
+                                                                                if (data.result == "Success") {
+                                                                                    $(".user-info .update-notif span").text("更新が成功した。");
+                                                                                    setTimeout(function() {
+                                                                                        //$(".user-info .update-notif span").text("");
+                                                                                        $('.user-info .update-notif span').fadeTo(500, 0, function() {
+                                                                                            $('.user-info .update-notif span').css("visibility", "hidden");
+                                                                                        });
+                                                                                    }, 2000);
+                                                                                } else if (data.result == "Fail") {
+                                                                                    $(".user-info .update-notif span").text("更新が失敗した。");
+                                                                                    setTimeout(function() {
+                                                                                        //$(".user-info .update-notif span").text("");
+                                                                                        $('.user-info .update-notif span').fadeTo(500, 0, function() {
+                                                                                            $('.user-info .update-notif span').css("visibility", "hidden");
+                                                                                        });
+                                                                                    }, 2000);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                        e.preventDefault();
+                                                                        return false;
+                                                                    }
+                                                                });
 
-	$(document).ready(function(){
-		var origin = {};
-		birthday = new Date("<?php echo $teacherInfo['Birthday']?>");
-		$("#BirthdayYear").val(birthday.getFullYear());
-		$("#BirthdayMonth").val(birthday.getMonth());
-		$("#BirthdayDay").val(birthday.getDay());
+                                                                $(document).ready(function() {
+                                                                    var origin = {};
+                                                                    birthday = new Date("<?php echo $teacherInfo['Birthday'] ?>");
+                                                                    $("#BirthdayYear").val(birthday.getFullYear());
+                                                                    $("#BirthdayMonth").val(birthday.getMonth());
+                                                                    $("#BirthdayDay").val(birthday.getDay());
 
-		$(".edit-btn").on("click", function() {
-			editElm = $(this).closest("td").find("input");
-			$(".button-save").removeClass("disabled");			
-			editElm.focus();
-		});
+                                                                    $(".edit-btn").on("click", function() {
+                                                                        editElm = $(this).closest("td").find("input");
+                                                                        $(".button-save").removeClass("disabled");
+                                                                        editElm.focus();
+                                                                    });
 
-		$(".user-info input[type='text'], .user-info select").live("focusin", function(){
-			$(".button-save").removeClass("disabled");			
-		});
+                                                                    $(".user-info input[type='text'], .user-info select").live("focusin", function() {
+                                                                        $(".button-save").removeClass("disabled");
+                                                                    });
 
-		$(".reset-pw").on("click", function(e){
+                                                                    $(".reset-pw").on("click", function(e) {
+                                                                        e = $.event.fix(e);
+                                                                        e.preventDefault();
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        if (confirm("Do you want to reset <?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s password?") == true) {
+                                                                            var url = "/elearning/admin/resetPassword";
+                                                                            var submit_data = {
+                                                                                UserId: "<?php echo $teacherInfo['UserId'] ?>",
+                                                                                Username: "<?php echo $teacherInfo['Username'] ?>",
+                                                                            };
+                                                                            $.ajax({
+                                                                                type: "POST",
+                                                                                url: url,
+                                                                                data: submit_data,
+                                                                                success: function(data)
+                                                                                {
+                                                                                    data = $.parseJSON(data);
+                                                                                    if (data.result == "Success") {
+                                                                                        alert("<?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s password has been reset to Initial password!");
+                                                                                    } else if (data.result == "Fail") {
+                                                                                        alert("Reset password failed!");
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                            return false;
+
+                                                                        }
+                                                                    });
+
+                                                                    $(".reset-ver-cod").on("click", function(e) {
+                                                                        e = $.event.fix(e);
+                                                                        e.preventDefault();
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        if (confirm("Do you want to reset <?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s verify code?") == true) {
+                                                                            var url = "/elearning/admin/resetVerifyCode";
+                                                                            var submit_data = {
+                                                                                UserId: "<?php echo $teacherInfo['UserId'] ?>",
+                                                                                Username: "<?php echo $teacherInfo['Username'] ?>",
+                                                                            };
+                                                                            $.ajax({
+                                                                                type: "POST",
+                                                                                url: url,
+                                                                                data: submit_data,
+                                                                                success: function(data)
+                                                                                {
+                                                                                    data = $.parseJSON(data);
+                                                                                    if (data.result == "Success") {
+                                                                                        alert("<?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s verify code has been reset!");
+                                                                                    } else if (data.result == "Fail") {
+                                                                                        alert("Reset password failed!");
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                            return false;
+
+                                                                        }
+                                                                    });
+
+                                                                    $(".update-block").on("click", function(e) {
+                                                                        e = $.event.fix(e);
+                                                                        e.preventDefault();
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        if (confirm("Do you want to block <?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s account?") == true) {
+                                                                            var url = "/elearning/admin/updateUserInfo/block";
+                                                                            var submit_data = {
+                                                                                UserId: "<?php echo $teacherInfo['UserId'] ?>",
+                                                                                Username: "<?php echo $teacherInfo['Username'] ?>",
+                                                                            };
+                                                                            $.ajax({
+                                                                                type: "POST",
+                                                                                url: url,
+                                                                                data: submit_data,
+                                                                                success: function(data)
+                                                                                {
+                                                                                    data = $.parseJSON(data);
+                                                                                    if (data.result == "Success") {
+                                                                                        alert("<?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s account has been blocked!");
+                                                                                        location.reload();
+                                                                                    } else if (data.result == "Fail") {
+
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                            return false;
+
+                                                                        }
+                                                                    });
+
+                                                                    $(".update-delete").on("click", function(e) {
+                                                                        e = $.event.fix(e);
+                                                                        e.preventDefault();
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        if (confirm("Do you want to delete <?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s account?") == true) {
+                                                                            var url = "/elearning/admin/updateUserInfo/delete";
+                                                                            var submit_data = {
+                                                                                UserId: "<?php echo $teacherInfo['UserId'] ?>",
+                                                                                Username: "<?php echo $teacherInfo['Username'] ?>",
+                                                                            };
+                                                                            $.ajax({
+                                                                                type: "POST",
+                                                                                url: url,
+                                                                                data: submit_data,
+                                                                                success: function(data)
+                                                                                {
+                                                                                    data = $.parseJSON(data);
+                                                                                    if (data.result == "Success") {
+                                                                                        alert("<?php echo!empty($teacherInfo['FullName']) ? $teacherInfo['FullName'] : $teacherInfo['Username'] ?>'s account has been delete!");
+                                                                                        location.reload();
+                                                                                    } else if (data.result == "Fail") {
+
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                            return false;
+
+                                                                        }
+                                                                    });
+
+                                                                    $(".update-active").on("click", function(e) {
+                                                                        e = $.event.fix(e);
+                                                                        e.preventDefault();
+                                                                        $("li.dropdown#options").removeClass("open");
+                                                                        var url = "/elearning/admin/updateUserInfo/active";
+                                                                        var submit_data = {
+                                                                            UserId: "<?php echo $teacherInfo['UserId'] ?>",
+                                                                            Username: "<?php echo $teacherInfo['Username'] ?>",
+                                                                        };
+                                                                        $.ajax({
+                                                                            type: "POST",
+                                                                            url: url,
+                                                                            data: submit_data,
+                                                                            success: function(data)
+                                                                            {
+                                                                                data = $.parseJSON(data);
+                                                                                if (data.result == "Success") {
+
+                                                                                    location.reload();
+                                                                                } else if (data.result == "Fail") {
+                                                                                    alert("Reactive user fail!");
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                        return false;
+                                                                    });
+
+
+		$("#first-active").on("click", function(e) {
 			e = $.event.fix(e);
 			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to reset <?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s password?") == true) {
-				var url = "/elearning/admin/resetPassword";
-				var submit_data = {
-					UserId: "<?php echo $teacherInfo['UserId']?>",
-					Username: "<?php echo $teacherInfo['Username']?>",
-				};
-				$.ajax({
-			           type: "POST",
-			           url: url,
-			           data: submit_data, 
-			           success: function(data)
-			           {
-							data = $.parseJSON(data);
-			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s password has been reset to Initial password!");
-			               	} else if (data.result == "Fail") {
-			               		alert("Reset password failed!");
-			               	}
-			           }
-			         });
-			    return false;
-
-			} 				
-		});
-
-		$(".reset-ver-cod").on("click", function(e){
-			e = $.event.fix(e);
-			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to reset <?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s verify code?") == true) {
-				var url = "/elearning/admin/resetVerifyCode";
-				var submit_data = {
-					UserId: "<?php echo $teacherInfo['UserId']?>",
-					Username: "<?php echo $teacherInfo['Username']?>",
-				};
-				$.ajax({
-			           type: "POST",
-			           url: url,
-			           data: submit_data, 
-			           success: function(data)
-			           {
-							data = $.parseJSON(data);
-			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s verify code has been reset!");
-			               	} else if (data.result == "Fail") {
-			               		alert("Reset password failed!");
-			               	}
-			           }
-			         });
-			    return false;
-
-			} 				
-		});
-
-		$(".update-block").on("click", function(e){
-			e = $.event.fix(e);
-			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to block <?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s account?") == true) {
-				var url = "/elearning/admin/updateUserInfo/block";
-				var submit_data = {
-					UserId: "<?php echo $teacherInfo['UserId']?>",
-					Username: "<?php echo $teacherInfo['Username']?>",
-				};
-				$.ajax({
-			           type: "POST",
-			           url: url,
-			           data: submit_data, 
-			           success: function(data)
-			           {
-							data = $.parseJSON(data);
-			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s account has been blocked!");
-			               		location.reload();
-			               	} else if (data.result == "Fail") {
-
-			               	}
-			           }
-			         });
-			    return false;
-
-			} 				
-		});
-
-		$(".update-delete").on("click", function(e){
-			e = $.event.fix(e);
-			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
-			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to delete <?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s account?") == true) {
-				var url = "/elearning/admin/updateUserInfo/delete";
-				var submit_data = {
-					UserId: "<?php echo $teacherInfo['UserId']?>",
-					Username: "<?php echo $teacherInfo['Username']?>",
-				};
-				$.ajax({
-			           type: "POST",
-			           url: url,
-			           data: submit_data, 
-			           success: function(data)
-			           {
-							data = $.parseJSON(data);
-			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($teacherInfo['FullName'])?$teacherInfo['FullName']:$teacherInfo['Username'] ?>'s account has been delete!");
-			               		location.reload();
-			               	} else if (data.result == "Fail") {
-
-			               	}
-			           }
-			         });
-			    return false;
-
-			} 				
-		});
-
-		$(".update-active").on("click", function(e){
-			e = $.event.fix(e);
-			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
 			var url = "/elearning/admin/updateUserInfo/active";
 			var submit_data = {
 				UserId: "<?php echo $teacherInfo['UserId']?>",
 				Username: "<?php echo $teacherInfo['Username']?>",
 			};
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-deny").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-active").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-active").unbind();
 			$.ajax({
 		           type: "POST",
 		           url: url,
@@ -699,26 +742,30 @@
 		           {
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-
-		               		location.reload();
+		               		
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+
 		               	}
 		           }
 		         });
+
 		    return false;
 		});
 
-		$("#first-active").on("click", function(e){
+		$("#first-active").on("click", function(e) {
 			e = $.event.fix(e);
 			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
 			var url = "/elearning/admin/updateUserInfo/active";
 			var submit_data = {
 				UserId: "<?php echo $teacherInfo['UserId']?>",
 				Username: "<?php echo $teacherInfo['Username']?>",
 			};
-
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-deny").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-active").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-active").unbind();
 			$.ajax({
 		           type: "POST",
 		           url: url,
@@ -727,10 +774,9 @@
 		           {
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-		               		$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
-							$(".handle-user #first-active").delay(1000).prepend('<i class="fa fa-check margin-right-5"></i>');
+		               		
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+
 		               	}
 		           }
 		         });
@@ -738,7 +784,40 @@
 		    return false;
 		});
 
-	});
-</script>
+		$("#first-deny").on("click", function(e) {
+			e = $.event.fix(e);
+			e.preventDefault();
+			var url = "/elearning/admin/updateUserInfo/deny";
+			var submit_data = {
+				UserId: "<?php echo $teacherInfo['UserId']?>",
+				Username: "<?php echo $teacherInfo['Username']?>",
+			};
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-active").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-deny").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-deny").unbind();
+			$.ajax({
+		           type: "POST",
+		           url: url,
+		           data: submit_data, 
+		           success: function(data)
+		           {
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+		               		
+		               	} else if (data.result == "Fail") {
 
-<?php } //end else-if !isset($teacherInfo)?>
+		               	}
+		           }
+		         });
+
+                                                                        return false;
+                                                                    });
+
+                                                                });
+                                                            </script>
+
+                                                            <?php
+                                                        } //end else-if !isset($teacherInfo)?>

@@ -71,7 +71,7 @@ class AdminController extends AppController {
             	$user = $this->User->find('first', array(
             			"conditions" => array(
             				"User.Username" => $data['User']['Username'],
-            				"User.Password" => Security::hash($data['User']['Password'], 'sha1', true),
+            				"User.Password" => Security::hash($data['User']['Username'].$data['User']['Password'], 'sha1', true),
             				),
             		));
             	if (empty($user)) {
@@ -82,7 +82,8 @@ class AdminController extends AppController {
             			array_push($ip_tble, $ip['IpAddress']);
             		}
             		if (in_array($currentIpAddress, $ip_tble)) {
-            			$this->Auth->login();
+                		$this->request->data['User']['Password'] = $data['User']['Username'] . $data['User']['Password'];
+            			$this->log($this->Auth->login());
             			$this->Session->write('User', $this->Auth->user());
             			$this->Session->write('User.currentIp', $currentIpAddress);
 	            		$this->redirect(array('controller' => 'admin', 'action' => 'home'));
@@ -558,6 +559,12 @@ class AdminController extends AppController {
 			$ret = array();
 
 			if ($param == "update") {
+				if (isset($data['Password'])) {
+                    $this->log($data['Password']);
+                    $data['Password'] = trim($data['Password']);
+                    $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
+                    $this->log($data['Password']);
+				}
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
 					$ret['result'] = "Success";
 				} else {
@@ -631,6 +638,7 @@ class AdminController extends AppController {
 					$ret['msg'] = "ユーザー '".$data['Username']."'' があった!!!";
 				} else {
 					$this->User->create();
+
 					if ($this->User->save($data)) {
 						$ret['result'] = "Success";
 					} else {

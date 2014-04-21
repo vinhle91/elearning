@@ -107,7 +107,8 @@ class UsersController extends AppController
                 //for test
                 $this->request->data['User']['Password'] = $data['User']['Username'] . $data['User']['Password'];
                 // debug($data['User']['Password']);
-                $currentIpAddress = '123.1.1.124';
+                $currentIpAddress = '123.1.1.125';
+                // $currentIpAddress = '123.1.1.125';
                 $username = $data['User']['Username'];
                 $user = $this->User->getUserByUsername($username);
                 // debug($user);
@@ -168,6 +169,10 @@ class UsersController extends AppController
                     }
 
                     if ($isValidVerifyCode) {
+
+                        $this->User->id = $user['User']['UserId'];
+                        $this->User->saveField('IpAddress', $currentIpAddress);
+
                         //login here
                         if ($this->Auth->login()) {
                             //if login success, save the ip
@@ -177,9 +182,19 @@ class UsersController extends AppController
                                 $this->set('allowVerifyCode', true);
                                 $this->set('user', $user);
                                 $notLogin = true;
+
+
+                                // if($this->Auth->user()){
+                                //     $UserType = $this->Auth->user('UserType');
+                                //     if ($UserType == 1) {
+                                //         $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+                                //     }
+                                //     if ($UserType == 2) {
+                                //         $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
+                                //     }
+                                // };
                             }
-                            $this->User->id = $user['User']['UserId'];
-                            $this->User->saveField('IpAddress', $currentIpAddress);
+
                             $this->unBlockUser($user['User']['Username']);
                             $this->setNumberOfFailedLogin(0, $user['User']['Username']);
                             if (!$notLogin) {
@@ -265,18 +280,24 @@ class UsersController extends AppController
                 $initialPassword = $data['User']['Username'] . $data['User']['Password'];
                 $data['User']['InitialPassword'] = $data['User']['Password'];
                 $data['User']['Status'] = 2;
-
                 if ($data['User']['UserType'] == 2) {
                     if (empty($data['User']['BankInfo'])) {
-                        $this->Session->setFlash(__('A bank infor is required'));
-                        $this->redirect(array('action' => 'sign_up', $userType));
+                        $this->Session->setFlash(__('銀行の情報が必要です'));
+                        //$this->redirect(array('action' => 'sign_up', $userType));
+                        return;
+                    }else{
+
+                        if(!is_numeric($data['User']['BankInfo'])){
+                            $this->Session->setFlash(__('銀行の情報は数字だけ'));
+                            return;
+                        }
                     }
                     if (empty($data['User']['VerifyCodeAnswer'])) {
-                        $this->Session->setFlash(__('A VerifyCodeAnswer infor is required'));
+                        $this->Session->setFlash(__('A VerifyCodeAnswer is required'));
                         $this->redirect(array('action' => 'sign_up', $userType));
                     }
                     if (empty($data['User']['VerifyCodeQuestion'])) {
-                        $this->Session->setFlash(__('A VerifyCodeQuestion infor is required'));
+                        $this->Session->setFlash(__('A VerifyCodeQuestion is required'));
                         $this->redirect(array('action' => 'sign_up', $userType));
                     }
                     $initialCodeQuestion = $data['User']['Username'] . $data['User']['VerifyCodeQuestion'];
@@ -287,8 +308,15 @@ class UsersController extends AppController
                     $data['User']['VerifyCodeAnswer'] = $data['User']['InitialCodeAnswer'];
                 } else {
                     if (empty($data['User']['CreditCard'])) {
-                        $this->Session->setFlash(__('A CreditCard infor is required'));
-                        $this->redirect(array('action' => 'sign_up', $userType));
+                        $this->Session->setFlash(__('クレジットカード情報が必要となります'));
+                        // $this->redirect(array('action' => 'sign_up', $userType));
+                        return;
+                    }else{
+                        if(!is_numeric($data['User']['CreditCard'])){
+                            $this->Session->setFlash(__('クレジットカードは数字だけ'));
+                             return;
+                        }
+                       
                     }
                 }
                 // debug($data);
