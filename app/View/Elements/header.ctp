@@ -5,10 +5,17 @@
         <?php
         echo $this->Form->create('Lesson', array('url'=>"http://localhost/elearning/lessons/search"));
         echo $this->Form->input("keyWords",array("label"=>false,"class"=>"frm_search"));
+        $options=array('1'=>'全て','2'=>'先生','3'=>'授業','4'=>'タグ');
+        echo $this->Form->input( '種類', array(
+            'type' => 'select',
+            'multiple'=> false,  // 複数選択を不可能にする場合
+            'options' => $options,
+//            "class"=>"frm_search"
+        ));
         echo $this->Form->submit('検索',array("class"=>"btn_search"));
         echo $this->Form->end();
         ?>
-        </div>-
+        </div>
         <?php
         if($this->Session->check('Auth.User')): ?>
             <a href="javascript:void()" id="profile">
