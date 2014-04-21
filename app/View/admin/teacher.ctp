@@ -12,10 +12,7 @@
 				<div class="col-md-6">
 					<div class="portlet">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-user"></i>今月中新しい先生</div>
-							<div class="tools">
-								<a href="javascript:;" class="reload"></a>
-							</div>
+							<div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
 						</div>
 						<?php if (isset($new_teachers) && $new_teachers['Total'] != 0) { ?>
 						<div class="portlet-body">
@@ -46,7 +43,7 @@
 						</div>
 						<?php }  else { ?>
 						<div class="portlet-body">
-							今日は新しい先生がいません。
+							今日は新しい学生がいません。
 						</div>
 						<?php } ?>
 					</div>
@@ -55,7 +52,9 @@
 
 			<div class="portlet">
 				<div class="portlet-title">
-					<div class="caption">すべてのユ先生</div>
+					<div class="caption">すべてのユ学生</div>
+
+
 				</div>
 				<div class="portlet-body flip-scroll" style="display: block; overflow: auto">
 					<?php if (isset($all_teachers) && $all_teachers['Total'] != 0) { ?>
@@ -70,8 +69,8 @@
 								<th class="numeric"><a link>性</a></th>
 								<th class="numeric"><a link>電話番号</a></th>
 								<th class="numeric"><a link>登録日時</a></th>
-                                <th class="numeric"><a link>変更</a></th>
-                                <th class="numeric"><a link>レポート</a></th>
+								<th class="numeric"><a link>変更</a></th>
+								<th class="numeric"><a link>レポート</a></th>
 								<th class="numeric"><a link>状態</a></th>
 							</tr>
 						</thead>
@@ -82,8 +81,8 @@
 								<td><a href="/elearning/admin/teacher/<?php echo $teacher['User']['Username']?>"><?php echo $teacher['User']['Username']?></a></td>
 								<td><?php echo $teacher['User']['Email']?></td>
 								<td><?php echo $teacher['User']['FullName']?></td>
-                                <td><?php echo $teacher['User']['Birthday'] ? date_format(date_create($teacher['User']['Birthday']), 'Y年m月d日') : null?></td>
-								<td><?php echo $teacher['User']['Gender'] == 0 ? __("男") : __("女")?></td>
+								<td><?php echo $teacher['User']['Birthday'] ? date_format(date_create($teacher['User']['Birthday']), 'Y年m月d日') : null?></td>
+								<td><?php echo $teacher['User']['Gender'] == 0 ? __("Female") : __("Male")?></td>
 								<td><?php echo $teacher['User']['Phone']?></td>
 								<td><?php echo $teacher['User']['created']?></td>
 								<td><?php echo $teacher['User']['modified']?></td>
@@ -95,7 +94,7 @@
 					</table>
 					<?php }  else { ?>
 					<div class="portlet-body">
-                        今日登録が新しい先生はありません。
+                        今日登録が新入生はありません。
 					</div>
 					<?php } ?>
 				</div>
@@ -133,6 +132,11 @@
 						 アクティブ
 					</span>
 				</button>
+				<button class="btn btn-sm btn-danger margin-right-5 pull-right" id = "first-deny">
+					<span>
+						 Deny
+					</span>
+				</button>
 			</div>			
 			<?php } ?>
 			<?php if ($teacherInfo['Status'] == 0) { ?>
@@ -159,7 +163,7 @@
 							<ul class="dropdown-menu extended" style="width: auto !important; margin-left: 77px; margin-top: -50px;">
 								<li>
 									<ul class="dropdown-menu-list no-space no-list-style">
-										<li>  
+										<!-- <li>  
 											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">パスワードをリセット</span>
@@ -169,6 +173,12 @@
 											<a class="reset-ver-cod" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">verifycodeをリセット<span>
+											</a>
+										</li> -->
+										<li>  
+											<a class="reset-ver-cod">
+											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-key"></i></span>
+                                            <span class="inline-block">パスワードを変更する</span>
 											</a>
 										</li>
 										<?php if ($teacherInfo['Username'] != $this->Session->read('User.Username')) { ?>
@@ -226,7 +236,7 @@
 										<td>性</td>
 										<td>
 											<select name="Gender" id="Gender">
-												<option value="" <?php if ($teacherInfo['Gender'] == "" || $teacherInfo['Gender'] == "0") echo "selected"?>>--</option>
+												<option value="0" <?php if ($teacherInfo['Gender'] == "" || $teacherInfo['Gender'] == "0") echo "selected"?>>--</option>
 												<option value="1" <?php if ($teacherInfo['Gender'] == "1") echo "selected"?>>男</option>
 												<option value="2" <?php if ($teacherInfo['Gender'] == "2") echo "selected"?>>女</option>
 											</select>
@@ -236,7 +246,7 @@
 										<td>生年月日</td>
 										<td>
 											<select name="BirthdayYear" class="birth-year" id="BirthdayYear">
-												<option value="">YY</option>
+												<option value="0000">YY</option>
 												<option value="2014">2014</option>
 												<option value="2013">2013</option>
 												<option value="2012">2012</option>
@@ -354,7 +364,7 @@
 												<option value="1900">1900</option>
 												</select>
 											<select name="BirthdayMonth" class="birth-month" id="BirthdayMonth">
-												<option value="">MM</option>
+												<option value="00">MM</option>
 												<option value="1">01</option>
 												<option value="2">02</option>
 												<option value="3">03</option>
@@ -369,7 +379,7 @@
 												<option value="12">12</option>
 											</select>
 											<select name="BirthdayDay" class="birth-day" id="BirthdayDay">
-												<option value="">DD</option>
+												<option value="00">DD</option>
 												<option value="1">01</option>
 												<option value="2">02</option>
 												<option value="3">03</option>
@@ -709,16 +719,20 @@
 		    return false;
 		});
 
-		$("#first-active").on("click", function(e){
+		$("#first-active").on("click", function(e) {
 			e = $.event.fix(e);
 			e.preventDefault();
-			$("li.dropdown#options").removeClass("open");
 			var url = "/elearning/admin/updateUserInfo/active";
 			var submit_data = {
 				UserId: "<?php echo $teacherInfo['UserId']?>",
 				Username: "<?php echo $teacherInfo['Username']?>",
 			};
-
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-deny").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-active").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-active").unbind();
 			$.ajax({
 		           type: "POST",
 		           url: url,
@@ -727,10 +741,41 @@
 		           {
 						data = $.parseJSON(data);
 		               	if (data.result == "Success") {
-		               		$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
-							$(".handle-user #first-active").delay(1000).prepend('<i class="fa fa-check margin-right-5"></i>');
+		               		
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+
+		               	}
+		           }
+		         });
+
+		    return false;
+		});
+
+		$("#first-deny").on("click", function(e) {
+			e = $.event.fix(e);
+			e.preventDefault();
+			var url = "/elearning/admin/updateUserInfo/deny";
+			var submit_data = {
+				UserId: "<?php echo $teacherInfo['UserId']?>",
+				Username: "<?php echo $teacherInfo['Username']?>",
+			};
+			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
+			$(".handle-user #first-active").hide("slide", { direction: "right" }, 1000);
+			setTimeout(function(){
+				$(".handle-user #first-deny").prepend('<i class="fa fa-check margin-right-5"></i>');
+			}, 1000);
+			$("#first-deny").unbind();
+			$.ajax({
+		           type: "POST",
+		           url: url,
+		           data: submit_data, 
+		           success: function(data)
+		           {
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+		               		
+		               	} else if (data.result == "Fail") {
+
 		               	}
 		           }
 		         });
