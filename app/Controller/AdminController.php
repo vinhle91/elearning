@@ -893,6 +893,22 @@ class AdminController extends AppController {
 		}
 	}
 
+    public function backup() {
+        $this->layout = null;
 
+        $dbname ='e-learning';
+        $filename = $dbname.'_backup.sql';
+        $command = 'mysqldump.exe '.$dbname.' --password= --user=root --host=localhost --single-transaction > ./backups/'.$filename;
+        $result=exec($command, $output);
+    }
+
+    public function restore() {
+        $this->layout = null;
+
+        $dbname ='e-learning';
+        $filename = $dbname.'_backup.sql';
+        $command = 'mysql.exe '.$dbname.' --password= --user=root --host=localhost --single-transaction < ./backups/'.$filename;
+        $result=exec($command, $output);
+    }
 }	
 ?>
