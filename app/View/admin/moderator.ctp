@@ -119,10 +119,10 @@
 					$(".ajax-loader").fadeOut(10);
 					data = $.parseJSON(data);
 	               	if (data.result == "Success") {
-	               		$("#user-info .update-notif span").text("Updated successfully");
+	               		$("#user-info .update-notif span").text("最新化が成功です。");
 						parent.remove();
 	               	} else if (data.result == "Fail") {
-	               		$("#user-info .update-notif span").text("Updated fail");
+	               		$("#user-info .update-notif span").text("最新化が失敗しました。");
 	               		
 	               	}
 	               	setTimeout(function(){
@@ -692,7 +692,7 @@
                 e = $.event.fix(e);
                 e.preventDefault();
                 $("li.dropdown#options").removeClass("open");
-                if (confirm("Do you want to reset <?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s password?") == true) {
+                if (confirm("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントのパスワードをリセットしますか？") == true) {
                     var url = "/elearning/admin/resetPassword";
                     var submit_data = {
                         UserId: "<?php echo $moderatorInfo['UserId'] ?>",
@@ -706,9 +706,9 @@
                         {
                             data = $.parseJSON(data);
                             if (data.result == "Success") {
-                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s password has been reset to Initial password!");
+                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントのパスワードがリセットさせられました");
                             } else if (data.result == "Fail") {
-                                alert("Reset password failed!");
+                                alert("パスワードリセットさせられません");
                             }
                         }
                     });
@@ -721,7 +721,7 @@
                 e = $.event.fix(e);
                 e.preventDefault();
                 $("li.dropdown#options").removeClass("open");
-                if (confirm("Do you want to reset <?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s verify code?") == true) {
+                if (confirm("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントのVerifyCodeをリセットしますか？") == true) {
                     var url = "/elearning/admin/resetVerifyCode";
                     var submit_data = {
                         UserId: "<?php echo $moderatorInfo['UserId'] ?>",
@@ -735,9 +735,9 @@
                         {
                             data = $.parseJSON(data);
                             if (data.result == "Success") {
-                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s verify code has been reset!");
+                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントのVerifyCodeがリセットさせられました。");
                             } else if (data.result == "Fail") {
-                                alert("Reset password failed!");
+                                alert("VerifyCode　リセットさせられませんでした");
                             }
                         }
                     });
@@ -750,7 +750,7 @@
                 e = $.event.fix(e);
                 e.preventDefault();
                 $("li.dropdown#options").removeClass("open");
-                if (confirm("Do you want to block <?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s account?") == true) {
+                if (confirm("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントを拒否させますか") == true) {
                     var url = "/elearning/admin/updateUserInfo/block";
                     var submit_data = {
                         UserId: "<?php echo $moderatorInfo['UserId'] ?>",
@@ -764,7 +764,7 @@
                         {
                             data = $.parseJSON(data);
                             if (data.result == "Success") {
-                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s account has been blocked!");
+                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウント拒否されました。");
                                 location.reload();
                             } else if (data.result == "Fail") {
 
@@ -781,7 +781,7 @@
                 e.preventDefault();
                 $("li.dropdown#options").removeClass("open");
                 $("li.dropdown#options").removeClass("open");
-                if (confirm("Do you want to delete <?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s account?") == true) {
+                if (confirm("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントを削除しますか？") == true) {
                     var url = "/elearning/admin/updateUserInfo/delete";
                     var submit_data = {
                         UserId: "<?php echo $moderatorInfo['UserId'] ?>",
@@ -795,7 +795,7 @@
                         {
                             data = $.parseJSON(data);
                             if (data.result == "Success") {
-                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>'s account has been delete!");
+                                alert("<?php echo!empty($moderatorInfo['FullName']) ? $moderatorInfo['FullName'] : $moderatorInfo['Username'] ?>アカウントが削除されました。");
                                 location.reload();
                             } else if (data.result == "Fail") {
 
@@ -827,7 +827,7 @@
 
                             location.reload();
                         } else if (data.result == "Fail") {
-                            alert("Reactive user fail!");
+                            alert("活動させられません");
                         }
                     }
                 });
@@ -855,7 +855,7 @@
                             $(".handle-user #notif-pending").hide("slide", {direction: "right"}, 1000);
                             $(".handle-user #first-active").delay(1000).prepend('<i class="fa fa-check margin-right-5"></i>');
                         } else if (data.result == "Fail") {
-                            alert("Reactive user fail!");
+                            alert("活動させられません");
                         }
                     }
                 });

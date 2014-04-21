@@ -570,7 +570,7 @@
 			e = $.event.fix(e);
 			e.preventDefault();
 			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to reset <?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s password?") == true) {
+			if (confirm("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>アカウントのパスワードをリセットしますか？") == true) {
 				var url = "/elearning/admin/resetPassword";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -584,9 +584,9 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s password has been reset to Initial password!");
+			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>アカウントのパスワードは初期パスワードにリセットしました。");
 			               	} else if (data.result == "Fail") {
-			               		alert("Reset password failed!");
+			               		alert("パスワードリセットさせられません");
 			               	}
 			           }
 			         });
@@ -599,7 +599,7 @@
 			e = $.event.fix(e);
 			e.preventDefault();
 			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to reset <?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s verify code?") == true) {
+			if (confirm("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>アカウントのVerifyCodeをリセットしますか？") == true) {
 				var url = "/elearning/admin/resetVerifyCode";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -613,9 +613,9 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s verify code has been reset!");
+			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>アカウントのVeifyCodeがリセットされました");
 			               	} else if (data.result == "Fail") {
-			               		alert("Reset password failed!");
+			               		alert("VerifyCodeリセットさせられません");
 			               	}
 			           }
 			         });
@@ -628,7 +628,7 @@
 			e = $.event.fix(e);
 			e.preventDefault();
 			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to block <?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s account?") == true) {
+			if (confirm("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>のアカウントを拒否しますか?") == true) {
 				var url = "/elearning/admin/updateUserInfo/block";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -642,7 +642,7 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s account has been blocked!");
+			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>のアカウントが拒否されました");
 			               		location.reload();
 			               	} else if (data.result == "Fail") {
 
@@ -659,7 +659,7 @@
 			e.preventDefault();
 			$("li.dropdown#options").removeClass("open");
 			$("li.dropdown#options").removeClass("open");
-			if (confirm("Do you want to delete <?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s account?") == true) {
+			if (confirm("アカウント <?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>を削除しますか?") == true) {
 				var url = "/elearning/admin/updateUserInfo/delete";
 				var submit_data = {
 					UserId: "<?php echo $studentInfo['UserId']?>",
@@ -673,7 +673,7 @@
 			           {
 							data = $.parseJSON(data);
 			               	if (data.result == "Success") {
-			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'s account has been delete!");
+			               		alert("<?php echo !empty($studentInfo['FullName'])?$studentInfo['FullName']:$studentInfo['Username'] ?>'のアカウントが削除されました!");
 			               		location.assign("/elearning/admin/student");
 			               	} else if (data.result == "Fail") {
 
@@ -705,7 +705,7 @@
 
 		               		location.reload();
 		               	} else if (data.result == "Fail") {
-		               		alert("Reactive user fail!");
+		               		alert("再活動させられません");
 		               	}
 		           }
 		         });
