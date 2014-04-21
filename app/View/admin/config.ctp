@@ -27,7 +27,7 @@
 								<td><?php echo $key + 1?></td>
 								<td><?php echo $ip['Ip']['IpAddress']?></td>
 								<td><a href="/elearning/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
-								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp')) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
+								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp') && $ip['User']['Username'] == $this->Session->read("User.Username")) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>
 							<?php } ?>
 						</tbody>
@@ -44,6 +44,14 @@
 				</div>
 			</div>
 		</div>
+        <div class="padding-5 align-right">
+            <input type="button" class="btn btn-info btn-xs button-save" data-icon="check" value="バックアップ"
+                   onclick="confirm_alert_backup(this)"></input>
+        </div>
+        <div class="padding-5 align-right">
+            <input type="button" class="btn btn-xs btn-warning cancel pull-right" data-icon="check" value="リカバリ"
+                   onclick="confirm_alert_restore(this)"></input>
+        </div>
 	</div>
 
 	<div class="col-md-6 ">
@@ -139,6 +147,26 @@
 		</form>
 	</div>
 </div>
+
+<script type="text/javascript">
+    function confirm_alert_backup(node) {
+        if (confirm('Are you sure you want to back up database?')) {
+            var url = "./backup";
+            $(location).attr('href',url);
+        } else {
+// Do nothing!
+        }
+}
+
+function confirm_alert_restore(node) {
+    if (confirm('Are you sure you want to restore database?')) {
+        var url = "./restore";
+        $(location).attr('href',url);
+    } else {
+// Do nothing!
+    }
+}
+</script>
 
 <script>
 	function getUserList() {
@@ -354,7 +382,8 @@
 	        },
 	        share_rate: {
 	            required: true,
-	            number: true
+	            number: true,
+	            range: [1, 100],
 	        },
 
 	    },
@@ -386,6 +415,7 @@
 	        share_rate: {
 	            number: "番号を入力してください。",
 	            required: "報酬% は必須です",
+	            range: "1から100までを入力してください。"
 	        },
 	    },
 	    errorPlacement: function (error, element) {
@@ -416,7 +446,7 @@
 			console.log(submit_data);
 			
 			$("#config-info .update-notif span").css({"visibility": "visible", "opacity": 1});
-			$("#config-info .update-notif span").text("Updating infomation...");
+			$("#config-info .update-notif span").text("情報を更新している...");
 			$("#config-info .ajax-loader").fadeIn(10);
 			// $("#config-info .button-save").addClass("disabled");
 
@@ -430,14 +460,14 @@
 						data = $.parseJSON(data);
 						console.log(data);
 		               	if (data.result == "Success") {
-		           			$("#config-info .update-notif span").text("Updated successfully");
+		           			$("#config-info .update-notif span").text("更新が成功した");
 		           			setTimeout(function(){
 		           				$('#config-info .update-notif span').fadeTo(500, 0, function(){
 								  	$('#config-info .update-notif span').css("visibility", "hidden");   
 								});
 		           			}, 2000);
 		               	} else if (data.result == "Fail") {
-		           			$("#config-info .update-notif span").text("Updated fail");
+		           			$("#config-info .update-notif span").text("更新が失敗した");
 		               		setTimeout(function(){
 		           				$('#config-info .update-notif span').fadeTo(500, 0, function(){
 								  	$('#config-info .update-notif span').css("visibility", "hidden");   
@@ -454,3 +484,4 @@
 		
 	});
 </script>
+
