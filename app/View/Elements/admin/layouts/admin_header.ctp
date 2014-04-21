@@ -47,8 +47,10 @@ function time_elapsed_string($ptime)
 			<!-- BEGIN NOTIFICATION DROPDOWN -->
 			<li class="dropdown" id="header_notification_bar">
 				<a href="//elearning/admin/student" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-				<i class="fa fa-envelope-o"></i>
-				<span class="badge"><?php echo isset ($nmsg) ? $nmsg : '0' ?></span>
+				<i class="fa fa-envelope"></i>
+				<?php if ($nmsg > 0) { ?>
+					<span class="badge badge-success"><?php echo isset ($nmsg) ? $nmsg : '0' ?></span>
+				<?php } ?>
 				</a>
 				<ul class="dropdown-menu extended notification">
 				<?php if (isset($notifs) && count($notifs) > 0) { ?>

@@ -1,7 +1,7 @@
 <?php echo $this->element('admin' . DS . 'page_breadcrumb'); ?>
 <?php $this->log($list_user)?>
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-6" id="ip-info">
 		<div class="portlet">
 			<div class="portlet-title">
 				<div class="caption"><i class="fa fa-reorder"></i>IP アドレス</div>
@@ -9,7 +9,7 @@
 					<a href="#" class="btn btn-info btn-xs" id="add-ip" onclick="addNewIp(event)"><i class="fa fa-plus"></i> 追加</a>
 				</div>
 			</div>
-			<div class="portlet-body" id="ip-info">
+			<div class="portlet-body">
 				<div class="table-responsive">
 					<table class="table table-hover" id="ip-table">
 						<thead>
@@ -25,8 +25,13 @@
 							<?php foreach ($ip_addrs as $key => $ip) { ?>
 							<tr>
 								<td><?php echo $key + 1?></td>
-								<td><?php echo $ip['Ip']['IpAddress']?></td>
-								<td><a href="/elearning/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
+								<td class="ipaddr">
+									<input name="" id="<?php echo $ip['Ip']['IpId']?>" value="<?php echo $ip['Ip']['IpAddress']?>" class="no-border transparent width-100" disabled></input>
+									<?php if ($ip['Ip']['IpAddress'] != $this->Session->read('User.currentIp') || $ip['User']['Username'] != $this->Session->read("User.Username")) { ?>
+										<a class="btn btn-xxs btn-default pull-right display-none editIp" onclick="editIp(event)"><span>エディット</span></a>
+									<?php }?>
+									</td>
+								<td><a href="/elearning/admin/moderator/<?php echo $ip['User']['Username']?>"><?php echo $ip['User']['Username']?></a></td>
 								<td><a type="reset" class="btn btn-xs btn-warning cancel pull-right <?php if ($ip['Ip']['IpAddress'] == $this->Session->read('User.currentIp') && $ip['User']['Username'] == $this->Session->read("User.Username")) echo "disabled"?>" onclick="removeIp(event)"><span>削除</span></a></td>
 							</tr>
 							<?php } ?>
@@ -117,7 +122,7 @@
 										<input type="text" class="padding-5 no-border align-right" id="test_time" name="test_time" value="<?php echo $configs[5]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
-										<span style="line-height: 1.7; margin-left: 5px">秒</span>
+										<span style="line-height: 1.7; margin-left: 5px">日</span>
 									</td>
 								</tr>
 								<tr>
@@ -193,7 +198,7 @@ function confirm_alert_restore(node) {
 						+ '<td class="col-md-1">' + next + '</td>'
 						+ '<td class="col-md-2"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none; width: 130px;" id="new-ip" placeholder="IPアドレス"></input></td>'
 						+ '<td class="col-md-3"><input type="text" name="" rows="1" class="no-border padding-5" style="resize: none; width: 130px;" id="new-user" placeholder="ユーザー"></input></td>'
-						+ '<td class="col-md-3"><a href="#" class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("キャンセル")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("保存") ?></a></td>'
+						+ '<td class="col-md-3"><a class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancel(event)"><?php echo __("キャンセル")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitNewIp()"><?php echo __("保存") ?></a></td>'
 						+ '</tr>';
 		$("#add-ip").addClass("disabled");
 		$("#ip-table tr:last").after(buff);
@@ -242,7 +247,8 @@ function confirm_alert_restore(node) {
 								$(".ajax-loader").fadeOut(10);
 								data = $.parseJSON(data);
 				               	if (data.result == "Success") {
-				               		$("#ip-table tr:last td:eq(1)").html('<span>' + submit_data + '</span>');
+				               		$("#ip-table tr:last td:eq(1)").html('<input name="" id="" value="'+submit_data+'" class="no-border transparent width-100" disabled></input><a class="btn btn-xxs btn-default pull-right display-none editIp" onclick="editIp(event)"><span>エディット</span></a>');
+				               		$("#ip-table tr:last td:eq(1)").addClass("ipaddr");
 									$("#ip-table tr:last td:eq(2)").html('<span><a href="/elearning/moderator/"' + submit_data2 + '">' + submit_data2 + '</a></span>');
 									$("#ip-table tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a>');
 									$("#ip-info #add-ip").removeClass("disabled");
@@ -293,14 +299,14 @@ function confirm_alert_restore(node) {
 	function cancel(e) {
 		e = $.event.fix(e);
 		e.preventDefault();
-		$("#ip-table tr:last").remove();		
+		$(e.target).closest("tr").remove();		
 		$("#add-ip").removeClass("disabled");
 	}
 
 	function removeIp(event) {
 		parent = $(event.target).closest("tr");
 		window.abc = parent;
-		submit_data = parent.find("td:eq(1)").html();
+		submit_data = parent.find("td:eq(1) input").val().trim();
 		r = confirm("あなたは、このIPアドレスを削除しますか?");
 		if (r == true) {
 			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
@@ -330,12 +336,82 @@ function confirm_alert_restore(node) {
            			}, 2000);
 	           }
 	        });
-
-			
-
 		} 
+	}
 
-		//submit to server
+	$(".ipaddr").live("mouseover", function(e){
+		$(this).find(".editIp").removeClass("display-none");
+	});
+
+	$(".ipaddr").live("mouseout", function(e){
+		$(this).find(".editIp").addClass("display-none");
+	});
+
+	function editIp(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
+		window.abc = $(e.target);
+		$(e.target).closest("td").find("input").removeAttr("disabled");
+		$(e.target).closest("td").find("input").focus();
+		$(e.target).closest("tr").find("td:eq(3)").html('<a class="pull-right btn btn-xs btn-warning margin-left-5" onclick="cancelEdit(event)"><?php echo __("キャンセル")?></a><a class="pull-right btn btn-xs btn-success" onclick="submitEdit(event)"><?php echo __("保存") ?></a>')
+		$("#ip-info #add-ip").addClass("disabled");
+	}
+
+	function cancelEdit(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
+		$(e.target).closest("td").find("input").attr("disabled", "disabled");
+		$(e.target).closest("tr").find("td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right onclick="removeIp(event)"><span>削除</span></a>')
+		$("#ip-info #add-ip").removeClass("disabled");
+	}
+
+	function submitEdit(e) {
+		e = $.event.fix(e);
+		e.preventDefault();
+		target = $(e.target);
+		var submit_data = target.closest("tr").find("td:eq(1) input").val();
+		var ipid = target.closest("tr").find("td:eq(1) input").attr("id");
+		var submit_data2 = target.closest("tr").find("td:eq(2) a").val();
+		if (checkIpValidate(submit_data)) {
+			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
+			$("#ip-info .update-notif span").text("IPアドレスを変更している...");
+			$("#ip-info .ajax-loader").fadeIn(10);
+			$.ajax({
+		           type: "POST",
+		           url: "/elearning/admin/updateConfig/changeIp",
+		           data: {IpAddress: "'"+submit_data+"'", IpId: ipid}, 
+		           success: function(data)
+		           {
+						$(".ajax-loader").fadeOut(10);
+						data = $.parseJSON(data);
+		               	if (data.result == "Success") {
+		               		$(e.target).closest("tr").find("td:eq(1)").html('<input name="" id="'+ipid+'" value="'+submit_data+'" class="no-border transparent width-100" disabled></input><a class="btn btn-xxs btn-default pull-right display-none editIp" onclick="editIp(event)"><span>エディット</span></a>');
+		               		$(e.target).closest("tr").find("td:eq(1)").addClass("ipaddr");
+		               		$(e.target).closest("tr").find("td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right onclick="removeIp(event)"><span>削除</span></a>')
+							$("#ip-info .update-notif span").text("変更が成功");
+							$("#ip-info #add-ip").removeClass("disabled");
+	               			
+		               	} else if (data.result == "Fail") {
+		               		$("#ip-info .update-notif span").text("変更が失敗");
+		               		
+		               	}
+		               	setTimeout(function(){
+	           				$('#ip-info .update-notif span').fadeTo(500, 0, function(){
+							  	$('#ip-info .update-notif span').css("visibility", "hidden");   
+							});
+	           			}, 2000);
+		           }
+		         });
+				
+		} else {
+			$("#ip-info .update-notif span").css({"visibility": "visible", "opacity": 1});
+			$("#ip-info .update-notif span").text("IPアドレスが一致しない!");
+			setTimeout(function(){
+   				$('#ip-info .update-notif span').fadeTo(500, 0, function(){
+				  	$('#ip-info .update-notif span').css("visibility", "hidden");   
+				});
+   			}, 2000);
+		}
 	}
 
 	function submitKey(key) {
@@ -344,10 +420,6 @@ function confirm_alert_restore(node) {
 	        submitNewIp();
 	    }
 	}
-
-	$(document).ready(function(){
-		
-	});
 
 	$("#form1 input[type='text']").on("click", function(){
 		$("#config-info .button-save").removeClass("disabled");			

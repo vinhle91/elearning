@@ -121,6 +121,10 @@ class UsersController extends AppController
                     $this->Session->setFlash(__('このアカウントは、管理者が受け入れるために保留状態である。'));
                     $this->redirect(array('action' => 'login'));
                 }
+                if (isset($user) && $user['User']['Status'] == 4) {
+                    $this->Session->setFlash(__('このアカウントは拒否される'));
+                    $this->redirect(array('action' => 'login'));
+                }
                 $ipAddress = $user['User']['IpAddress'];
                 //debug($user);
 

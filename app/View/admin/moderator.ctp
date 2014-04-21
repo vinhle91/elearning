@@ -64,21 +64,27 @@
 	        username: {
 	            required: true,
 	        },
-	        password: {
+	        password1: {
 	            required: true,
 	            minlength: 4,
 	            maxlength: 16,
 	        },
+	        password2: {
+	        	required: true,
+	        }
 	    },
 	    messages: {
 	        username: {
 	        	required: "ユーザー名を入力してください。"
 	        },
-	        password: {
+	        password1: {
 	            required: "パスワードを入力してください。",
 	            minlength: "少なくとも4文字を入力してください。",
 	            maxlength: "これ以上16文字以内で入力してください。"
 	        },
+	        password2: {
+	        	required: true,
+	        }
 	    },
 	    errorPlacement: function (error, element) {
 	        error.appendTo(element.parent());
@@ -92,8 +98,8 @@
 		var next = parseInt($("#mod-tbl tr:last td:first").html()) + 1;
 		var buff = 		'<tr>'
 						+ '<td class="col-md-1">' + next + '</td>'
-						+ '<td class="col-md-3"><input type="text" name="username" rows="1" class="no-border mod-info name padding-3" style="resize: none; width: 150px;" id="username" placeholder="ユーザー"></input></td>'
-						+ '<td class="col-md-3"><input type="password" name="password" rows="1" class="no-border mod-info password padding-3" style="resize: none; width: 150px;" id="password" placeholder="パスワード"></input></td>'
+						+ '<td class="col-md-3"><input type="text" name="username" rows="1" class="no-border mod-info name padding-3" style="resize: none; width: 150px; margin-top: 3px;" id="username" placeholder="ユーザー"></input></td>'
+						+ '<td class="col-md-3"><input type="password" name="password1" id="password1" rows="1" class="no-border mod-info password padding-3" style="resize: none; width: 150px; margin-top: 3px;" id="password" placeholder="パスワード"></input><input type="password" name="passwor2" id="password2" rows="1" class="no-border mod-info password padding-3" style="resize: none; width: 150px; margin-top: 3px;" id="password" placeholder="パスワード"></input></td>'
 						+ '<td class="col-md-3"><a href="#" class="btn btn-xs btn-warning margin-left-5 pull-right" onclick="cancel(event)"><?php echo __("キャンセル")?></a><input type="submit" class="pull-right btn btn-xs btn-success" value="<?php echo __("保存") ?>"></input></td>'
 						+ '</tr>';
 		$("#add-new-mod").addClass("disabled");
@@ -139,57 +145,66 @@
 		if ($("#all-moderator").validate().checkForm() == false) {
 			return;
 		} else {
-			$(".moderator .update-notif span").css("visibility", "visible");
-			$(".moderator .update-notif").html("<span>情報が更新...</span>");
-			$(".ajax-loader").fadeIn(10);
-			
-			var now = new Date();
-			var time = now.toUTCString();
-			var url = "/elearning/admin/updateUserInfo/insert";
-			var submit_data = {
-				Username: $("input.name").val(), 
-				Password: $("input.password").val(), 
-				InitialPassword: $("input.password").val(), 
-				UserType: 3,
-	            VerifyCodeQuestion: "Default Question",
-	            InitialCodeQuestion: "12345678",
-	            VerifyCodeAnswer: "Default Answer",
-	            InitialCodeAnswer: "12345678",
-	            Status: 1,
-			};
+			if ($("input#password1").val() != $("input#password2").val()) {
+				$(".moderator .update-notif span").text("パスワードが一致しない。");
+           		setTimeout(function(){
+       				$(".moderator .update-notif span").text("");
+       				$(".moderator .update-notif p").text("");
+       			}, 4000);
+       			return false;
+			} else {
+				console.log($("input#password1").val());
+				console.log($("input#password2").val());
+				$(".moderator .update-notif span").css("visibility", "visible");
+				$(".moderator .update-notif").html("<span>情報が更新...</span>");
+				$(".ajax-loader").fadeIn(10);
+				
+				var url = "/elearning/admin/updateUserInfo/insert";
+				var submit_data = {
+					Username: $("input.name").val(), 
+					Password: $("input#password1").val(), 
+					InitialPassword: $("input#password1").val(), 
+					UserType: 3,
+		            VerifyCodeQuestion: "Default Question",
+		            InitialCodeQuestion: "12345678",
+		            VerifyCodeAnswer: "Default Answer",
+		            InitialCodeAnswer: "12345678",
+		            Status: 1,
+				};
 
-			$.ajax({
-		           type: "POST",
-		           url: url,
-		           data: submit_data, 
-		           success: function(data)
-		           {
-						$(".ajax-loader").fadeOut(10);
-						console.log(data);
-						data = $.parseJSON(data);
-						console.log(data);
-		               	if (data.result == "Success") {
-	               			$(".moderator .update-notif span").text("更新することは成功した");
-	               			$("#mod-tbl tr:last td:eq(1)").html('<a href="/elearning/admin/moderator/'+$("#mod-tbl tr:last td:eq(1) input").val()+'">' + $("#mod-tbl tr:last td:eq(1) input").val() + '</a>');
-							$("#mod-tbl tr:last td:eq(2)").html("<?php echo date('Y-m-d H:i:s', time())?>");
-							$("#mod-tbl tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeUser(event)"><span>削除</span></a>');
-							$("#add-mod").removeClass("disabled");
-	               			setTimeout(function(){
-	               				$(".moderator .update-notif span").text("");
-	               			}, 2000);
-		               	} else if (data.result == "Fail") {
-	               			$(".moderator .update-notif span").text("更新することは失敗した");
-	               			$(".moderator .update-notif").append("<p><span>"+data.msg+"</span><p>");
-		               		setTimeout(function(){
-	               				$(".moderator .update-notif span").text("");
-	               				$(".moderator .update-notif p").text("");
-	               			}, 4000);
-		               	}
-		           }
-		         });
-		         
-			e.preventDefault();
-		    return false;
+				$.ajax({
+			           type: "POST",
+			           url: url,
+			           data: submit_data, 
+			           success: function(data)
+			           {
+							$(".ajax-loader").fadeOut(10);
+							console.log(data);
+							data = $.parseJSON(data);
+							console.log(data);
+			               	if (data.result == "Success") {
+		               			$(".moderator .update-notif span").text("更新することは成功した");
+		               			$("#mod-tbl tr:last td:eq(1)").html('<a href="/elearning/admin/moderator/'+$("#mod-tbl tr:last td:eq(1) input").val()+'">' + $("#mod-tbl tr:last td:eq(1) input").val() + '</a>');
+								$("#mod-tbl tr:last td:eq(2)").html("<?php echo date('Y-m-d H:i:s', time())?>");
+								$("#mod-tbl tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeUser(event)"><span>削除</span></a>');
+								$("#add-mod").removeClass("disabled");
+		               			setTimeout(function(){
+		               				$(".moderator .update-notif span").text("");
+		               			}, 2000);
+			               	} else if (data.result == "Fail") {
+		               			$(".moderator .update-notif span").text("更新することは失敗した");
+		               			$(".moderator .update-notif").append("<p><span>"+data.msg+"</span><p>");
+			               		setTimeout(function(){
+		               				$(".moderator .update-notif span").text("");
+		               				$(".moderator .update-notif p").text("");
+		               			}, 4000);
+			               	}
+			           }
+			         });
+			         
+				e.preventDefault();
+			    return false;
+			}
 		}
 	});
 
