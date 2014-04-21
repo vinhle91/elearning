@@ -90,6 +90,7 @@ class LessonsController extends AppController
                         'Lesson.Abstract',
                         'Lesson.modified',
                         'Tag.TagContent',
+                        'Tag.LessonId'
                     ),
                     'conditions' => array(
                         'User.Status' => 1,
@@ -100,7 +101,7 @@ class LessonsController extends AppController
                             array('Lesson.Abstract LIKE' => "%$keyWord%"),
                             array('User.FullName LIKE'=> "%$keyWord%")
                         )
-                    )
+                    ),'group'=>array('Tag.LessonId')
                 ));
 
 
@@ -137,7 +138,7 @@ class LessonsController extends AppController
                         'conditions' => array(
                             'User.Status' => 1,
                             'AND' => $conditions
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
 
                 } else if (isset($orConditions)) {
@@ -172,7 +173,7 @@ class LessonsController extends AppController
                         'conditions' => array(
                             'User.Status' => 1,
                             'OR' => $conditions
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
                 } else {
                     $results = $this->Lesson->find("all", array(
@@ -203,7 +204,7 @@ class LessonsController extends AppController
                                 array('User.Username LIKE' => "%$keyWord%"),
                                 array('User.FullName LIKE' => "%$keyWord%")
                             )
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
 
                 }
@@ -240,7 +241,7 @@ class LessonsController extends AppController
                         'conditions' => array(
                             'User.Status' => 1,
                             'AND' => $conditions
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
 
 
@@ -273,7 +274,7 @@ class LessonsController extends AppController
                         'conditions' => array(
                             'User.Status' => 1,
                             'OR' => $conditions
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
                 } else {
                     $results = $this->Lesson->find("all", array(
@@ -303,7 +304,7 @@ class LessonsController extends AppController
                             'OR' => array(
                                 array('Lesson.Title LIKE' => "%$keyWord%"),
                             )
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
 
                 }
@@ -338,7 +339,7 @@ class LessonsController extends AppController
                         'conditions' => array(
                             'User.Status' => 1,
                             'AND' => $conditions
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
                 } else if (isset($orConditions)) {
                     for ($i = 0; $i < sizeof($orConditions); $i++) {
@@ -369,7 +370,7 @@ class LessonsController extends AppController
                         'conditions' => array(
                             'User.Status' => 1,
                             'OR' => $conditions
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
 
 
@@ -402,7 +403,7 @@ class LessonsController extends AppController
                             'OR' => array(
                                 array('Tag.TagContent LIKE' => "%$keyWord%"),
                             )
-                        )
+                        ),'group'=>array('Tag.LessonId')
                     ));
 
 
@@ -451,6 +452,7 @@ class LessonsController extends AppController
 //                    )
 //                )
 //            ));
+
             foreach ($results as $key => $value) {
                 $isStudying = false;
                 $isBlocked = $this->StudentBlock->find('first', array(
@@ -481,6 +483,7 @@ class LessonsController extends AppController
                 $results[$key]['Lesson']['isStudying'] = $isStudying;
             }
             $this->set('results', $results);
+//            debug($results);
         }
     }
 }
