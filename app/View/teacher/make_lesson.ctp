@@ -52,9 +52,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td> <div class="td_text">タグ<span style="color:red">*</span></div></td>
+                                    <td> <div class="td_text" >タグ<span style="color:red">*</span></div></td>
                                     <td>
-                                        <?php echo $this->Form->input('Tag', array('class'=>'input','type'=>'text','label'=>false,'div'=>false));?>
+                                        <?php echo $this->Form->input('Tag', array('class'=>'input','type'=>'text','label'=>false,'div'=>false,'class'=>'tag'));?>
                                     </td>
                                 </tr> 
                                 <tr>
@@ -106,3 +106,8 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.tag').select2();
+    });
+</script>
