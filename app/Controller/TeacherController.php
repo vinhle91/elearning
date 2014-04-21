@@ -669,13 +669,14 @@ class TeacherController extends AppController
         }
         $this->set(compact('tmp'));
         // Get list category 
-        $params = array(
-            'conditions' => array('Category.IsDeleted' => '0'),
-            'fields' => array('CatId', 'CatName'),
-            'order' => array('Category.CatId' => 'Asc'),
-        );
-        $cat = $this->Category->find('all', $params);
-        $this->set(compact('cat'));
+        // $params = array(
+        //     'conditions' => array('Category.IsDeleted' => '0'),
+        //     'fields' => array('CatId', 'CatName'),
+        //     'order' => array('Category.CatId' => 'Asc'),
+        // );
+        // $cat = $this->Category->find('all', $params);
+        
+        // $this->set(compact('cat'));
         if (!isset($lesson_id) || empty($lesson_id)) {
             $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
             $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
