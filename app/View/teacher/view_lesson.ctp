@@ -102,8 +102,8 @@
                                 <?php if(isset($com)):?>
                                    <?php foreach ($com as $key => $value):?>
                                        <li cass="comment"  style="display: list-item;">
-                                            <a href="#" title="Dahiibrahim" class="commenter" >
-                                                <img class="nickname" src="images/icon/user-48x48.png" height="48" alt="Dahiibrahim" width="48" style="display: block;">
+                                            <a href="#" class="commenter" >
+                                                <img class="nickname" src="images/icon/user-48x48.png" height="48" width="48" style="display: block;">
                                                 <?php echo $this->Html->image('icon/user-48x48.png',array('alt' =>'views','height'=>'48px')); ?>
                                                 <strong class=""><?php echo $value['User']['FullName']?></strong>
                                             </a>

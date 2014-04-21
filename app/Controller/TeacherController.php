@@ -67,12 +67,12 @@ class TeacherController extends AppController
             }
         }
         $this->set('lessons', $lessons);
-        $cat = $this->Category->getCategories();
-        $Category = array();
-        foreach ($cat as $key => $value) {
-            $Category[$key + 1] = $value['Category']['CatName'];
-        }
-        $this->set('Category', $Category);
+        // $cat = $this->Category->getCategories();
+        // $Category = array();
+        // foreach ($cat as $key => $value) {
+        //     $Category[$key + 1] = $value['Category']['CatName'];
+        // }
+        // $this->set('Category', $Category);
 
         //Get top lesson
         if (!isset($this->request->query['top']) || $this->request->query['top'] == 'lesson') {
@@ -278,13 +278,13 @@ class TeacherController extends AppController
         $this->set(compact('tmp'));
         // debug($tmp);
         // Get list category 
-        $params = array(
-            'conditions' => array('Category.IsDeleted' => '0'),
-            'fields' => array('CatId', 'CatName'),
-            'order' => array('Category.CatId' => 'Asc'),
-        );
-        $cat = $this->Category->find('all', $params);
-        $this->set(compact('cat'));
+        // $params = array(
+        //     'conditions' => array('Category.IsDeleted' => '0'),
+        //     'fields' => array('CatId', 'CatName'),
+        //     'order' => array('Category.CatId' => 'Asc'),
+        // );
+        // $cat = $this->Category->find('all', $params);
+        // $this->set(compact('cat'));
         if ($this->request->is('post')) {
             $data = $this->request->data;
             // debug($data);
@@ -327,23 +327,23 @@ class TeacherController extends AppController
                     foreach ($data['File'] as $key => $value) {
                         if (!empty($value['path']['name'])) {
                             //check duplicate file name
-                            $options['conditions'] = array(
-                                'File.FileName' => $value['path']['name'],
-                                'File.IsDeleted' => '0',
-                                'File.FileType' => '1',
-                                'Lesson.IsDeleted' => '0',
-                                'Lesson.UserId' => $userId,
-                            );
-                            $options['fields'] = array('Lesson.UserId', 'File.*');
-                            $file_name = $this->File->find('all', $options);
-                            // debug($file_name);
-                            // die;
-                            if (!empty($file_name)) {
-                                $this->Lesson->delete($lesson_id);
-                                $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
-                                $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
-                                $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                            }
+                            // $options['conditions'] = array(
+                            //     'File.FileName' => $value['path']['name'],
+                            //     'File.IsDeleted' => '0',
+                            //     'File.FileType' => '1',
+                            //     'Lesson.IsDeleted' => '0',
+                            //     'Lesson.UserId' => $userId,
+                            // );
+                            // $options['fields'] = array('Lesson.UserId', 'File.*');
+                            // $file_name = $this->File->find('all', $options);
+                            // // debug($file_name);
+                            // // die;
+                            // if (!empty($file_name)) {
+                            //     $this->Lesson->delete($lesson_id);
+                            //     $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                            //     $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
+                            //     $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+                            // }
                             $data['File'][$key]['path']['old_name'] = $value['path']['name'];
                             $num_file++;
                             $type = explode(".", $value['path']['name']);
@@ -382,27 +382,32 @@ class TeacherController extends AppController
                                 // $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
                             }
                         }
+                    }else{
+                        $this->Lesson->delete($lesson_id);
+                        $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                        $this->Session->setFlash(__('あなたはまだアップロードするファイルを選択していない'));
+                        return;
                     }
                     // Save test of lesson
                     $num_test = 0;
                     foreach ($data['TestFile'] as $key => $value) {
                         if (!empty($value['path']['name'])) {
-                            $options['conditions'] = array(
-                                'File.FileName' => $value['path']['name'],
-                                'File.IsDeleted' => '0',
-                                'File.FileType' => '2',
-                                'Lesson.IsDeleted' => '0',
-                                'Lesson.UserId' => $userId,
-                            );
-                            $options['fields'] = array('Lesson.UserId', 'File.*');
-                            $file_name = $this->File->find('all', $options);
-                            if (!empty($file_name)) {
-                            	$this->Lesson->delete($lesson_id);
-                                $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
-                                $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
-                                $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
-                                $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
-                            }
+                            // $options['conditions'] = array(
+                            //     'File.FileName' => $value['path']['name'],
+                            //     'File.IsDeleted' => '0',
+                            //     'File.FileType' => '2',
+                            //     'Lesson.IsDeleted' => '0',
+                            //     'Lesson.UserId' => $userId,
+                            // );
+                            // $options['fields'] = array('Lesson.UserId', 'File.*');
+                            // $file_name = $this->File->find('all', $options);
+                            // if (!empty($file_name)) {
+                            // 	$this->Lesson->delete($lesson_id);
+                            //     $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                            //     $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                            //     $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
+                            //     $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+                            // }
                             $data['TestFile'][$key]['path']['old_name'] = $value['path']['name'];
                             $num_test++;
                             $type = explode(".", $value['path']['name']);
@@ -705,7 +710,14 @@ class TeacherController extends AppController
 	            	$list_tag = $list_tag.$value['Tag']['TagContent'];
 	            }
 	            $this->set(compact('list_tag'));
-	            // debug($list_tag);
+                $file = $this->File->find('all', array(
+                    'conditions' => array('File.LessonId' => $lesson_id),
+                    'fields' => array('File.*'),
+                    'order' => array('File.created' => 'Asc'),
+                    'contain' => False,
+                ));
+                $this->set(compact('file'));
+	            // debug($file);
 	        }
         	if ($this->request->is('post')) {
 	            $data = $this->request->data;
@@ -714,7 +726,6 @@ class TeacherController extends AppController
 	            if ($data['Lesson']['TermsOfService'] == 1) {
 	                //update lesson
 	                 $updateData = array(
-	                 	'Category' => "'" . $data['Lesson']['Category'] . "'",
 	                    'Title' => "'" . $data['Lesson']['Title'] . "'",
 	                    'Abstract' => "'" . $data['Lesson']['Abstract'] . "'",
 	                );
@@ -725,21 +736,21 @@ class TeacherController extends AppController
 	                    foreach ($data['File'] as $key => $value) {
 	                        if (!empty($value['path']['name'])) {
 	                            //check duplicate file name
-	                            $options['conditions'] = array(
-	                                'File.FileName' => $value['path']['name'],
-	                                'File.IsDeleted' => '0',
-	                                'File.FileType' => '1',
-	                                'Lesson.IsDeleted' => '0',
-	                                'Lesson.UserId' => $userId,
-	                            );
-	                            $options['fields'] = array('Lesson.UserId', 'File.*');
-	                            $file_name = $this->File->find('all', $options);
-	                            // debug($file_name);
-	                            // die;
-	                            if (!empty($file_name)) {
-	                                $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
-	                                $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
-	                            }
+	                            // $options['conditions'] = array(
+	                            //     'File.FileName' => $value['path']['name'],
+	                            //     'File.IsDeleted' => '0',
+	                            //     'File.FileType' => '1',
+	                            //     'Lesson.IsDeleted' => '0',
+	                            //     'Lesson.UserId' => $userId,
+	                            // );
+	                            // $options['fields'] = array('Lesson.UserId', 'File.*');
+	                            // $file_name = $this->File->find('all', $options);
+	                            // // debug($file_name);
+	                            // // die;
+	                            // if (!empty($file_name)) {
+	                            //     $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
+	                            //     $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
+	                            // }
 	                            $data['File'][$key]['path']['old_name'] = $value['path']['name'];
 	                            $num_file++;
 	                            $type = explode(".", $value['path']['name']);
@@ -775,7 +786,12 @@ class TeacherController extends AppController
 	                                $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
 	                            }
 	                        }
-	                    }
+	                    }else{
+                            if(empty($file)){
+                                $this->Session->setFlash(__('あなたはまだアップロードするファイルを選択していない'));
+                                return;
+                            }
+                        }
 	                	$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
 	                    // Save Tag of lesson
 	                    $tag = $data['Lesson']['Tag'];
@@ -887,20 +903,20 @@ class TeacherController extends AppController
         }
     }
 
-    public function view_category($catId)
-    {
-        $userId = $this->Auth->user('UserId');
-        $this->set(compact('userId'));
-        $category = $this->Category->getCategory($catId);
-        $this->set('cat', $category);
+    // public function view_category($catId)
+    // {
+    //     $userId = $this->Auth->user('UserId');
+    //     $this->set(compact('userId'));
+    //     $category = $this->Category->getCategory($catId);
+    //     $this->set('cat', $category);
 
-        $options = $this->Category->getPaginationOptions($catId);
+    //     $options = $this->Category->getPaginationOptions($catId);
 
-        $this->paginate = $options;
-        $lessons = $this->paginate('Category');
-        // debug($lessons);
-        $this->set('lessons', $lessons);
-    }
+    //     $this->paginate = $options;
+    //     $lessons = $this->paginate('Category');
+    //     // debug($lessons);
+    //     $this->set('lessons', $lessons);
+    // }
 
     public function list_student()
     {
@@ -979,7 +995,6 @@ class TeacherController extends AppController
 
     public function view_message()
     {
-
         if ($this->request->is('post')) {
 //            debug($this->request->data);
             $data = $this->request->data;
@@ -996,6 +1011,15 @@ class TeacherController extends AppController
 //        debug($messages);
         if ($messages != null)
             $this->set("messages", $messages);
+    }
+    public function delete_file($lesson_id,$file_id)
+    {
+        $this->File->deleteAll(array('File.FileId' => $file_id), false);
+        $this->Session->setFlash(__('このファイルには、正常な削除してしまった。'));
+        $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
+       
+
+       
     }
 
 }

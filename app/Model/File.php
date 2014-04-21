@@ -13,7 +13,7 @@ class File extends AppModel {
         'Uploader.Attachment' => array(
             'File' => array(
                 // 'nameCallback' => 'formatName',
-                'overwrite' => false,
+                'overwrite' => true,
                 'uploadDir' => 'uploads/jugyou',
                 'finalPath' => '',
                 'size' => 'fileSize',
@@ -25,7 +25,7 @@ class File extends AppModel {
             ),
             'TestFile' => array(
                 // 'nameCallback' => 'formatName',
-                'overwrite' => false,
+                'overwrite' => true,
                 'allowEmpty' => true,
                 'uploadDir' => 'uploads/tsv',
                 'finalPath' => '',

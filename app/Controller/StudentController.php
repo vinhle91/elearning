@@ -114,12 +114,12 @@ class StudentController extends AppController {
         $this->set('histories', $histories);
         $this->set('direction', $direction);
         //Get category
-        $cat = $this->Category->getCategories();
-        $Category = array();
-        foreach ($cat as $key => $value) {
-            $Category[$key + 1] = $value['Category']['CatName'];
-        }
-        $this->set('Category', $Category);
+        // $cat = $this->Category->getCategories();
+        // $Category = array();
+        // foreach ($cat as $key => $value) {
+        //     $Category[$key + 1] = $value['Category']['CatName'];
+        // }
+        // $this->set('Category', $Category);
         //Get top lesson
         $this->Paginator->settings = array(
             'Lesson' => array('conditions' => array('IsDeleted' => '0'),

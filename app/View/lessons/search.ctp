@@ -35,7 +35,7 @@
                             <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
                                 <td width="5%" style="background-color: #eee;">ID</td>
                                 <td width="23%" style="background-color: #eee;"> タイトル</td>
-                                <td width="7%" style="background-color: #eee;">カテゴリィ</td>
+                               <!--  <td width="7%" style="background-color: #eee;">カテゴリィ</td> -->
                                 <td width="7%" style="background-color: #eee;">先生</td>
                                 <td width="5%" style="background-color: #eee;">いいねと</td>
                                 <td width="5%" style="background-color: #eee;">ビュー</td>
@@ -51,7 +51,7 @@
                                 <tr>
                                     <td><?php echo ($reuslt['Lesson']['LessonId']); ?></td>
                                     <td><a href="javascript:void(0)"><?php echo ($reuslt['Lesson']['Title']); ?></a></td>
-                                    <td><?php echo $Category[$reuslt['Lesson']['Category']]; ?></td>
+                                   <!--  <td><?php echo $Category[$reuslt['Lesson']['Category']]; ?></td> -->
                                     <td><?php echo $reuslt['User']['FullName']; ?></td>
                                     <td><?php echo $reuslt['Lesson']['LikeNumber']; ?></td>
                                     <td><?php echo $reuslt['Lesson']['ViewNumber']; ?></td>

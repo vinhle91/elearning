@@ -40,7 +40,7 @@
                         <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
                             <td width="5%" style="background-color: #eee;">番号</td>
                             <td width="20%" style="background-color: #eee;"><?php echo $paginator->sort('Title', 'タイトル'); ?></td>
-                            <td width="7%" style="background-color: #eee;"><?php echo $paginator->sort('Category', 'カテゴリィ'); ?></td>
+                           <!--  <td width="7%" style="background-color: #eee;"><?php echo $paginator->sort('Category', 'カテゴリィ'); ?></td> -->
                             <td width="7%" style="background-color: #eee;"><?php echo $paginator->sort('Lesson.Author', '先生'); ?></td>
                             <td width="5%" style="background-color: #eee;"><?php echo $paginator->sort('LikeNumber', 'いいねと言う'); ?></td>
                             <td width="5%" style="background-color: #eee;"><?php echo $paginator->sort('ViewNumber', 'ビュー'); ?></td>
@@ -52,7 +52,7 @@
                             <tr>
                                 <td><?php echo ($lesson['Lesson']['LessonId']); ?></td>
                                 <td><a href="javascript:void(0)"><?php echo ($lesson['Lesson']['Title']); ?></a></td>
-                                <td><?php echo $Category[$lesson['Lesson']['Category']]; ?></td>
+                                <!-- <td><?php echo $Category[$lesson['Lesson']['Category']]; ?></td> -->
                                 <td><?php echo $lesson['Lesson']['Author']; ?></td>
                                 <td><?php echo $lesson['Lesson']['LikeNumber']; ?></td>
                                 <td><?php echo $lesson['Lesson']['ViewNumber']; ?></td>

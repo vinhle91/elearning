@@ -29,7 +29,7 @@
                                         <?php echo $this->Form->input('Title', array('class'=>'input','type'=>'text','label'=>false,'div'=>false,'value'=>$lessons['Lesson']['Title']));?>
                                     </td>
                                 </tr>
-                                <tr>
+                               <!--  <tr>
                                     <td> <div class="td_text">カテゴリィ<span style="color:red">*</span></div></td>
                                     <td>
                                         <select  name="data[Lesson][Category]">
@@ -40,7 +40,7 @@
                                         <?php endforeach;?>
                                         </select>        
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td>
                                         <div class="td_text">記述<span style="color:red">*</span></div>
@@ -55,7 +55,19 @@
                                     <td>
                                         <?php echo $this->Form->input('Tag', array('class'=>'input','type'=>'text','label'=>false,'div'=>false,'value'=>$list_tag,'id'=>'tag'))?>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td> <div class="td_text">ファイルをアップロードした</div></td>
+                                    <td></td>
                                 </tr> 
+                                <?php foreach ($file as $key => $value):?>
+                                <tr>
+                                    <td><div class="td_text"></div></td>
+                                    <td><h3 style="display:inline-block;"><?php echo $this->Html->image('icon/yes.png'); ?><?php echo $value['File']['FileName']?></h3>
+                                        <?php echo $this->Html->link('ファイルの削除',array('controller'=>'Teacher','action'=>'delete_file',$value['File']['LessonId'],$value['File']['FileId']),array('class'=>'btn','style'=>'display:inline-block;margin-left:10px;'));?>
+                                    </td>
+                                </tr>
+                                <?php endforeach;?> 
                                 <tr>
                                     <td> <div class="td_text">ファイル アップロード</div></td>
                                     <td>
