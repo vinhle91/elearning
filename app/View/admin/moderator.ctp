@@ -666,7 +666,7 @@
             'overlayOpacity': 0,
             'hideOnOverlayClick': false,
             'type': 'iframe',
-            'href': '/elearning/admin/changePassword',
+            'href': '/elearning/admin/changePassword/<?php echo $this->Session->read('User.UserId')?>',
             'fitToView': false,
             'autoSize': false
         });

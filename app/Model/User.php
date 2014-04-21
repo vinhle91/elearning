@@ -240,6 +240,16 @@ class User extends AppModel
         return $users;
     }
 
+    public function getUserById($userid)
+    {
+        $options['conditions'] = array(
+            'User.UserId' => $userid
+        );
+
+        $users = $this->find('first', $options);
+        return $users;
+    }
+
 }
 
 ?>

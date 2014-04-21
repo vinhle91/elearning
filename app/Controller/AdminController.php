@@ -559,12 +559,6 @@ class AdminController extends AppController {
 			$ret = array();
 
 			if ($param == "update") {
-				if (isset($data['Password'])) {
-                    $this->log($data['Password']);
-                    $data['Password'] = trim($data['Password']);
-                    $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
-                    $this->log($data['Password']);
-				}
 				if ($this->User->updateAll($data, array('UserId' => $data['UserId'])) == 1) {
 					$ret['result'] = "Success";
 				} else {
@@ -872,20 +866,31 @@ class AdminController extends AppController {
 		}
 	}
 
-	public function changePassword() {
+	public function changePassword($param=null) {
 		$this->layout = null;
-
+		$userid = $param;
+		$this->set(compact('userid'));
 		if ($this->request->is('post') && !empty($this->request->data)) {
 
 			$data = $this->request->data;
-			$this->log($data);
 			$ret = array();
+			$user = $this->User->getUserById($data['UserId']);
+			$this->log($user);
+			$this->log(Security::hash($user['User']['Username'].trim($data['old_password']), 'sha1', true));
+			$this->log($user['User']['Password']);
+			if (Security::hash($user['User']['Username'].trim($data['old_password']), 'sha1', true) != $user['User']['Password']) {
+				$ret['result'] = "Fail";
+				$ret['msg'] = "不正なパスワード";
+			} else {
+				$submit_data['Password'] = "'".Security::hash($user['User']['Username'].trim($data['new_password']), 'sha1', true)."'";
+				$submit_data['UserId'] = $data['UserId'];
+	            $this->log($submit_data);
 
-			if (isset($data['Password'])) {
-                    $this->log($data['Password']);
-                    $data['Password'] = trim($data['Password']);
-                    $data['Password'] = "'".Security::hash($data['Password'], 'sha1', true)."'";
-                    $this->log($data['Password']);
+	            if ($this->User->updateAll($submit_data, array('UserId' => $data['UserId'])) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
 			}
 
 			echo json_encode($ret);
