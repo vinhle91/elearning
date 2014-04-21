@@ -109,7 +109,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#tag').select2({
-            tags:[<?php echo $tmp;?>]
+            tags:[<?php echo $tmp;?>],
+            tokenSeparators: [",", " "]
       });
     });
 </script>

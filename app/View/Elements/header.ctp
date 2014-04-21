@@ -3,14 +3,16 @@
         <div id="logo"><h3> <?php echo $this->Html->link('E-learning',array('controller' => 'users','action' => 'index'),array('style'=>'color: #fff'));?></h3></div>
         <div id="search">
         <?php
-        echo $this->Form->create('Lesson', array('url'=>"http://localhost/elearning/lessons/search"));
+        echo $this->Form->create('Lesson', array('controller'=>'Lesson','action'=>'search'));
         echo $this->Form->input("keyWords",array("label"=>false,"class"=>"frm_search"));
         $options=array('1'=>'全て','2'=>'先生','3'=>'授業','4'=>'タグ');
         echo $this->Form->input( '種類', array(
             'type' => 'select',
             'multiple'=> false,  // 複数選択を不可能にする場合
             'options' => $options,
-//            "class"=>"frm_search"
+            'class'=>'frm_search',
+            'label'=>false,
+            'style'=>'width:50px;height:30px;padding:0px'
         ));
         echo $this->Form->submit('検索',array("class"=>"btn_search"));
         echo $this->Form->end();

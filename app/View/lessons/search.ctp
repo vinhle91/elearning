@@ -2,7 +2,7 @@
 <?php define("TEACHER","User",true) ?>
 <?php //if (isset($results)) { echo "<pre>";print_r($results); echo "</pre>";} ?>
 <div id="contents">
-    <?php echo $this->Element('cat_menu'); ?>
+<!--     <?php echo $this->Element('cat_menu'); ?> -->
     <div id="content">
         <?php
         $error = $this->Session->flash();
