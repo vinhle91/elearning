@@ -271,7 +271,7 @@ class UsersController extends AppController
                         //$this->redirect(array('action' => 'sign_up', $userType));
                         return;
                     }else{
-                        if(!is_numeric($data['User']['BankInfor'])){
+                        if(!is_numeric($data['User']['BankInfo'])){
                             $this->Session->setFlash(__('銀行の情報は数字だけ'));
                             return;
                         }
