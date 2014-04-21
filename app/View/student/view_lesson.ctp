@@ -33,7 +33,7 @@
                             <?php foreach ($lesson['File'] as $key => $value): ?>
                                 <?php if ($value['Extension'] == 'pdf'): ?>
                                     <div class="<?php echo 'file' . $key ?> file_l">
-                                        <iframe id="fraDisabled" width='725' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?> "></iframe>
+                                        <iframe id="fraDisabled" width='945' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?> "></iframe>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ($value['Extension'] == 'gif'|| $value['Extension'] == 'jpg'||$value['Extension'] == 'png'): ?>
@@ -43,7 +43,7 @@
                                 <?php endif; ?>
                                 <?php if ($value['Extension'] == 'mp4'): ?>
                                     <div class="<?php echo 'file' . $key ?> file_l" >
-                                        <video width="725" height="535" controls>
+                                        <video width="945" height="535" controls>
                                             <source src="<?php echo '/elearning' . $value['FileLink'] ?>" type="video/mp4">
                                             お使いのブラウザはvideoタグをサポートしていません。
                                         </video>
@@ -162,7 +162,7 @@
                                         <strong><?php echo $users_username['FullName']; ?></strong>
                                     </a>
                                 </div>
-                                <textarea cols="40" rows="4" name="comment"></textarea>
+                                <textarea cols="100" rows="4" name="comment"></textarea>
                                 <div class="postCommentSubmit sign_up_tb">
                                     <input class="flat_btn" value="コメント" type="submit" style="">
                                 </div>
@@ -206,16 +206,16 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(function () {
-      $(document).bind("contextmenu",function(e){
-        e.preventDefault();
-        alert("Right Click is not allowed");
-      });
+// <script type="text/javascript">
+//     $(function () {
+//       $(document).bind("contextmenu",function(e){
+//         e.preventDefault();
+//         alert("Right Click is not allowed");
+//       });
 
-      /*$('.dvOne').bind("contextmenu",function(e){
-        e.preventDefault();
-        alert("Right Click is not allowed on div");
-      });*/
-    });
-</script>
+//       /*$('.dvOne').bind("contextmenu",function(e){
+//         e.preventDefault();
+//         alert("Right Click is not allowed on div");
+//       });*/
+//     });
+// </script>

@@ -9,8 +9,8 @@
 		echo $this->Html->css(array(
 			'reset',
 			'common',
-			'select2',
 		));
+
 		// Js file
 		echo $this->Html->script(array(
 			'jquery-1.9.0.min',
@@ -18,10 +18,16 @@
 			'select2/select2',
 		)); 
 	?>
-
+	<link rel="stylesheet" type="text/css" href="/elearning/js/select2/select2.css">
+	<script type="text/javascript"> 
+	 	function disableContextMenu()
+	   	{
+	     	window.frames["fraDisabled"].document.oncontextmenu = function(){alert("No way!"); return false;};   
+		}
+	</script>
 	<style type="text/css"> @media print { body { display:none } } </style>
 </head>
-<body >
+<body onload="disableContextMenu()" >
 <!-- <?php echo $this->element('sql_dump'); ?>  -->
 	<div id="body">
 		<!--Start header-->

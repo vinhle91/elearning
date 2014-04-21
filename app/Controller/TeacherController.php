@@ -265,6 +265,18 @@ class TeacherController extends AppController
             $userId = $this->Auth->user('UserId');
             $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
         }
+        // Get list tag
+        $params = array(
+            'fields' => array('TagId', 'TagContent'),
+            'order' => array('Category.tagId' => 'Asc'),
+        );
+        $list_tag = $this->Tag->find('all');
+        $tmp ='';
+        foreach ($list_tag as $key => $value) {
+            $tmp = $tmp.'"'.$value['Tag']['TagContent'].'"'.',';
+        }
+        $this->set(compact('tmp'));
+        // debug($tmp);
         // Get list category 
         $params = array(
             'conditions' => array('Category.IsDeleted' => '0'),
