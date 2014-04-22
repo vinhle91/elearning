@@ -81,7 +81,32 @@
                                         <?php echo $this->Form->input('File.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
                                         <a href="javascript:void(0)" id="morefile">さらにファイルを追加</a>
                                     </td>
-                                </tr>      
+                                </tr>
+                                 <tr>
+                                    <td> <div class="td_text">テストファイル をアップロードした</div></td>
+                                    <td></td>
+                                </tr> 
+                                <?php foreach ($file_test as $key => $value):?>
+                                <tr>
+                                    <td><div class="td_text"></div></td>
+                                    <td><h3 style="display:inline-block;"><?php echo $this->Html->image('icon/yes.png'); ?><?php echo $value['File']['FileName']?></h3>
+                                        <?php echo $this->Html->link('ファイルの削除',array('controller'=>'Teacher','action'=>'delete_filetest',$value['File']['FileId']),array('class'=>'btn','style'=>'display:inline-block;margin-left:10px;'));?>
+                                    </td>
+                                </tr>
+                                <?php endforeach;?> 
+                                <tr>
+                                    <td> <div class="td_text">テストファイル アップロード</div></td>
+                                    <td><div class="td_text">承認されたタイプ：TSV</div>
+                                    </td>
+                                </tr> 
+                                  <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="hidden" value="0" id="n_testfile">
+                                        <?php echo $this->Form->input('TestFile.0.path', array('class'=>'input','type'=>'file','label'=>false,'div'=>false,'style'=>'margin-bottom:10px')); ?>
+                                        <a href="javascript:void(0)" id="moretestfile">さらにファイルを追加</a>
+                                    </td>
+                                </tr>             
                                 <tr>
                                     <td></td>
                                     <td>

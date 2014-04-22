@@ -441,6 +441,7 @@ class TeacherController extends AppController
                                 $test['Test']['Title'] = $this->Readtsv->getCell(1, 2);
                                 $test['Test']['SubTitle'] = $this->Readtsv->getCell(2, 2);
                                 $test['Test']['LessonId'] = $lesson_id;
+                                $test['Test']['FileId'] = $test_tmp['File']['FileId'] ;
                                 $check = $this->Readtsv->getColumn(1);
                                 $k=0;
                                 foreach ($check as $key => $value) {
@@ -732,6 +733,13 @@ class TeacherController extends AppController
                     'contain' => False,
                 ));
                 $this->set(compact('file'));
+                $file_test = $this->File->find('all', array(
+                    'conditions' => array('File.LessonId' => $lesson_id,'FIle.FileType'=>2),
+                    'fields' => array('File.*'),
+                    'order' => array('File.created' => 'Asc'),
+                    'contain' => False,
+                ));
+                $this->set(compact('file_test'));
 	            // debug($file);
 	        }
         	if ($this->request->is('post')) {
@@ -819,8 +827,180 @@ class TeacherController extends AppController
 	                            }
 	                        }
 	                    }
+
+                         // Save test of lesson
+                        $num_test = 0;
+                        foreach ($data['TestFile'] as $key => $value) {
+                            if (!empty($value['path']['name'])) {
+                                // $options['conditions'] = array(
+                                //     'File.FileName' => $value['path']['name'],
+                                //     'File.LessonId' =>$lesson_id,
+                                //     'File.IsDeleted' => '0',
+                                //     'File.FileType' => '2',
+                                //     'Lesson.IsDeleted' => '0',
+                                //     'Lesson.UserId' => $userId,
+                                // );
+                                // $options['fields'] = array('Lesson.UserId', 'File.*');
+                                // $file_name = $this->File->find('first', $options);
+                                // if (!empty($file_name)) {
+                                //     $test_dup = 
+                                //     $this->Test->deleteAll(array('Test.LessonId' => $lesson_id), false);
+                                //     $this->Question->deleteAll(array('Question.TestId' => $test_id), false);
+                                //     $this->File->delete($file_name['File']['FileId']);
+                                // }
+                                $data['TestFile'][$key]['path']['old_name'] = $value['path']['name'];
+                                $num_test++;
+                                $type = explode(".", $value['path']['name']);
+                                $type = $type['1'];
+                                //formatName LessonId_FileNum_Size_Type
+                                $name = 'Test' . '_' . $lesson_id . '_' . $num_test . '_' . $value['path']['size'] . '.' . $type;
+                                $data['TestFile'][$key]['path']['name'] = $name;
+                            }
+                        }
+                        if ($num_test != 0) {
+                            foreach ($data['TestFile'] as $key => $value) {
+                                $this->File->create();
+                                $param2['File']['TestFile'] = $value['path'];
+                                $param2['File']['LessonId'] = $lesson_id;
+                                $param2['File']['FileType'] = '2';
+                                $param2['File']['FileName'] = $value['path']['old_name'];
+                                if ($this->File->save($param2)) {
+                                    $test_tmp = $this->File->find('first', array(
+                                        'conditions' => array('File.LessonId' => $lesson_id, 'File.FileType' => '2'),
+                                        'fields' => array('File.FileId', 'FileLink'),
+                                        'order' => array('File.FileId' => 'desc'),
+                                        'contain' => False,
+                                    ));
+                                    $link = $test_tmp['File']['FileLink'];
+                                    $link = substr($link, 1);
+                                    $excel = $this->Readtsv->loadFile($link);
+                                    $test = array();
+                                    $quest = array();
+                                    $answer = array();
+                                    $Answer = array();
+                                    $test['Test']['Title'] = $this->Readtsv->getCell(1, 2);
+                                    $test['Test']['SubTitle'] = $this->Readtsv->getCell(2, 2);
+                                    $test['Test']['LessonId'] = $lesson_id;
+                                    $test['Test']['FileId'] = $test_tmp['File']['FileId'] ;
+                                    $check = $this->Readtsv->getColumn(1);
+                                    $k=0;
+                                    foreach ($check as $key => $value) {
+                                       if(strcmp($value, 'End') == 0){
+                                            $k++;
+                                       }
+                                    }
+                                    if($k==0){
+                                        $this->Lesson->delete($lesson_id);
+                                        $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                        $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                        $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
+                                        return;
+                                    }
+                                    // die;
+                                    if ($this->Test->save($test)) {
+                                        $Test = $this->Test->find('first', array(
+                                            'conditions' => array('Test.LessonId' => $lesson_id),
+                                            'fields' => array('Test.TestId'),
+                                            'order' => array('Test.created' => 'Asc'),
+                                            'contain' => False,
+                                        ));
+                                        $test_id = $Test['Test']['TestId'];
+                                        $i = 3;
+                                        $num = 1;
+                                        $Answer[$num]['Num'] = 0;
+                                        while (strcmp($this->Readtsv->getCell($i, 1), 'End') != 0) {
+
+                                            if (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                                $i++;
+                                                continue;
+                                            }
+                                            if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] == 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
+                                                $Answer[$num]['Start'] = $i;
+                                                $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                                $i++;
+                                                continue;
+                                            } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
+                                                $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                                $i++;
+                                                continue;
+                                            } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') != 0) {
+                                                $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                                $num = $num + 1;
+                                                $Answer[$num]['Num'] = 0;
+                                                $i++;
+                                                continue;
+                                            } else {
+                                                $i++;
+                                                continue;
+                                            }
+                                        }
+                                        foreach ($Answer as $key => $value) {
+                                            if ($value['Num'] != 0) {
+                                                $quest['Question']['TestId'] = $test_id;
+                                                $quest['Question']['QuesNumber'] = $key;
+                                                $quest['Question']['QuesContent'] = $this->Readtsv->getCell($value['Start'], 3);
+                                                $quest['Question']['QuesAnswer'] = $this->Readtsv->getCell($value['Start'] + $value['Num'] - 1, 3);
+                                                $quest['Question']['Point'] = $this->Readtsv->getCell($value['Start'] + $value['Num'] - 1, 4);
+                                                $this->Question->create();
+                                                if ($this->Question->save($quest)) {
+                                                    $Quest = $this->Question->find('first', array(
+                                                        'conditions' => array('Question.TestId' => $test_id, 'Question.QuesNumber' => $key),
+                                                        'fields' => array('Question.QuesId'),
+                                                        'contain' => False,
+                                                    ));
+                                                    $quest_id = $Quest['Question']['QuesId'];
+                                                    $h = 1;
+                                                    for ($j = $value['Start'] + 1; $j < $value['Start'] + $value['Num'] - 1; $j++) {
+                                                        $answer['Answer']['QuesId'] = $quest_id;
+                                                        $answer['Answer']['AnswerNumber'] = $h;
+                                                        $answer['Answer']['AnswerContent'] = $this->Readtsv->getCell($j, 3);
+                                                        $this->Answer->create();
+                                                        if ($this->Answer->save($answer)) {
+
+                                                        } else {
+                                                            $this->Lesson->delete($lesson_id);
+                                                            $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                                            $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                                            $this->Test->deleteAll(array('Test.LessonId' => $lesson_id), false);
+                                                            $this->Question->deleteAll(array('Question.TestId' => $test_id), false);
+                                                            $this->Session->setFlash(__('答えは作成できませんでした。 、もう一度お試しください。'));
+                                                            $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $userId));
+                                                        }
+                                                        $h++;
+                                                    }
+                                                } else {
+                                                    $this->Lesson->delete($lesson_id);
+                                                    $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                                    $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                                    $this->Test->deleteAll(array('Test.LessonId' => $lesson_id), false);
+                                                    $this->Session->setFlash(__('クエストは作成できませんでした。 、もう一度お試しください。'));
+                                                    $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $userId));
+
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        $this->Lesson->delete($lesson_id);
+                                        $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                        $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                        $this->Session->setFlash(__('テストは作成できませんでした。 、もう一度お試しください。'));
+                                        $this->redirect(array('controller' => 'teacher', 'action' => 'make_lesson', $userId));
+
+                                    }
+                                } else {
+                                    $error_msg = $this->File->validationErrors['File'];
+                                    $this->set(compact('error_msg'));
+                                    $this->Lesson->delete($lesson_id);
+                                    $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                    $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                    $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
+                                    return;
+                                }
+                            }
+                        }
+
                         $File = $this->File->find('first', array(
-                            'conditions' => array('File.LessonId' => $lesson_id),
+                            'conditions' => array('File.LessonId' => $lesson_id,'File.FileType'=>1),
                             'fields' => array('File.FileId'),
                             'order' => array('File.created' => 'Asc'),
                             'contain' => False,
@@ -1039,7 +1219,39 @@ class TeacherController extends AppController
 
         $this->File->deleteAll(array('File.FileId' => $file_id));
         $this->Session->setFlash(__('このファイルには、正常な削除してしまった。'));
-        $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
+        $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $File['File']['LessonId']));
+   
+    }
+    public function delete_filetest($file_id)
+    {
+        $File = $this->File->find('first', array(
+            'conditions' => array('File.FileId' => $file_id),
+            'fields' => array('File.*'),
+            'order' => array('File.created' => 'Asc'),
+            'contain' => False,
+        ));
+        // debug($file_id);
+        $Test = $this->Test->find('first', array(
+            'conditions' => array('Test.FileId' => $file_id),
+            'fields' => array('Test.*'),
+            'order' => array('Test.created' => 'Asc'),
+            'contain' => False,
+        ));
+        // debug($Test);
+        $Question = $this->Question->find('all', array(
+            'conditions' => array('Question.TestId' => $Test['Test']['TestId']),
+            'fields' => array('Question.*'),
+            'contain' => False,
+        ));
+        foreach ($Question as $key => $value) {
+             $this->Answer->deleteAll(array('Answer.QuesId' => $value['Question']['QuesId']));
+        }
+        $this->Question->deleteAll(array('Question.TestId' => $Test['Test']['TestId']));
+        $this->File->deleteAll(array('File.FileId' => $file_id));
+        $this->Test->deleteAll(array('Test.TestId' => $Test['Test']['TestId']));
+       
+        $this->Session->setFlash(__('このファイルには、正常な削除してしまった。'));
+        $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $File['File']['LessonId']));
    
     }
 
