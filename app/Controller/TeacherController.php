@@ -353,7 +353,7 @@ class TeacherController extends AppController
                             $data['File'][$key]['path']['name'] = $name;
                         }
                     }
-                    // debug($data);
+                    debug($data);
                     if ($num_file != 0) {
                         foreach ($data['File'] as $key => $value) {
                             $this->File->create();
@@ -441,6 +441,21 @@ class TeacherController extends AppController
                                 $test['Test']['Title'] = $this->Readtsv->getCell(1, 2);
                                 $test['Test']['SubTitle'] = $this->Readtsv->getCell(2, 2);
                                 $test['Test']['LessonId'] = $lesson_id;
+                                $check = $this->Readtsv->getColumn(1));
+                                $k=0;
+                                foreach ($check as $key => $value) {
+                                   if(strcmp($value, 'End') == 0){
+                                        $k++;
+                                   }
+                                }
+                                if($k==0){
+                                    $this->Lesson->delete($lesson_id);
+                                    $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                    $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                    $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
+                                    return;
+                                }
+                                // die;
                                 if ($this->Test->save($test)) {
                                     $Test = $this->Test->find('first', array(
                                         'conditions' => array('Test.LessonId' => $lesson_id),
