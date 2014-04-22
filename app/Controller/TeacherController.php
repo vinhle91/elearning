@@ -353,7 +353,7 @@ class TeacherController extends AppController
                             $data['File'][$key]['path']['name'] = $name;
                         }
                     }
-                    debug($data);
+                    // debug($data);
                     if ($num_file != 0) {
                         foreach ($data['File'] as $key => $value) {
                             $this->File->create();
@@ -441,7 +441,7 @@ class TeacherController extends AppController
                                 $test['Test']['Title'] = $this->Readtsv->getCell(1, 2);
                                 $test['Test']['SubTitle'] = $this->Readtsv->getCell(2, 2);
                                 $test['Test']['LessonId'] = $lesson_id;
-                                $check = $this->Readtsv->getColumn(1));
+                                $check = $this->Readtsv->getColumn(1);
                                 $k=0;
                                 foreach ($check as $key => $value) {
                                    if(strcmp($value, 'End') == 0){
