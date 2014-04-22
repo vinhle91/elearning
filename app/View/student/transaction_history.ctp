@@ -73,7 +73,12 @@
                         <?php foreach ($transactions as $transaction): ?>
                             <tr>
                                 <td><?php echo($i++); ?></td>
-                                <td><?php echo($transaction['Lesson']['Title']); ?></td>
+                                <td><?php 
+                                $title = $transaction['Lesson']['Title'];
+                                if(empty($title)) {
+                                    $title = '***この授業は先生に削除されました***';
+                                }
+                                echo($title); ?></td>
                                 <td><?php echo($transaction['StudentHistory']['StartDate']); ?></td>
                                 <td><?php echo($transaction['StudentHistory']['ExpiryDate']); ?></td>
                                 <td><?php echo ($transaction['StudentHistory']['CourseFee']); ?></td>

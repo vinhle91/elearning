@@ -76,6 +76,7 @@ class StudentController extends AppController {
         $histories = $this->StudentHistory->find('all', array(
             'conditions' => array(
                 'StudentHistory.UserId' => $userId,
+                'Blocked' => 0,
                 'CURDATE() BETWEEN DATE(StudentHistory.StartDate) AND DATE(StudentHistory.ExpiryDate)'
             ),
             'order' => $order,

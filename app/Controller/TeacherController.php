@@ -1067,6 +1067,7 @@ class TeacherController extends AppController
                         if ($lesson['Lesson']['UserId'] == $userId) {
                             if ($lesson['Author']['Status'] == 1) {
                                 if($this->Lesson->delete($lesson_id, true)){
+                                    $this->StudentHistory->updateAll(array('Blocked'=>1),array('StudentHistory.LessonId'=>$lesson_id));
                                     $this->Session->setFlash('授業削除できました');
                                 } else {
                                     $this->Session->setFlash('エラーが発生された、授業削除できなかった。もう一度やってみてください');

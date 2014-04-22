@@ -17,21 +17,21 @@ class StudentHistory extends AppModel {
     public $belongsTo = array(
         'User' => array(
             'className' => 'User',
-            'foreignKey' => false,
-            'conditions' => array(
-                'StudentHistory.UserId = User.UserId',
-            )
+            'foreignKey' => 'UserId',
+//            'conditions' => array(
+//                'StudentHistory.UserId = User.UserId',
+//            )
         ),
         'Lesson' => array(
             'className' => 'Lesson',
-            'foreignKey' => false,
-            'conditions' => array(
-                'StudentHistory.LessonId = Lesson.LessonId',
-            )
+            'foreignKey' => 'LessonId',
+//            'conditions' => array(
+//                'StudentHistory.LessonId = Lesson.LessonId',
+//            )
         )
     );
     function getStudentTransactionHistory($userId, $month, $year) {
-        $this->recursive = -1;
+//        $this->recursive = -1;
         if ($month != 0 && $year != 0) {
             $options['conditions'] = array(
                 'StudentHistory.UserId' => $userId,
@@ -44,16 +44,16 @@ class StudentHistory extends AppModel {
             );
         }
 
-        $options['fields'] = array('Lesson.Title', 'StudentHistory.*');
-        $options['joins'] = array(
-            array('table' => 'lessons',
-                'alias' => 'Lesson',
-                'type' => 'inner',
-                'conditions' => array(
-                    'Lesson.LessonId = StudentHistory.LessonId'
-                )
-            )
-        );
+//        $options['fields'] = array('Lesson.Title', 'StudentHistory.*');
+//        $options['joins'] = array(
+//            array('table' => 'lessons',
+//                'alias' => 'Lesson',
+//                'type' => 'inner',
+//                'conditions' => array(
+//                    'Lesson.LessonId = StudentHistory.LessonId'
+//                )
+//            )
+//        );
 
         $transactions = $this->find('all', $options);
         return $transactions;
