@@ -690,8 +690,8 @@
             var origin = {};
             birthday = new Date("<?php echo $moderatorInfo['Birthday'] ?>");
             $("#BirthdayYear").val(birthday.getFullYear());
-            $("#BirthdayMonth").val(birthday.getMonth());
-            $("#BirthdayDay").val(birthday.getDay());
+            $("#BirthdayMonth").val(birthday.getMonth()+1);
+            $("#BirthdayDay").val(birthday.getDate());
 
             $(".edit-btn").on("click", function() {
                 editElm = $(this).closest("td").find("input");

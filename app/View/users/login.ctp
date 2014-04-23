@@ -43,7 +43,7 @@
                         </label>
 
                         <?php if(empty($userIsBlocked) || $userIsBlocked==false):?>
-                        <input class="flat_btn" style="margin-top:15px; height:40px; font-size:18px;" type="submit" value="Login">  
+                        <input class="flat_btn" style="margin-top:15px; height:40px; font-size:18px;" type="submit" value="ログイン">
                         <?php endif;?>
 
                         <?php echo $this->Form->end(); ?>

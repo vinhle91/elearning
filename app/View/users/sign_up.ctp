@@ -145,7 +145,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td> <input class="flat_btn" data-act_as="submit" type="submit" value="Sign up"></td>
+                                <td> <input class="flat_btn" data-act_as="submit" type="submit" value="登録"></td>
                             </tr>
                         </tbody>
                     </table>

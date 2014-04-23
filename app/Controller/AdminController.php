@@ -507,7 +507,7 @@ class AdminController extends AppController {
 			//breadcrumb cho trang
 			$page_breadcrumb = array();
 			$page_breadcrumb['title'] = $moderatorInfo['FullName'];
-			$page_breadcrumb['direct'] = array('Home', 'Moderator', $moderatorInfo['FullName']);
+			$page_breadcrumb['direct'] = array('ホーム', '管理者', $moderatorInfo['FullName']);
 			$this->set(compact('page_breadcrumb'));
 			//end breadcrumb cho trang
 
