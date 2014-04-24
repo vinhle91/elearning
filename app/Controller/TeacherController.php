@@ -276,15 +276,6 @@ class TeacherController extends AppController
             $tmp = $tmp.'"'.$value['Tag']['TagContent'].'"'.',';
         }
         $this->set(compact('tmp'));
-        // debug($tmp);
-        // Get list category 
-        // $params = array(
-        //     'conditions' => array('Category.IsDeleted' => '0'),
-        //     'fields' => array('CatId', 'CatName'),
-        //     'order' => array('Category.CatId' => 'Asc'),
-        // );
-        // $cat = $this->Category->find('all', $params);
-        // $this->set(compact('cat'));
         if ($this->request->is('post')) {
             $data = $this->request->data;
             // debug($data);
@@ -767,14 +758,14 @@ class TeacherController extends AppController
                 $file = $this->File->find('all', array(
                     'conditions' => array('File.LessonId' => $lesson_id,'FIle.FileType'=>1),
                     'fields' => array('File.*'),
-                    'order' => array('File.created' => 'Asc'),
+                    'order' => array('File.created' => 'desc'),
                     'contain' => False,
                 ));
                 $this->set(compact('file'));
                 $file_test = $this->File->find('all', array(
                     'conditions' => array('File.LessonId' => $lesson_id,'FIle.FileType'=>2),
                     'fields' => array('File.*'),
-                    'order' => array('File.created' => 'Asc'),
+                    'order' => array('File.created' => 'desc'),
                     'contain' => False,
                 ));
                 $this->set(compact('file_test'));
@@ -865,27 +856,10 @@ class TeacherController extends AppController
 	                            }
 	                        }
 	                    }
-
                          // Save test of lesson
                         $num_test = 0;
                         foreach ($data['TestFile'] as $key => $value) {
                             if (!empty($value['path']['name'])) {
-                                // $options['conditions'] = array(
-                                //     'File.FileName' => $value['path']['name'],
-                                //     'File.LessonId' =>$lesson_id,
-                                //     'File.IsDeleted' => '0',
-                                //     'File.FileType' => '2',
-                                //     'Lesson.IsDeleted' => '0',
-                                //     'Lesson.UserId' => $userId,
-                                // );
-                                // $options['fields'] = array('Lesson.UserId', 'File.*');
-                                // $file_name = $this->File->find('first', $options);
-                                // if (!empty($file_name)) {
-                                //     $test_dup = 
-                                //     $this->Test->deleteAll(array('Test.LessonId' => $lesson_id), false);
-                                //     $this->Question->deleteAll(array('Question.TestId' => $test_id), false);
-                                //     $this->File->delete($file_name['File']['FileId']);
-                                // }
                                 $data['TestFile'][$key]['path']['old_name'] = $value['path']['name'];
                                 $num_test++;
                                 $type = explode(".", $value['path']['name']);
@@ -896,12 +870,12 @@ class TeacherController extends AppController
                             }
                         }
                         if ($num_test != 0) {
-                            foreach ($data['TestFile'] as $key => $value) {
+                            foreach ($data['TestFile'] as $key => $value12) {
                                 $this->File->create();
-                                $param2['File']['TestFile'] = $value['path'];
+                                $param2['File']['TestFile'] = $value12['path'];
                                 $param2['File']['LessonId'] = $lesson_id;
                                 $param2['File']['FileType'] = '2';
-                                $param2['File']['FileName'] = $value['path']['old_name'];
+                                $param2['File']['FileName'] = $value12['path']['old_name'];
                                 if ($this->File->save($param2)) {
                                     $test_tmp = $this->File->find('first', array(
                                         'conditions' => array('File.LessonId' => $lesson_id, 'File.FileType' => '2'),
@@ -909,6 +883,7 @@ class TeacherController extends AppController
                                         'order' => array('File.FileId' => 'desc'),
                                         'contain' => False,
                                     ));
+                                    $File_id = $test_tmp['File']['FileId'];
                                     $link = $test_tmp['File']['FileLink'];
                                     $link = substr($link, 1);
                                     $excel = $this->Readtsv->loadFile($link);
@@ -916,10 +891,24 @@ class TeacherController extends AppController
                                     $quest = array();
                                     $answer = array();
                                     $Answer = array();
-                                    $test['Test']['Title'] = $this->Readtsv->getCell(1, 2);
-                                    $test['Test']['SubTitle'] = $this->Readtsv->getCell(2, 2);
+                                    $i = 1;
+                                    $this->Test->create();
+                                    while (strcmp(substr($this->Readtsv->getCell($i, 1),0,1), '#') == 0) {
+                                        $i++;
+                                    }
+                                    $test['Test']['Title'] = $this->Readtsv->getCell($i, 2);
+                                    $i++;
+                                    while (strcmp(substr($this->Readtsv->getCell($i, 1),0,1), '#') == 0) {
+                                        $i++;
+                                    }
+                                    $test['Test']['SubTitle'] = $this->Readtsv->getCell($i, 2);
+                                    $i++;
+                                    while (strcmp($this->Readtsv->getCell($i, 1), '#') == 0||strcmp($this->Readtsv->getCell($i, 1), '') == 0) {
+                                        $i++;
+                                    }
                                     $test['Test']['LessonId'] = $lesson_id;
                                     $test['Test']['FileId'] = $test_tmp['File']['FileId'] ;
+                                    // Check format file TSV
                                     $check = $this->Readtsv->getColumn(1);
                                     $k=0;
                                     foreach ($check as $key => $value) {
@@ -928,50 +917,106 @@ class TeacherController extends AppController
                                        }
                                     }
                                     if($k==0){
-                                        $this->Lesson->delete($lesson_id);
-                                        $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
-                                        $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                        $this->File->deleteAll(array('File.FileId' => $File_id), false);
                                         $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
                                         return;
                                     }
+                                    $g = 0;
+                                    $num = 1;
+                                    $Answer[$num]['Num'] = 0;
+                                    while (strcmp($this->Readtsv->getCell($i, 1), 'End') != 0) {
+                                        if (strcmp(substr($this->Readtsv->getCell($i, 1),0,1), '#') == 0) {
+                                            $i++;
+                                            continue;
+                                        }
+                                        if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] == 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
+                                            if(strcmp($this->Readtsv->getCell($i, 2), 'QS')!=0){
+                                                $g++;
+                                                break;
+                                            }
+                                            $Answer[$num]['Start'] = $i;
+                                            $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                            $i++;
+                                            continue;
+                                        } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
+                                            $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                            $i++;
+                                            continue;
+                                        } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') != 0) {
+                                            if(strcmp($this->Readtsv->getCell($i, 2), 'KS')!=0){
+                                                $g++;
+                                                break;
+                                            }
+                                            $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                            $num = $num + 1;
+                                            $Answer[$num]['Num'] = 0;
+                                            $i++;
+                                            continue;
+                                        }else{
+                                            if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') != 0&&strcmp($this->Readtsv->getCell($i, 1), '') != 0 ) {
+                                                $g++;
+                                                break;
+                                            }
+                                            $i++;
+                                            continue;
+                                        }
+                                    }
+                                    // debug($h);
+                                    if($g!=0){
+                                        $this->File->deleteAll(array('File.FileId' => $File_id), false);
+                                        $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
+                                        return;
+                                    }
+                                    // debug($data['TestFile']);
+                                    //overwrite file
+                                    $options['conditions'] = array(
+                                        'File.FileName' => $value12['path']['old_name'],
+                                        'File.LessonId' =>$lesson_id,
+                                        'File.IsDeleted' => '0',
+                                        'File.FileType' => '2',
+                                        'Lesson.IsDeleted' => '0',
+                                        'Lesson.UserId' => $userId,
+                                    );
+                                    $options['order'] = array(
+                                        'File.FileId' => 'Asc',
+                                    );
+                                    $options['fields'] = array('Lesson.UserId', 'File.*');
+                                    $file_name = $this->File->find('all', $options);
+                                    $j =0;
+                                    foreach ($file_name as $key => $value) {
+                                        $j++;
+                                    }
+
+                                    if ($j>1) {
+                                        $Test = $this->Test->find('first', array(
+                                            'conditions' => array('Test.FileId' => $file_name['0']['File']['FileId']),
+                                            'fields' => array('Test.*'),
+                                            'order' => array('Test.created' => 'Asc'),
+                                            'contain' => False,
+                                        ));
+                                        // debug($Test);
+                                        $Question = $this->Question->find('all', array(
+                                            'conditions' => array('Question.TestId' => $Test['Test']['TestId']),
+                                            'fields' => array('Question.*'),
+                                            'contain' => False,
+                                        ));
+                                        foreach ($Question as $key => $value) {
+                                             $this->Answer->deleteAll(array('Answer.QuesId' => $value['Question']['QuesId']));
+                                        }
+                                        $this->Question->deleteAll(array('Question.TestId' => $Test['Test']['TestId']));
+                                        $this->File->deleteAll(array('File.FileId' =>$file_name['0']['File']['FileId']));
+                                        $this->Test->deleteAll(array('Test.TestId' => $Test['Test']['TestId']));
+                                    }
+                                    // debug($test);
                                     // die;
                                     if ($this->Test->save($test)) {
                                         $Test = $this->Test->find('first', array(
                                             'conditions' => array('Test.LessonId' => $lesson_id),
                                             'fields' => array('Test.TestId'),
-                                            'order' => array('Test.created' => 'Asc'),
+                                            'order' => array('Test.created' => 'desc'),
                                             'contain' => False,
                                         ));
                                         $test_id = $Test['Test']['TestId'];
-                                        $i = 3;
-                                        $num = 1;
-                                        $Answer[$num]['Num'] = 0;
-                                        while (strcmp($this->Readtsv->getCell($i, 1), 'End') != 0) {
-
-                                            if (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
-                                                $i++;
-                                                continue;
-                                            }
-                                            if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] == 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
-                                                $Answer[$num]['Start'] = $i;
-                                                $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
-                                                $i++;
-                                                continue;
-                                            } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
-                                                $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
-                                                $i++;
-                                                continue;
-                                            } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') != 0) {
-                                                $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
-                                                $num = $num + 1;
-                                                $Answer[$num]['Num'] = 0;
-                                                $i++;
-                                                continue;
-                                            } else {
-                                                $i++;
-                                                continue;
-                                            }
-                                        }
                                         foreach ($Answer as $key => $value) {
                                             if ($value['Num'] != 0) {
                                                 $quest['Question']['TestId'] = $test_id;
