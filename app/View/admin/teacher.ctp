@@ -729,39 +729,6 @@
             return false;
         });
 
-
-		$("#first-active").on("click", function(e) {
-			e = $.event.fix(e);
-			e.preventDefault();
-			var url = "/elearning/admin/updateUserInfo/active";
-			var submit_data = {
-				UserId: "<?php echo $teacherInfo['UserId']?>",
-				Username: "<?php echo $teacherInfo['Username']?>",
-			};
-			$(".handle-user #notif-pending").hide("slide", { direction: "right" }, 1000);
-			$(".handle-user #first-deny").hide("slide", { direction: "right" }, 1000);
-			setTimeout(function(){
-				$(".handle-user #first-active").prepend('<i class="fa fa-check margin-right-5"></i>');
-			}, 1000);
-			$("#first-active").unbind();
-			$.ajax({
-		           type: "POST",
-		           url: url,
-		           data: submit_data, 
-		           success: function(data)
-		           {
-						data = $.parseJSON(data);
-		               	if (data.result == "Success") {
-		               		
-		               	} else if (data.result == "Fail") {
-
-		               	}
-		           }
-		         });
-
-		    return false;
-		});
-
 		$("#first-active").on("click", function(e) {
 			e = $.event.fix(e);
 			e.preventDefault();
@@ -824,11 +791,11 @@
 		           }
 		         });
 
-                                                                        return false;
-                                                                    });
+                return false;
+            });
 
-                                                                });
-                                                            </script>
+        });
+    </script>
 
-                                                            <?php
-                                                        } //end else-if !isset($teacherInfo)?>
+    <?php
+} //end else-if !isset($teacherInfo)?>

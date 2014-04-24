@@ -200,7 +200,8 @@ class AdminController extends AppController {
     }
 
 	public function payment($param = null) {
-
+		$CONFIG_COURSE_FEE = $this->Config->getConfig("lesson_cost") ?  $this->Config->getConfig("lesson_cost") : 20000;
+		$CONFIG_SHARING_RATE = $this->Config->getConfig("share_rate") ? $this->Config->getConfig("share_rate") : 40;
 		if (!isset($param)) {
 			//title cho trang
 			$pageTitle = __('支払い概要');
@@ -228,7 +229,11 @@ class AdminController extends AppController {
 				try {
 					$ret['data']  = $this->Transaction->getTransaction($data['Month'], $data['Year']);
 					$ret['result'] = "Success";
-					$ret['data']['Earn'] = $ret['data']['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
+					$ret['data']['Earn'] = 0;
+					foreach ($ret['data']['Data'] as $key => $buff) {
+						$ret['data']['Earn'] += $buff['Transaction']['CourseFee'];
+					}
+					
 				} catch (Exception $e) {
 					$ret['data'] = null;
 					$ret['result'] = "Fail";
@@ -254,7 +259,6 @@ class AdminController extends AppController {
 		$lastweek = $this->Transaction->getTransactions("LastWeek");
 
 		$total = $this->Transaction->find("all", array(
-					'recursive' => '2',
 					'conditions' => array(
 						'Blocked' => '0'
 						),
@@ -264,14 +268,12 @@ class AdminController extends AppController {
 		$overview = array(
 			'Today' => $today['Total'] * $CONFIG_COURSE_FEE,
 			'Lastweek' => $lastweek['Total'] * $CONFIG_COURSE_FEE,
-			'Total' => $total['Total'] * $CONFIG_COURSE_FEE,
-			'Earn' => $total['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100,
+			'Total' => $total['TotalEarn'],
+			'Earn' => $total['TotalEarn'] * $CONFIG_SHARING_RATE / 100,
 			);
 		$this->set(compact('overview'));
 
 		$payment_summary = $this->Transaction->getTransactions("LastMonth");
-		$payment_summary['Earn'] = $payment_summary['Total'] * $CONFIG_COURSE_FEE * $CONFIG_SHARING_RATE / 100;
-		// $this->log($payment_summary);
 		$this->set(compact('payment_summary'));
 
 	}

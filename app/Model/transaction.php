@@ -51,6 +51,10 @@ class Transaction extends AppModel {
 					'conditions' => $condition,
 					));
 
+			$_total_earn = 0;
+			foreach ($_data as $key => $data) {
+				$_total_earn += $data['Transaction']['CourseFee'];
+			}
 
 			$_student = $_student = $this->find("count", array(
 					'fields' => 'DISTINCT Transaction.UserId',
@@ -87,6 +91,7 @@ class Transaction extends AppModel {
 				'Total' => $_amount,
 				'TotalStudent' => $_student,
 				'TotalTeacher' => $_teacher,
+				'TotalEarn' => $_total_earn,
 				'Data' => $_data,
 				);
 
@@ -138,12 +143,18 @@ class Transaction extends AppModel {
 
 			$_teacher = $this->find('count', $options);
 
+			$_total_earn = 0;
+			foreach ($_data as $key => $data) {
+				$_total_earn += $data['Transaction']['CourseFee'];
+			}
+
 			$buff = array(
 				'Start' => $_start,
 				'End' => $_end,
 				'Total' => $_amount,
 				'TotalStudent' => $_student,
 				'TotalTeacher' => $_teacher,
+				'TotalEarn' => $_total_earn,
 				'Data' => $_data,
 				);
 
@@ -195,12 +206,18 @@ class Transaction extends AppModel {
 
 			$_teacher = $this->find('count', $options);
 
+			$_total_earn = 0;
+			foreach ($_data as $key => $data) {
+				$_total_earn += $data['Transaction']['CourseFee'];
+			}
+
 			$buff = array(
 				'Start' => $_start,
 				'End' => $_end,
 				'Total' => $_amount,
 				'TotalStudent' => $_student,
 				'TotalTeacher' => $_teacher,
+				'TotalEarn' => $_total_earn,
 				'Data' => $_data,
 				);
 
@@ -251,12 +268,18 @@ class Transaction extends AppModel {
 
 			$_teacher = $this->find('count', $options);
 
+			$_total_earn = 0;
+			foreach ($_data as $key => $data) {
+				$_total_earn += $data['Transaction']['CourseFee'];
+			}
+
 			$buff = array(
 				'Start' => $_start,
 				'End' => $_end,
 				'Total' => $_amount,
 				'TotalStudent' => $_student,
 				'TotalTeacher' => $_teacher,
+				'TotalEarn' => $_total_earn,
 				'Data' => $_data,
 				);
 

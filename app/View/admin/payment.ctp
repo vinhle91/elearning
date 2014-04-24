@@ -70,7 +70,7 @@
                                 </tr>
                                 <tr>
                                     <td>報酬</td>
-                                    <td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
+                                    <td id="payment-earn"><?php echo $payment_summary['TotalEarn'] ?> VND</td>
                                 </tr>
                             </tbody>
                         </table>

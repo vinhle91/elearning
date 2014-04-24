@@ -58,6 +58,7 @@ $paid_label = array('warning', 'success');
 				<div class="portlet-body">
 					<div class="table-responsive">
 						<table class="table margin-top-10" style="width: 400px">
+						<?php $this->log($payment_summary) ?>
 							<tbody>
 								<tr>
 									<td class="">最初トランザクション</td>
@@ -80,8 +81,8 @@ $paid_label = array('warning', 'success');
 									<td id="payment-total-student"><?php echo $payment_summary['TotalTeacher'] ?></td>
 								</tr>
 								<tr>
-									<td>Translate_"Earn"</td>
-									<td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
+									<td>利益</td>
+									<td id="payment-earn"><?php echo $payment_summary['TotalEarn'] ?> VND</td>
 								</tr>
 							</tbody>
 						</table>
@@ -110,7 +111,8 @@ $paid_label = array('warning', 'success');
 									<td><?php echo $buff['Lesson']['Title'] ?></td>
 									<td><a href="/elearning/admin/student/<?php echo $buff['Student']['Username'] ?>"><?php echo $buff['Student']['Username'] ?></a></td>
 									<td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
-									<td class="text-align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした"  ?></span></td>
+									<!-- <td class="text-align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした"  ?></span></td> -->
+									<td class="text-align-right"><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo $buff['Transaction']['CourseFee'] ?></span></td>
 								</tr>
 								<?php } ?>							
 							</tbody>
