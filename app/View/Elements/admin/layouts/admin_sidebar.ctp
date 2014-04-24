@@ -69,6 +69,13 @@
 			<span class="title">システム設定</span>
 			</a>
 		</li>	
+
+		<li class="backup">
+			<a href="/elearning/admin/backupData">
+			<i class="fa fa-save"></i> 
+			<span class="title">バックアップデータベース</span>
+			</a>
+		</li>	
 		
 	</ul>
 	<!-- END SIDEBAR MENU -->

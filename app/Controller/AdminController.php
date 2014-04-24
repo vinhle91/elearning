@@ -382,7 +382,7 @@ class AdminController extends AppController {
 				)
 			));
 		$this->log($file);
-		
+
 		$this->set(compact('file'));
 	}
 
@@ -580,6 +580,15 @@ class AdminController extends AppController {
 							),
 						));
 		$this->set(compact('list_user'));
+	}
+
+	public function backupData() {
+		//title cho trang
+		$pageTitle = __('システム設定');
+		$this->set(compact('pageTitle'));
+
+		//sidebar
+		$this->set('sidebar', array('backup'));
 	}
 
 	public function updateUserInfo($param) {

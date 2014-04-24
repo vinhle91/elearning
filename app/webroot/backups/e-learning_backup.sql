@@ -28,7 +28,7 @@ CREATE TABLE `answers` (
   `AnswerNumber` int(11) NOT NULL,
   `AnswerContent` text CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`AnswerId`)
-) ENGINE=MyISAM AUTO_INCREMENT=253 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
-INSERT INTO `answers` VALUES (252,149,5,'男性は３本足である。'),(251,149,4,'鳥類は４本足である。'),(250,149,3,'哺乳類は全て２本足である。'),(249,149,2,'爬虫類は全て４本足である。'),(248,149,1,'昆虫は６本足である。'),(247,148,3,'ちょうふく'),(246,148,2,'じゅうふく'),(245,148,1,'おもふく'),(244,147,5,'コムピューター'),(243,147,4,'コンピュータ'),(242,147,3,'コンプータ'),(241,147,2,'コムピューター'),(240,147,1,'コムピュータ'),(239,146,6,'ミーチング'),(238,146,5,'ミティング'),(237,146,4,'メティング'),(236,146,3,'ミッティング'),(235,146,2,'メーティング'),(234,146,1,'ミーティング');
+INSERT INTO `answers` VALUES (1,1,1,'ミーティング'),(2,1,2,'メーティング'),(3,1,3,'ミッティング'),(4,1,4,'メティング'),(5,1,5,'ミティング'),(6,1,6,'ミーチング'),(7,2,1,'コムピュータ'),(8,2,2,'コムピューター'),(9,2,3,'コンプータ'),(10,2,4,'コンピュータ'),(11,2,5,'コムピューター'),(12,3,1,'おもふく'),(13,3,2,'じゅうふく'),(14,3,3,'ちょうふく'),(15,4,1,'昆虫は６本足である。'),(16,4,2,'爬虫類は全て４本足である。'),(17,4,3,'哺乳類は全て２本足である。'),(18,4,4,'鳥類は４本足である。'),(19,4,5,'男性は３本足である。'),(20,5,1,'ミーティング'),(21,5,2,'メーティング'),(22,5,3,'ミッティング'),(23,5,4,'メティング'),(24,5,5,'ミティング'),(25,5,6,'ミーチング'),(26,6,1,'コムピュータ'),(27,6,2,'コムピューター'),(28,6,3,'コンプータ'),(29,6,4,'コンピュータ'),(30,6,5,'コムピューター'),(31,7,1,'おもふく'),(32,7,2,'じゅうふく'),(33,7,3,'ちょうふく'),(34,8,1,'昆虫は６本足である。'),(35,8,2,'爬虫類は全て４本足である。'),(36,8,3,'哺乳類は全て２本足である。'),(37,8,4,'鳥類は４本足である。'),(38,8,5,'男性は３本足である。'),(39,9,1,'外で野球やかくれんぼなど'),(40,9,2,'外で昆虫採集など'),(41,9,3,'家でお絵かき、おままごとなど'),(42,9,4,'友達と一緒にいろんなことを'),(43,10,1,'超アウトドア'),(44,10,2,'どちらかというとアウトドア'),(45,10,3,'どちらかというとインドア'),(46,10,4,'超インドア'),(47,11,1,'世界で活躍するスポーツ選手など'),(48,11,2,'自分の実力で大金を稼ぎだす経営者'),(49,11,3,'知的で頭のいい文化人'),(50,11,4,'やさしくて誰からも好かれている人'),(51,12,1,'棄権する'),(52,12,2,'とりあえず休む'),(53,12,3,'自分を騙し騙し走りつづける'),(54,12,4,'気合だけで最後まで走りぬく'),(55,13,1,'１か月間、金がない'),(56,13,2,'１か月間、野宿する'),(57,13,3,'１か月間、誰とも喋らない'),(58,13,4,'１か月間、ごはんにおかずがない'),(59,14,1,'お金'),(60,14,2,'時間'),(61,14,3,'愛'),(62,14,4,'目的'),(63,15,1,'とりあえず連絡を待つ'),(64,15,2,'とりあえず他の親戚に様子を聞く'),(65,15,3,'とりあえず駆けつける'),(66,15,4,'何もしない'),(67,16,1,'遠まわしに断わる'),(68,16,2,'はっきり断わる'),(69,16,3,'とりあえずつきあってみる'),(70,16,4,'友達から始めようと言う'),(71,17,1,'才能'),(72,17,2,'体力'),(73,17,3,'自分の道'),(74,17,4,'何も望んじゃいない'),(75,18,1,'畳の上で家族に見守れて大往生'),(76,18,2,'思いがけない不慮の事故'),(77,18,3,'晩年自殺'),(78,18,4,'世界破壊で地上の大半の人と共に死ぬ');
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,7 +122,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'session_timeout',3600,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(2,'auto_backup',36000,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(3,'login_fail',3,'回','0000-00-00 00:00:00','0000-00-00 00:00:00'),(4,'lock_time',10,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(5,'lesson_cost',20000,'VND','0000-00-00 00:00:00','0000-00-00 00:00:00'),(6,'test_time',7,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(7,'share_rate',90,'%','0000-00-00 00:00:00','0000-00-00 00:00:00');
+INSERT INTO `configs` VALUES (1,'session_timeout',3600,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(2,'auto_backup',36000,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(3,'login_fail',3,'回','0000-00-00 00:00:00','0000-00-00 00:00:00'),(4,'lock_time',10,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(5,'lesson_cost',20000,'VND','0000-00-00 00:00:00','0000-00-00 00:00:00'),(6,'test_time',7,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(7,'share_rate',50,'%','0000-00-00 00:00:00','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,7 +137,7 @@ CREATE TABLE `files` (
   `FileId` int(11) NOT NULL AUTO_INCREMENT,
   `LessonId` int(11) NOT NULL,
   `FileName` varchar(255) NOT NULL,
-  `Alias` varchar(255) NOT NULL,
+  `Alias` varchar(255) DEFAULT NULL,
   `FileLink` text NOT NULL,
   `FileType` int(11) NOT NULL,
   `Extension` varchar(50) NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE `files` (
   PRIMARY KEY (`FileId`),
   KEY `files - users` (`LessonId`),
   CONSTRAINT `files - users` FOREIGN KEY (`LessonId`) REFERENCES `lessons` (`LessonId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,6 +157,7 @@ CREATE TABLE `files` (
 
 LOCK TABLES `files` WRITE;
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
+INSERT INTO `files` VALUES (9,75,'NTD01-1.mp4','','/uploads/jugyou/File-75-1-4015906.mp4',1,'mp4','2014-04-24 17:24:26','2014-04-24 17:24:26',0,0),(10,76,'NTD07-1.pdf','','/uploads/jugyou/File-76-1-13637.pdf',1,'pdf','2014-04-24 17:25:23','2014-04-24 17:25:23',0,0),(11,76,'NTD04-1.jpg','','/uploads/jugyou/File-76-2-4915.jpg',1,'jpg','2014-04-24 17:25:23','2014-04-24 17:25:23',0,0),(12,76,'NTD08-1.tsv','','/uploads/tsv/Test-76-1-1273.tsv',2,'tsv','2014-04-24 17:25:23','2014-04-24 17:25:23',0,0),(13,77,'NTD02-1.mp3','','/uploads/jugyou/File-77-1-749696.mp3',1,'mp3','2014-04-24 17:25:54','2014-04-24 17:25:54',0,0),(14,77,'NTD03-1.wav','','/uploads/jugyou/File-77-2-267458.wav',1,'wav','2014-04-24 17:25:55','2014-04-24 17:25:55',0,0),(15,77,'NTD08-1.tsv','','/uploads/tsv/Test-77-1-1273.tsv',2,'tsv','2014-04-24 17:25:55','2014-04-24 17:25:55',0,0),(16,77,'NTD08-2.tsv','','/uploads/tsv/Test-77-2-2911.tsv',2,'tsv','2014-04-24 17:25:55','2014-04-24 17:25:55',0,0),(17,78,'NTD07-1.pdf',NULL,'/uploads/jugyou/File-78-1-13637.pdf',1,'pdf','2014-04-24 22:43:58','2014-04-24 22:43:58',0,0);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,7 +185,7 @@ CREATE TABLE `ips` (
 
 LOCK TABLES `ips` WRITE;
 /*!40000 ALTER TABLE `ips` DISABLE KEYS */;
-INSERT INTO `ips` VALUES (6,63,'127.0.0.1',NULL,'2014-04-21 11:11:01','2014-04-21 11:11:01'),(7,63,'99.99.99.99',NULL,'2014-04-21 11:15:13','2014-04-21 11:15:13'),(11,63,'2.2.2.52',NULL,'2014-04-21 16:58:27','2014-04-21 16:58:27');
+INSERT INTO `ips` VALUES (5,63,'127.0.0.1',NULL,'2014-04-18 09:40:50','2014-04-18 09:40:50'),(11,73,'88.88.88.88',NULL,'2014-04-22 03:57:28','2014-04-22 03:57:28'),(12,74,'127.0.0.1',NULL,'2014-04-22 04:02:15','2014-04-22 04:02:15');
 /*!40000 ALTER TABLE `ips` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,21 +198,22 @@ DROP TABLE IF EXISTS `lessons`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `lessons` (
   `LessonId` int(11) NOT NULL AUTO_INCREMENT,
-  `Category` varchar(255) NOT NULL,
-  `Title` text NOT NULL,
+  `Category` varchar(255) DEFAULT NULL,
+  `Title` text,
   `Abstract` text,
   `Other` text,
   `LikeNumber` int(11) DEFAULT '0',
-  `ViewNumber` int(11) NOT NULL,
+  `ViewNumber` int(11) NOT NULL DEFAULT '0',
   `UserId` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `IsDeleted` int(11) NOT NULL DEFAULT '0',
   `IsBlocked` int(11) DEFAULT '0',
+  `lessonscol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`LessonId`),
   KEY `Lesson -  User` (`UserId`),
   CONSTRAINT `Lesson -  User` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,6 +222,7 @@ CREATE TABLE `lessons` (
 
 LOCK TABLES `lessons` WRITE;
 /*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
+INSERT INTO `lessons` VALUES (75,'','dasgsadg','sdgsfg',NULL,0,0,76,'2014-04-24 17:16:24','2014-04-24 17:16:24',0,0,NULL),(76,'','dsgfsagd','sgasg',NULL,0,0,76,'2014-04-24 17:25:23','2014-04-24 17:25:23',0,0,NULL),(77,'','fnhsdh','sdgfsdfg',NULL,0,0,76,'2014-04-24 17:25:54','2014-04-24 17:25:54',0,0,NULL),(78,NULL,'sample','sample mota',NULL,0,0,82,'2014-04-24 22:43:58','2014-04-24 22:43:58',0,0,NULL);
 /*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,7 +269,7 @@ CREATE TABLE `questions` (
   `QuesAnswer` varchar(20) NOT NULL,
   `Point` int(11) NOT NULL,
   PRIMARY KEY (`QuesId`)
-) ENGINE=MyISAM AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,6 +278,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
+INSERT INTO `questions` VALUES (1,1,1,'Meeting をカタカナで表記しなさい。','S(1)',10),(2,2,1,'computer をカタカナで表記しなさい。','S(4)',5),(3,3,1,'「重複」をひらがなで解答欄に表記しなさい。','S(3)',5),(4,4,1,'以下の説明で適切なものを選択しなさい。','S(1)',20),(5,1,2,'Meeting をカタカナで表記しなさい。','S(1)',10),(6,2,2,'computer をカタカナで表記しなさい。','S(4)',5),(7,3,2,'「重複」をひらがなで解答欄に表記しなさい。','S(3)',5),(8,4,2,'以下の説明で適切なものを選択しなさい。','S(1)',20),(9,1,3,'子供時代、あなたがよくしていた遊びは？','S(1)',4),(10,2,3,'あなたはインドア派？　アウトドア派？','S(4)',4),(11,3,3,'あなたが憧れるのはどんな人物？','S(1)',5),(12,4,3,'長距離走の途中、腹痛に見舞われました。どうする？','S(2)',8),(13,5,3,'次のうち、どれなら耐えられそう？','S(4)',10),(14,6,3,'あなたにとって大切なものは','S(1)',9),(15,7,3,'遠方の親戚が危篤に陥りました。さて、どうする？','S(2)',8),(16,8,3,'あまり好みのタイプではない相手から告白されました。どうする？','S(3)',4),(17,9,3,'あなたがいま、求めているものはなんでしょう？','S(2)',6),(18,10,3,'あなたの理想の死に方は？','S(1)',5);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,7 +413,7 @@ CREATE TABLE `tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`TagId`)
-) ENGINE=MyISAM AUTO_INCREMENT=419 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -418,6 +422,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+INSERT INTO `tags` VALUES (9,75,'sdfgsdfg','2014-04-24 17:24:27','2014-04-24 17:24:27'),(10,76,'sgasdgasdg','2014-04-24 17:25:23','2014-04-24 17:25:23'),(11,77,'dsfgsdfgs','2014-04-24 17:25:54','2014-04-24 17:25:54'),(12,78,'sample','2014-04-24 22:43:58','2014-04-24 22:43:58');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -438,7 +443,7 @@ CREATE TABLE `tests` (
   `modified` datetime NOT NULL,
   `IsDeleted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`TestId`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,6 +452,7 @@ CREATE TABLE `tests` (
 
 LOCK TABLES `tests` WRITE;
 /*!40000 ALTER TABLE `tests` DISABLE KEYS */;
+INSERT INTO `tests` VALUES (1,76,'テスト問題サンプル','日本語テスト第３週',12,'2014-04-24 17:25:23','2014-04-24 17:25:23',0),(2,77,'テスト問題サンプル','日本語テスト第３週',15,'2014-04-24 17:25:55','2014-04-24 17:25:55',0),(3,77,'テスト問題サンプル・固定・０１・・・正常０１','PTFX01-N01',16,'2014-04-24 17:25:55','2014-04-24 17:25:55',0);
 /*!40000 ALTER TABLE `tests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -485,7 +491,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `UserId_UNIQUE` (`UserId`),
   UNIQUE KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -494,7 +500,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (55,'mrhieusd','0c0133dae1234c3e04edb522706a62afb9d686ca','0c0133dae1234c3e04edb522706a62afb9d686ca',2,'Mac Hieu','1996-04-21','f3b577db70ac2a1d5723abd8cd0296b216d82745','f3b577db70ac2a1d5723abd8cd0296b216d82745','f3b577db70ac2a1d5723abd8cd0296b216d82745','f3b577db70ac2a1d5723abd8cd0296b216d82745',1,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 04:49:15','2014-04-21 05:14:53',1,NULL,'12314345234234','2453523452345'),(56,'tanvn','975c267bc444991bc019c7cb9e96ab7862390771','975c267bc444991bc019c7cb9e96ab7862390771',1,'Nhat Tan','1996-10-10','','','','',1,'','','stdue@gmail.com',NULL,'123.1.1.124',NULL,'2014-04-21 05:05:57','2014-04-21 05:13:03',1,NULL,'','12345667'),(57,'Teacher01','f2d45cc9062c78e8c468c90cd7c5860b5db8d9ba','f2d45cc9062c78e8c468c90cd7c5860b5db8d9ba',2,'Mac Hieu','1996-04-21','831adc7a11ec05e39a2db74ef7ea1d1fdfc4707b','831adc7a11ec05e39a2db74ef7ea1d1fdfc4707b','a6fc2996628d2fb7c37bf9fa0666a2464bab0315','a6fc2996628d2fb7c37bf9fa0666a2464bab0315',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 05:23:40','2014-04-21 05:58:29',1,NULL,'423423423','431241234'),(58,'Teacher02','8c15a5568a2d529f43a583b84885c1d8fa3c17fb','8c15a5568a2d529f43a583b84885c1d8fa3c17fb',2,'Nhat Tan01','1991-08-13','fae27fc8e9ec0c95e50d9dc0686ba986ba64752a','fae27fc8e9ec0c95e50d9dc0686ba986ba64752a','f832cec62a3018f1a9a036d15b4b9d557b14c57b','f832cec62a3018f1a9a036d15b4b9d557b14c57b',2,'','','tanvn@gmail.com',NULL,'123.1.1.124',NULL,'2014-04-21 05:25:56','2014-04-21 05:47:15',1,NULL,'2345234452345234',''),(59,'Teacher03','cc170ce8800e17445868da3a267173c9b54df82c','cc170ce8800e17445868da3a267173c9b54df82c',2,'Le Vinh','1996-04-17','c46a776264ebba19c70e35f2b320cfcc911e7e6a','c46a776264ebba19c70e35f2b320cfcc911e7e6a','33cf74cb1bf19010b54f1126d2f50e9fb0ba9faa','33cf74cb1bf19010b54f1126d2f50e9fb0ba9faa',1,'','','',NULL,NULL,NULL,'2014-04-21 05:26:31','2014-04-21 05:26:31',2,NULL,'2536478',''),(60,'Student01','e54b98817b7c69c9153fa917713304799c28130b','db30de4bf2e151790518301a0b2bc445a05fd171',1,'Tuan Anh','1996-04-21','','','','',1,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 05:27:38','2014-04-21 05:50:14',1,NULL,'','235434523452'),(61,'Student02','a8947fc639b5d079fface5b075617c30ec6c1568','a8947fc639b5d079fface5b075617c30ec6c1568',1,'Dinh Quan','1996-04-21','','','','',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 05:28:08','2014-04-21 05:50:29',1,NULL,'','215234534'),(62,'Student03','f26604f641e43887e0e67b2a6efece3f605fd425','f26604f641e43887e0e67b2a6efece3f605fd425',1,'Minh Luong','1996-04-21','','','','',NULL,'','','',NULL,NULL,NULL,'2014-04-21 05:28:40','2014-04-21 05:28:40',1,NULL,'','43535243'),(63,'Admin00','f3f80bcb92409df4e776a5714bf5c88351584f95','8d5aae31937df87c344d0e77e42806c842132524',3,NULL,NULL,'Default Question','12345678','Default Answer','12345678',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2014-04-21 11:10:24','2014-04-21 11:10:24',1,NULL,NULL,NULL),(64,'admin','2b693fbfef4bc912e439948f1a09cbcc93b540ae','2b693fbfef4bc912e439948f1a09cbcc93b540ae',3,NULL,NULL,'Default Question','12345678','Default Answer','12345678',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2014-04-21 23:09:53','2014-04-21 23:09:53',1,NULL,NULL,NULL);
+INSERT INTO `users` VALUES (63,'Admin00','8d5aae31937df87c344d0e77e42806c842132524','8d5aae31937df87c344d0e77e42806c842132524',3,NULL,NULL,'Default Question','12345678','Default Answer','12345678',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2014-04-21 11:10:24','2014-04-21 11:10:24',1,NULL,NULL,NULL),(76,'Teacher01','f2d45cc9062c78e8c468c90cd7c5860b5db8d9ba','f2d45cc9062c78e8c468c90cd7c5860b5db8d9ba',2,'Mac Hieu01','1991-08-13','4f463a55b2b97343709818b611c1ecac9492ac97','4f463a55b2b97343709818b611c1ecac9492ac97','a6fc2996628d2fb7c37bf9fa0666a2464bab0315','a6fc2996628d2fb7c37bf9fa0666a2464bab0315',1,'','','',NULL,'123.1.1.124',NULL,'2014-04-22 04:13:20','2014-04-24 14:43:25',1,NULL,'1234567890987654321123456789',''),(79,'Student01','e54b98817b7c69c9153fa917713304799c28130b','db30de4bf2e151790518301a0b2bc445a05fd171',1,'Tuan Anh','1996-04-22','','','','',NULL,'','','',NULL,NULL,NULL,'2014-04-22 04:17:59','2014-04-22 04:17:59',1,NULL,'','123456789987654321'),(82,'teacher','4b9251b8987d4d0da115f39e74ca671843a9dcbb','4b9251b8987d4d0da115f39e74ca671843a9dcbb',2,'teacher','1996-04-24','c1a64d34202c71ae4e2cac738c1b69d5381cfbad','c1a64d34202c71ae4e2cac738c1b69d5381cfbad','c1a64d34202c71ae4e2cac738c1b69d5381cfbad','c1a64d34202c71ae4e2cac738c1b69d5381cfbad',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-24 22:39:51','2014-04-24 22:40:32',1,NULL,'1234567891234567891234567890','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -507,4 +513,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-24  8:03:35
+-- Dump completed on 2014-04-24 23:57:53
