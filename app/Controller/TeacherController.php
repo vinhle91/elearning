@@ -417,6 +417,7 @@ class TeacherController extends AppController
                             $data['TestFile'][$key]['path']['name'] = $name;
                         }
                     }
+                    // debug($data);
                     if ($num_test != 0) {
                         foreach ($data['TestFile'] as $key => $value) {
                             $this->File->create();
@@ -431,6 +432,7 @@ class TeacherController extends AppController
                                     'order' => array('File.FileId' => 'desc'),
                                     'contain' => False,
                                 ));
+                                // debug($test_tmp);
                                 $link = $test_tmp['File']['FileLink'];
                                 $link = substr($link, 1);
                                 $excel = $this->Readtsv->loadFile($link);
@@ -439,12 +441,13 @@ class TeacherController extends AppController
                                 $answer = array();
                                 $Answer = array();
                                 $i = 1;
-                                while (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                $this->Test->create();
+                                while (strcmp(substr($this->Readtsv->getCell($i, 1),0,1), '#') == 0) {
                                     $i++;
                                 }
                                 $test['Test']['Title'] = $this->Readtsv->getCell($i, 2);
                                 $i++;
-                                while (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                while (strcmp(substr($this->Readtsv->getCell($i, 1),0,1), '#') == 0) {
                                     $i++;
                                 }
                                 $test['Test']['SubTitle'] = $this->Readtsv->getCell($i, 2);
@@ -469,17 +472,17 @@ class TeacherController extends AppController
                                     $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
                                     return;
                                 }
-                                $h = 0;
+                                $g = 0;
                                 $num = 1;
                                 $Answer[$num]['Num'] = 0;
                                 while (strcmp($this->Readtsv->getCell($i, 1), 'End') != 0) {
-                                    if (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                    if (strcmp(substr($this->Readtsv->getCell($i, 1),0,1), '#') == 0) {
                                         $i++;
                                         continue;
                                     }
                                     if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] == 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
                                         if(strcmp($this->Readtsv->getCell($i, 2), 'QS')!=0){
-                                            $h++;
+                                            $g++;
                                             break;
                                         }
                                         $Answer[$num]['Start'] = $i;
@@ -492,7 +495,7 @@ class TeacherController extends AppController
                                         continue;
                                     } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') != 0) {
                                         if(strcmp($this->Readtsv->getCell($i, 2), 'KS')!=0){
-                                            $h++;
+                                            $g++;
                                             break;
                                         }
                                         $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
@@ -502,7 +505,7 @@ class TeacherController extends AppController
                                         continue;
                                     }else{
                                         if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') != 0&&strcmp($this->Readtsv->getCell($i, 1), '') != 0 ) {
-                                            $h++;
+                                            $g++;
                                             break;
                                         }
                                         $i++;
@@ -510,22 +513,23 @@ class TeacherController extends AppController
                                     }
                                 }
                                 // debug($h);
-                                if($h!=0){
+                                if($g!=0){
                                     $this->Lesson->delete($lesson_id);
                                     $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                                     $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
                                     $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
                                     return;
                                 }
-                                // debug($Answer);
+                                // debug($test);
                                 // die;
                                 if ($this->Test->save($test)) {
                                     $Test = $this->Test->find('first', array(
                                         'conditions' => array('Test.LessonId' => $lesson_id),
                                         'fields' => array('Test.TestId'),
-                                        'order' => array('Test.created' => 'Asc'),
+                                        'order' => array('Test.TestId' => 'desc'),
                                         'contain' => False,
                                     ));
+                                    // debug($Test);
                                     $test_id = $Test['Test']['TestId'];
                                     foreach ($Answer as $key => $value) {
                                         if ($value['Num'] != 0) {
