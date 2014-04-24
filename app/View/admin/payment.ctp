@@ -99,7 +99,7 @@
                                             <td><?php echo $buff['Lesson']['Title'] ?></td>
                                             <td><a href="/elearning/admin/student/<?php echo $buff['Student']['Username'] ?>"><?php echo $buff['Student']['Username'] ?></a></td>
                                             <td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
-                                            <td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success" ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした" ?></span></td>
+                                            <td class="text-align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success" ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした" ?></span></td>
                                         </tr>
                                     <?php } ?>							
                                 </tbody>
@@ -141,7 +141,7 @@
                                             <td><?php echo $buff['Lesson']['Title'] ?></td>
                                             <td><a href="/elearning/admin/student/<?php echo $buff['Student']['Username'] ?>"><?php echo $buff['Student']['Username'] ?></a></td>
                                             <td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
-                                            <td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success" ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "Not paid" : "Paid" ?></span></td>
+                                            <td class="text-align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success" ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "Not paid" : "Paid" ?></span></td>
                                         </tr>
                                     <?php } ?>
                                 <?php } else { ?>
@@ -276,7 +276,7 @@
                     "<td>" + value.Lesson.Title + "</td>" +
                     "<td><a href='/elearning/admin/student/" + value.Student.Username + "'>" + value.Student.Username + "</a></td>" +
                     "<td><a href='/elearning/admin/teacher/" + value.Lesson.Author.Username + "'>" + value.Lesson.Author.Username + "</a></td>" +
-                    "<td class='align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" +
+                    "<td class='text-align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" +
                     "</tr>"
 
                     );

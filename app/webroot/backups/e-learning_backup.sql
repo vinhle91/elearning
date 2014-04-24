@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: e-learning
 -- ------------------------------------------------------
--- Server version	5.5.34
+-- Server version	5.5.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,7 +28,7 @@ CREATE TABLE `answers` (
   `AnswerNumber` int(11) NOT NULL,
   `AnswerContent` text CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`AnswerId`)
-) ENGINE=MyISAM AUTO_INCREMENT=196 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=253 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
+INSERT INTO `answers` VALUES (252,149,5,'男性は３本足である。'),(251,149,4,'鳥類は４本足である。'),(250,149,3,'哺乳類は全て２本足である。'),(249,149,2,'爬虫類は全て４本足である。'),(248,149,1,'昆虫は６本足である。'),(247,148,3,'ちょうふく'),(246,148,2,'じゅうふく'),(245,148,1,'おもふく'),(244,147,5,'コムピューター'),(243,147,4,'コンピュータ'),(242,147,3,'コンプータ'),(241,147,2,'コムピューター'),(240,147,1,'コムピュータ'),(239,146,6,'ミーチング'),(238,146,5,'ミティング'),(237,146,4,'メティング'),(236,146,3,'ミッティング'),(235,146,2,'メーティング'),(234,146,1,'ミーティング');
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -49,12 +50,12 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categories` (
   `CatId` int(11) NOT NULL AUTO_INCREMENT,
-  `CatName` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `CatName` varchar(255) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `IsDeleted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`CatId`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,7 +86,7 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`CommentId`),
   KEY `UserId` (`UserId`),
   CONSTRAINT `UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +95,6 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,46,124,'fsgdjk;u\'o','2014-04-17 11:31:27',0,'2014-04-17 11:31:27');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,11 +108,12 @@ DROP TABLE IF EXISTS `configs`;
 CREATE TABLE `configs` (
   `ConfigId` int(11) NOT NULL AUTO_INCREMENT,
   `ConfigName` varchar(45) DEFAULT NULL,
-  `ConfigValue` varchar(45) DEFAULT NULL,
+  `ConfigValue` int(11) DEFAULT NULL,
+  `ConfigUnit` varchar(45) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`ConfigId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +122,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'SessionTimeout','8000','2014-03-11 16:52:27','2014-03-11 16:52:29'),(2,'CourseFee','20000','2014-03-17 00:00:00','2014-03-17 00:00:00'),(3,'FailNumber','3','2014-03-17 00:00:00','2014-03-17 00:00:00'),(4,'SharingRate','40','2014-03-17 00:00:00','2014-03-17 00:00:00');
+INSERT INTO `configs` VALUES (1,'session_timeout',3600,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(2,'auto_backup',36000,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(3,'login_fail',3,'回','0000-00-00 00:00:00','0000-00-00 00:00:00'),(4,'lock_time',10,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(5,'lesson_cost',20000,'VND','0000-00-00 00:00:00','0000-00-00 00:00:00'),(6,'test_time',7,'seconds','0000-00-00 00:00:00','0000-00-00 00:00:00'),(7,'share_rate',90,'%','0000-00-00 00:00:00','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,11 +144,11 @@ CREATE TABLE `files` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `IsDeleted` int(11) NOT NULL DEFAULT '0',
-  `IsBlocked` int(11) NOT NULL,
+  `IsBlocked` int(11) DEFAULT '0',
   PRIMARY KEY (`FileId`),
   KEY `files - users` (`LessonId`),
   CONSTRAINT `files - users` FOREIGN KEY (`LessonId`) REFERENCES `lessons` (`LessonId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +157,6 @@ CREATE TABLE `files` (
 
 LOCK TABLES `files` WRITE;
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
-INSERT INTO `files` VALUES (64,124,'3deec529d20b943102.pdf','','/uploads/jugyou/File-124-1-285896.pdf',1,'pdf','2014-04-17 11:27:53','2014-04-21 04:57:44',0,1),(65,125,'95259721-Cải-tiến-giải-thuật-mạng-noron-SOM-ap-dụng-để-phan-cụm-mau-ảnh.pdf','','/uploads/jugyou/File-125-1-1142250.pdf',1,'pdf','2014-04-17 15:55:28','2014-04-21 04:55:34',0,0);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +175,7 @@ CREATE TABLE `ips` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`IpId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `ips` (
 
 LOCK TABLES `ips` WRITE;
 /*!40000 ALTER TABLE `ips` DISABLE KEYS */;
-INSERT INTO `ips` VALUES (1,10,'127.0.0.1','2014-03-08 15:42:53','2014-03-08 15:42:53','2014-03-08 15:42:53');
+INSERT INTO `ips` VALUES (6,63,'127.0.0.1',NULL,'2014-04-21 11:11:01','2014-04-21 11:11:01'),(7,63,'99.99.99.99',NULL,'2014-04-21 11:15:13','2014-04-21 11:15:13'),(11,63,'2.2.2.52',NULL,'2014-04-21 16:58:27','2014-04-21 16:58:27');
 /*!40000 ALTER TABLE `ips` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,10 +207,11 @@ CREATE TABLE `lessons` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `IsDeleted` int(11) NOT NULL DEFAULT '0',
+  `IsBlocked` int(11) DEFAULT '0',
   PRIMARY KEY (`LessonId`),
   KEY `Lesson -  User` (`UserId`),
   CONSTRAINT `Lesson -  User` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +220,6 @@ CREATE TABLE `lessons` (
 
 LOCK TABLES `lessons` WRITE;
 /*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
-INSERT INTO `lessons` VALUES (124,'1','dafsgh','fdsgdhjk',NULL,2,1,45,'2014-04-17 11:27:53','2014-04-17 11:27:53',0),(125,'3','dafsgdhfj','dasfdhjkg',NULL,0,0,47,'2014-04-17 15:55:28','2014-04-17 15:55:28',0);
 /*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,33 +252,6 @@ LOCK TABLES `msgs` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `notifications`
---
-
-DROP TABLE IF EXISTS `notifications`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `notifications` (
-  `MesId` int(11) NOT NULL AUTO_INCREMENT,
-  `Message` text CHARACTER SET utf8 NOT NULL,
-  `UserId` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  `Status` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`MesId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `notifications`
---
-
-LOCK TABLES `notifications` WRITE;
-/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `questions`
 --
 
@@ -293,7 +266,7 @@ CREATE TABLE `questions` (
   `QuesAnswer` varchar(20) NOT NULL,
   `Point` int(11) NOT NULL,
   PRIMARY KEY (`QuesId`)
-) ENGINE=MyISAM AUTO_INCREMENT=138 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -325,7 +298,7 @@ CREATE TABLE `reports` (
   KEY `reports - lessons` (`LessonId`),
   CONSTRAINT `reports - lessons` FOREIGN KEY (`LessonId`) REFERENCES `lessons` (`LessonId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `reports - users` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,7 +307,6 @@ CREATE TABLE `reports` (
 
 LOCK TABLES `reports` WRITE;
 /*!40000 ALTER TABLE `reports` DISABLE KEYS */;
-INSERT INTO `reports` VALUES (1,46,124,'Copyright 違反','2014-04-17 11:32:07','2014-04-17 11:32:07',1),(2,47,124,'','2014-04-17 12:47:28','2014-04-17 12:47:28',1);
 /*!40000 ALTER TABLE `reports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -390,7 +362,6 @@ CREATE TABLE `student_histories` (
 
 LOCK TABLES `student_histories` WRITE;
 /*!40000 ALTER TABLE `student_histories` DISABLE KEYS */;
-INSERT INTO `student_histories` VALUES (46,124,'2014-04-17 11:29:03','2014-04-24 11:29:03',20000,1,0);
 /*!40000 ALTER TABLE `student_histories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -438,7 +409,7 @@ CREATE TABLE `tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`TagId`)
-) ENGINE=MyISAM AUTO_INCREMENT=386 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=419 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,7 +418,6 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` VALUES (385,125,'frgdhft','2014-04-17 15:55:28','2014-04-17 15:55:28'),(384,124,'dfshgk','2014-04-17 11:27:53','2014-04-17 11:27:53'),(380,120,'','2014-04-17 07:58:25','2014-04-17 07:58:25'),(379,120,'zxghcjkvlm','2014-04-17 07:58:25','2014-04-17 07:58:25'),(372,114,'zxcvbknm','2014-04-17 07:36:41','2014-04-17 07:36:41'),(371,113,'sadfsadf','2014-04-17 07:25:36','2014-04-17 07:25:36'),(369,111,'sdkgl;','2014-04-17 07:22:44','2014-04-17 07:22:44'),(368,110,'sdfghjkl','2014-04-17 07:16:02','2014-04-17 07:16:02'),(367,109,'kl;lhdcjvkj','2014-04-17 07:14:25','2014-04-17 07:14:25'),(365,107,'sdfgsfdg','2014-04-17 07:07:24','2014-04-17 07:07:24'),(363,105,'dfsdhjgk','2014-04-17 07:03:13','2014-04-17 07:03:13'),(359,102,'dàgjk','2014-04-17 06:57:46','2014-04-17 06:57:46'),(358,101,'djfgh','2014-04-17 06:55:17','2014-04-17 06:55:17'),(357,100,'sgdhfgh','2014-04-17 06:54:02','2014-04-17 06:54:02'),(355,99,'d','2014-04-17 06:49:22','2014-04-17 06:49:22'),(354,98,'sgdhfjkg','2014-04-17 06:46:38','2014-04-17 06:46:38'),(353,97,'shdfkl','2014-04-17 06:43:00','2014-04-17 06:43:00'),(351,95,'dsfhjgh','2014-04-16 12:17:57','2014-04-16 12:17:57'),(350,94,'sdhjfk','2014-04-16 12:09:47','2014-04-16 12:09:47'),(349,93,'sdfgdhjk','2014-04-16 12:07:48','2014-04-16 12:07:48'),(345,89,'fdasgdkhj','2014-04-16 11:59:22','2014-04-16 11:59:22'),(344,88,'','2014-04-16 11:52:40','2014-04-16 11:52:40'),(343,88,'dfsdgnfmg','2014-04-16 11:52:40','2014-04-16 11:52:40'),(342,87,'dqwjr','2014-04-16 11:48:20','2014-04-16 11:48:20'),(340,85,'dafsghrdjklk','2014-04-16 11:44:52','2014-04-16 11:44:52');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -468,7 +438,7 @@ CREATE TABLE `tests` (
   `modified` datetime NOT NULL,
   `IsDeleted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`TestId`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -515,7 +485,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `UserId_UNIQUE` (`UserId`),
   UNIQUE KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -524,7 +494,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (10,'Admin','cc06b37d9558e740c71aab2d6f9716f88def12c1','cc06b37d9558e740c71aab2d6f9716f88def12c1',3,'Admin','1996-03-03','','','','',1,'','','',NULL,'127.0.0.1',NULL,'2014-04-17 11:28:29','2014-04-17 11:28:54',1,NULL,'',''),(45,'mrhieusd','975c267bc444991bc019c7cb9e96ab7862390771','975c267bc444991bc019c7cb9e96ab7862390771',2,'Mac Hieu','1996-04-17','0c0133dae1234c3e04edb522706a62afb9d686ca','0c0133dae1234c3e04edb522706a62afb9d686ca','0c0133dae1234c3e04edb522706a62afb9d686ca','0c0133dae1234c3e04edb522706a62afb9d686ca',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-17 11:21:32','2014-04-17 11:36:54',1,NULL,'123456789',''),(46,'tanvn','975c267bc444991bc019c7cb9e96ab7862390771','975c267bc444991bc019c7cb9e96ab7862390771',1,'Nhat Tan','1996-04-17','','','','',1,'','','',NULL,'123.1.1.124',NULL,'2014-04-17 11:28:29','2014-04-17 16:49:56',3,NULL,'','1223523523525'),(47,'uploader','e8f05883591cacf38ca4426ce15e304c2f697808','e8f05883591cacf38ca4426ce15e304c2f697808',2,'Uploader','1996-04-17','d9d34302653945843c245f909d3b00feea84b50d','d9d34302653945843c245f909d3b00feea84b50d','d9d34302653945843c245f909d3b00feea84b50d','d9d34302653945843c245f909d3b00feea84b50d',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-17 11:59:16','2014-04-17 14:56:44',3,NULL,'213434675687',''),(48,'admin3','984b4ef73145ada0b6da59dedd0f169898e06c5a','984b4ef73145ada0b6da59dedd0f169898e06c5a',3,'','2002-04-06','Default Question','12345678','Default Answer','12345678',1,'',NULL,'',NULL,NULL,NULL,'2014-04-21 05:09:22','2014-04-21 05:09:22',1,NULL,'',NULL);
+INSERT INTO `users` VALUES (55,'mrhieusd','0c0133dae1234c3e04edb522706a62afb9d686ca','0c0133dae1234c3e04edb522706a62afb9d686ca',2,'Mac Hieu','1996-04-21','f3b577db70ac2a1d5723abd8cd0296b216d82745','f3b577db70ac2a1d5723abd8cd0296b216d82745','f3b577db70ac2a1d5723abd8cd0296b216d82745','f3b577db70ac2a1d5723abd8cd0296b216d82745',1,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 04:49:15','2014-04-21 05:14:53',1,NULL,'12314345234234','2453523452345'),(56,'tanvn','975c267bc444991bc019c7cb9e96ab7862390771','975c267bc444991bc019c7cb9e96ab7862390771',1,'Nhat Tan','1996-10-10','','','','',1,'','','stdue@gmail.com',NULL,'123.1.1.124',NULL,'2014-04-21 05:05:57','2014-04-21 05:13:03',1,NULL,'','12345667'),(57,'Teacher01','f2d45cc9062c78e8c468c90cd7c5860b5db8d9ba','f2d45cc9062c78e8c468c90cd7c5860b5db8d9ba',2,'Mac Hieu','1996-04-21','831adc7a11ec05e39a2db74ef7ea1d1fdfc4707b','831adc7a11ec05e39a2db74ef7ea1d1fdfc4707b','a6fc2996628d2fb7c37bf9fa0666a2464bab0315','a6fc2996628d2fb7c37bf9fa0666a2464bab0315',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 05:23:40','2014-04-21 05:58:29',1,NULL,'423423423','431241234'),(58,'Teacher02','8c15a5568a2d529f43a583b84885c1d8fa3c17fb','8c15a5568a2d529f43a583b84885c1d8fa3c17fb',2,'Nhat Tan01','1991-08-13','fae27fc8e9ec0c95e50d9dc0686ba986ba64752a','fae27fc8e9ec0c95e50d9dc0686ba986ba64752a','f832cec62a3018f1a9a036d15b4b9d557b14c57b','f832cec62a3018f1a9a036d15b4b9d557b14c57b',2,'','','tanvn@gmail.com',NULL,'123.1.1.124',NULL,'2014-04-21 05:25:56','2014-04-21 05:47:15',1,NULL,'2345234452345234',''),(59,'Teacher03','cc170ce8800e17445868da3a267173c9b54df82c','cc170ce8800e17445868da3a267173c9b54df82c',2,'Le Vinh','1996-04-17','c46a776264ebba19c70e35f2b320cfcc911e7e6a','c46a776264ebba19c70e35f2b320cfcc911e7e6a','33cf74cb1bf19010b54f1126d2f50e9fb0ba9faa','33cf74cb1bf19010b54f1126d2f50e9fb0ba9faa',1,'','','',NULL,NULL,NULL,'2014-04-21 05:26:31','2014-04-21 05:26:31',2,NULL,'2536478',''),(60,'Student01','e54b98817b7c69c9153fa917713304799c28130b','db30de4bf2e151790518301a0b2bc445a05fd171',1,'Tuan Anh','1996-04-21','','','','',1,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 05:27:38','2014-04-21 05:50:14',1,NULL,'','235434523452'),(61,'Student02','a8947fc639b5d079fface5b075617c30ec6c1568','a8947fc639b5d079fface5b075617c30ec6c1568',1,'Dinh Quan','1996-04-21','','','','',NULL,'','','',NULL,'123.1.1.124',NULL,'2014-04-21 05:28:08','2014-04-21 05:50:29',1,NULL,'','215234534'),(62,'Student03','f26604f641e43887e0e67b2a6efece3f605fd425','f26604f641e43887e0e67b2a6efece3f605fd425',1,'Minh Luong','1996-04-21','','','','',NULL,'','','',NULL,NULL,NULL,'2014-04-21 05:28:40','2014-04-21 05:28:40',1,NULL,'','43535243'),(63,'Admin00','f3f80bcb92409df4e776a5714bf5c88351584f95','8d5aae31937df87c344d0e77e42806c842132524',3,NULL,NULL,'Default Question','12345678','Default Answer','12345678',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2014-04-21 11:10:24','2014-04-21 11:10:24',1,NULL,NULL,NULL),(64,'admin','2b693fbfef4bc912e439948f1a09cbcc93b540ae','2b693fbfef4bc912e439948f1a09cbcc93b540ae',3,NULL,NULL,'Default Question','12345678','Default Answer','12345678',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2014-04-21 23:09:53','2014-04-21 23:09:53',1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -537,4 +507,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-21 11:05:09
+-- Dump completed on 2014-04-24  8:03:35

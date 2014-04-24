@@ -24,8 +24,6 @@ $paid_label = array('warning', 'success');
 ?>
 
 <div class="tabbable tabbable-custom tabbable-custom-profile col-md-9">
-	<ul class="nav nav-tabs">
-	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab_1_11">
 
@@ -40,18 +38,18 @@ $paid_label = array('warning', 'success');
 
 						<span class="margin-left-5">月: </span>
 						<select class="margin-right-3" id="payment-month" onchange="getTransInMonth($('#payment-year').val(), this.value)">
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-							<option>5</option>
-							<option>6</option>
-							<option>7</option>
-							<option>8</option>
-							<option>9</option>
-							<option>10</option>
-							<option>11</option>
-							<option>12</option>
+							<option value="1">01</option>
+							<option value="2">02</option>
+							<option value="3">03</option>
+							<option value="4">04</option>
+							<option value="5">05</option>
+							<option value="6">06</option>
+							<option value="7">07</option>
+							<option value="8">08</option>
+							<option value="9">09</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
 						</select>
 
 						<a class="reload" href="javascript:;"></a>
@@ -82,7 +80,7 @@ $paid_label = array('warning', 'success');
 									<td id="payment-total-student"><?php echo $payment_summary['TotalTeacher'] ?></td>
 								</tr>
 								<tr>
-									<td>報酬％</td>
+									<td>Translate_"Earn"</td>
 									<td id="payment-earn"><?php echo $payment_summary['Earn'] ?> VND</td>
 								</tr>
 							</tbody>
@@ -112,7 +110,7 @@ $paid_label = array('warning', 'success');
 									<td><?php echo $buff['Lesson']['Title'] ?></td>
 									<td><a href="/elearning/admin/student/<?php echo $buff['Student']['Username'] ?>"><?php echo $buff['Student']['Username'] ?></a></td>
 									<td><a href="/elearning/admin/teacher/<?php echo $buff['Lesson']['Author']['Username'] ?>"><?php echo $buff['Lesson']['Author']['Username'] ?></a></td>
-									<td class="align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした"  ?></span></td>
+									<td class="text-align-right"><?php echo $buff['Transaction']['CourseFee'] ?><span class="margin-left-5 label label-<?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "warning" : "success"  ?> label-sm"><?php echo date($buff['Transaction']['ExpiryDate']) > date('Y-m-01') ? "未払い" : "払いした"  ?></span></td>
 								</tr>
 								<?php } ?>							
 							</tbody>
@@ -317,7 +315,7 @@ function fillData(data) {
 			"<td>" + value.Lesson.Title + "</td>" + 
 			"<td><a href='/elearning/admin/student/" + value.Student.Username + "'>" + value.Student.Username + "</a></td>" + 
 			"<td><a href='/elearning/admin/teacher/" + value.Lesson.Author.Username + "'>" + value.Lesson.Author.Username + "</a></td>" + 
-			"<td class='align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" + 
+			"<td class='text-align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" + 
 		"</tr>"
 
 		);

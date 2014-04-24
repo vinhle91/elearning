@@ -120,7 +120,7 @@ class AdminController extends AppController {
 
 		$this->getPaymentInfo();
 		$this->getNewStudentInfo();
-                $this->getNewTeacherInfo();
+        $this->getNewTeacherInfo();
 	}
 
 	public function getNewStudentInfo() {
@@ -175,8 +175,7 @@ class AdminController extends AppController {
     }
 
 	public function payment($param = null) {
-		$CONFIG_COURSE_FEE = $this->Config->getConfig("CourseFee") ?  $this->Config->getConfig("CourseFee") : 20000;
-		$CONFIG_SHARING_RATE = $this->Config->getConfig("SharingRate") ? $this->Config->getConfig("SharingRate") : 40;
+
 		if (!isset($param)) {
 			//title cho trang
 			$pageTitle = __('支払い概要');
@@ -222,8 +221,8 @@ class AdminController extends AppController {
 	}
 
 	public function getPaymentInfo(){
-		$CONFIG_COURSE_FEE = $this->Config->getConfig("CourseFee") ?  $this->Config->getConfig("CourseFee") : 20000;
-		$CONFIG_SHARING_RATE = $this->Config->getConfig("SharingRate") ? $this->Config->getConfig("SharingRate") : 40;
+		$CONFIG_COURSE_FEE = $this->Config->getConfig("lesson_cost") ?  $this->Config->getConfig("lesson_cost") : 20000;
+		$CONFIG_SHARING_RATE = $this->Config->getConfig("share_rate") ? $this->Config->getConfig("share_rate") : 40;
 		$this->set(compact('CONFIG_SHARING_RATE'));
 		$today = $this->Transaction->getTransactions("Today");
 		$this->set(compact('today'));

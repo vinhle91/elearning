@@ -164,19 +164,19 @@ hr {
 Tools
 ***/
 
-.align-left {
+.text-align-left {
   text-align: left;
 }
 
-.align-right {
+.text-align-right {
   text-align: right;
 }
 
-.align-center {
+.text-align-center {
   text-align: center;
 }
 
-.align-justify {
+.text-align-justify {
   text-align: justify;
 }
 
@@ -221,6 +221,11 @@ Tools
 
 .inline-block {
   display: inline-block !important;
+}
+
+.align-top {
+  display: inline-block !important;
+  vertical-align: top !important;
 }
 
 .no-border {

@@ -49,14 +49,6 @@
 				</div>
 			</div>
 		</div>
-        <div class="padding-5 align-right">
-            <input type="button" class="btn btn-info btn-xs button-save" data-icon="check" value="バックアップ"
-                   onclick="confirm_alert_backup(this)"></input>
-        </div>
-        <div class="padding-5 align-right">
-            <input type="button" class="btn btn-xs btn-warning cancel pull-right" data-icon="check" value="リカバリ"
-                   onclick="confirm_alert_restore(this)"></input>
-        </div>
 	</div>
 
 	<div class="col-md-6 ">
@@ -66,6 +58,12 @@
 					<div class="caption">
 						<i class="fa fa-reorder"></i>設定テーブル
 					</div>
+					<div class="padding-right-5 pull-right">
+			            <input type="button" class="btn btn-xs btn-warning cancel pull-right" data-icon="check" value="リカバリ" onclick="confirm_alert_restore(this)"></input>
+			        </div>
+					<div class="padding-right-5 pull-right">
+			            <input type="button" class="btn btn-info btn-xs button-save" data-icon="check" value="バックアップ" onclick="confirm_alert_backup(this)"></input>
+			        </div>
 				</div>
 				<div class="portlet-body" id="config-info">
 					<div class="table-responsive">
@@ -73,8 +71,8 @@
 							<tbody>
 								<tr>
 									<td class="col-md-4">自動セッション終了時間</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="session_timeout" name="session_timeout" value="<?php echo $configs[0]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="session_timeout" name="session_timeout" value="<?php echo $configs[0]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">秒</span>
@@ -82,8 +80,8 @@
 								</tr>
 								<tr>
 									<td class="col-md-4">自動バックアップ時刻</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="auto_backup" name="auto_backup" value="<?php echo $configs[1]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="auto_backup" name="auto_backup" value="<?php echo $configs[1]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">秒</span>
@@ -91,8 +89,8 @@
 								</tr>
 								<tr>
 									<td class="col-md-4">ログイン誤り回数</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="login_fail" name="login_fail" value="<?php echo $configs[2]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="login_fail" name="login_fail" value="<?php echo $configs[2]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">回</span>
@@ -100,8 +98,8 @@
 								</tr>
 								<tr>
 									<td class="col-md-4">ロッグ時間</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="lock_time" name="lock_time" value="<?php echo $configs[3]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="lock_time" name="lock_time" value="<?php echo $configs[3]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">秒</span>
@@ -109,8 +107,8 @@
 								</tr>
 								<tr>
 									<td class="col-md-4">一回受講料</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="lesson_cost" name="lesson_cost" value="<?php echo $configs[4]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="lesson_cost" name="lesson_cost" value="<?php echo $configs[4]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">VND</span>
@@ -118,8 +116,8 @@
 								</tr>
 								<tr>
 									<td class="col-md-4">受講可能時間</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="test_time" name="test_time" value="<?php echo $configs[5]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="test_time" name="test_time" value="<?php echo $configs[5]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">日</span>
@@ -127,8 +125,8 @@
 								</tr>
 								<tr>
 									<td class="col-md-4">報酬%</td>
-									<td class="col-md-6 align-right">
-										<input type="text" class="padding-5 no-border align-right" id="share_rate" name="share_rate" value="<?php echo $configs[6]['Config']['ConfigValue']?>"></input>
+									<td class="col-md-6 text-align-right">
+										<input type="text" class="padding-5 no-border text-align-right" id="share_rate" name="share_rate" value="<?php echo $configs[6]['Config']['ConfigValue']?>"></input>
 									</td>
 									<td class="col-md-2">
 										<span style="line-height: 1.7; margin-left: 5px">%</span>
@@ -143,10 +141,12 @@
 							<label class="ajax-loader"></label>
 						</div>
 						<div class="clear-fix"></div>
-						<div class="padding-5 align-right">
+						<div class="padding-5 text-align-right">
 							<input type="submit" class="btn btn-info btn-xs button-save" data-icon="check" value="保存"></input>
 						</div>
 					</div>
+
+					
 				</div>
 			</div>
 		</form>
@@ -253,7 +253,7 @@ function confirm_alert_restore(node) {
 									$("#ip-table tr:last td:eq(3)").html('<a type="reset" class="btn btn-xs btn-warning cancel pull-right" onclick="removeIp(event)"><span>削除</span></a>');
 									$("#ip-info #add-ip").removeClass("disabled");
 				               		$("#ip-info .update-notif span").text("変更が成功");
-			               			
+			               			location.reload();
 				               	} else if (data.result == "Fail") {
 				               		$("#ip-info .update-notif span").text("変更が失敗");
 				               		
