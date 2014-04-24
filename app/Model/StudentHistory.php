@@ -37,6 +37,7 @@ class StudentHistory extends AppModel {
                 'StudentHistory.UserId' => $userId,
                 'MONTH(ExpiryDate)' => $month,
                 'YEAR(ExpiryDate)' => $year,
+                'Blocked' => '0'
             );
         } else {
             $options['conditions'] = array(
