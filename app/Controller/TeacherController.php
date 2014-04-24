@@ -718,15 +718,6 @@ class TeacherController extends AppController
             $tmp = $tmp.'"'.$value['Tag']['TagContent'].'"'.',';
         }
         $this->set(compact('tmp'));
-        // Get list category 
-        // $params = array(
-        //     'conditions' => array('Category.IsDeleted' => '0'),
-        //     'fields' => array('CatId', 'CatName'),
-        //     'order' => array('Category.CatId' => 'Asc'),
-        // );
-        // $cat = $this->Category->find('all', $params);
-        
-        // $this->set(compact('cat'));
         if (!isset($lesson_id) || empty($lesson_id)) {
             $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
             $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
@@ -751,8 +742,9 @@ class TeacherController extends AppController
 	            foreach ($tag as $key => $value) {
                     if(!empty($list_tag)){
                         $list_tag = $list_tag.','.$value['Tag']['TagContent'];
+                    }else{
+	            	    $list_tag = $list_tag.$value['Tag']['TagContent'];
                     }
-	            	$list_tag = $list_tag.$value['Tag']['TagContent'];
 	            }
 	            $this->set(compact('list_tag'));
                 $file = $this->File->find('all', array(
@@ -841,12 +833,15 @@ class TeacherController extends AppController
                         }
 	                	$this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
 	                    // Save Tag of lesson
+
 	                    $tag = $data['Lesson']['Tag'];
 	                    $tag = strtolower($tag);
 	                    $tag = explode(",", $tag);
+                       
 	                    if (isset($tag) && !empty($tag)) {
 	                        foreach ($tag as $value) {
 	                            $value = trim($value);
+                                debug($value);
 	                            $this->Tag->create();
 	                            $data1['Tag']['LessonId'] = $lesson_id;
 	                            $data1['Tag']['TagContent'] = $value;
