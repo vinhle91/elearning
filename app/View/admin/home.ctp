@@ -188,23 +188,23 @@ $paid_label = array('warning', 'success');
 		<div class="portlet-title">
 			<div class="caption"><i class="fa fa-user"></i>今日中新しい学生</div>
 		</div>
-		<?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
+		<?php if (isset($new_users) && $new_users['Total'] != 0) { ?>
 		<div class="portlet-body">
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>氏名</th>
 							<th>ユーザー名</th>
+							<th>ユーザータイプ</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($new_students['Data'] as $key => $new_student) { ?>
+						<?php foreach ($new_users['Data'] as $key => $new_user) { ?>
 						<tr>
-							<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['FullName']?></a></td>
-							<td><a href="/elearning/admin/student/<?php echo $new_student['User']['Username']?>"><?php echo $new_student['User']['Username']?></a></td>
-							<td><span class="label label-sm label-<?php echo $status_label[$new_student['User']['Status']]?> line-6"><?php echo $status[$new_student['User']['Status']]?></span></td>
+							<td><a href="/elearning/admin/<?php echo $new_user['User']['UserType'] == '1' ? "student" : "teacher"?>/<?php echo $new_user['User']['Username']?>"><?php echo $new_user['User']['Username']?></a></td>
+							<td><a href="/elearning/admin/<?php echo $new_user['User']['UserType'] == '1' ? "student" : "teacher"?>"><?php echo $new_user['User']['UserType'] == '1' ? "学生" : "先生"?></td>
+							<td><span class="label label-sm label-<?php echo $status_label[$new_user['User']['Status']]?> line-6"><?php echo $status[$new_user['User']['Status']]?></span></td>
 						</tr>
 						<?php } ?>
 					</tbody>
@@ -218,39 +218,6 @@ $paid_label = array('warning', 'success');
 		<?php } ?>
 	</div>
 
-    <div class="portlet">
-        <div class="portlet-title">
-            <div class="caption"><i class="fa fa-user"></i>今日中新しい先生</div>
-        </div>
-        <?php if (isset($new_teachers) && $new_teachers['Total'] != 0) { ?>
-            <div class="portlet-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>氏名</th>
-                            <th>ユーザー名</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($new_teachers['Data'] as $key => $new_teachers) { ?>
-                            <tr>
-                                <td><a href="/elearning/admin/student/<?php echo $new_teachers['User']['Username']?>"><?php echo $new_teachers['User']['FullName']?></a></td>
-                                <td><a href="/elearning/admin/student/<?php echo $new_teachers['User']['Username']?>"><?php echo $new_teachers['User']['Username']?></a></td>
-                                <td><span class="label label-sm label-<?php echo $status_label[$new_teachers['User']['Status']]?> line-6"><?php echo $status[$new_teachers['User']['Status']]?></span></td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        <?php }  else { ?>
-            <div class="portlet-body">
-                最近は新しい先生がいません。
-            </div>
-        <?php } ?>
-    </div>
 </div>
 <script>
 function getTransInMonth(year, month){

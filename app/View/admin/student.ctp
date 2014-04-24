@@ -168,12 +168,6 @@
                                                 <span class="inline-block">パスワードをリセット</span>
 											</a>
 										</li>
-										<li>  
-											<a class="reset-ver-cod" href="">
-											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
-                                                <span class="inline-block">verifycodeをリセット<span>
-											</a>
-										</li>
 										<?php if ($studentInfo['Username'] != $this->Session->read('User.Username')) { ?>
 											<?php if ($studentInfo['Status'] == 1) { ?>
 											<li>  
