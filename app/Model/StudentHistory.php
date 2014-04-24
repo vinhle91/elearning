@@ -17,17 +17,17 @@ class StudentHistory extends AppModel {
     public $belongsTo = array(
         'User' => array(
             'className' => 'User',
-            'foreignKey' => 'UserId',
-//            'conditions' => array(
-//                'StudentHistory.UserId = User.UserId',
-//            )
+            'foreignKey' => false,
+            'conditions' => array(
+                'StudentHistory.UserId = User.UserId',
+           )
         ),
         'Lesson' => array(
             'className' => 'Lesson',
-            'foreignKey' => 'LessonId',
-//            'conditions' => array(
-//                'StudentHistory.LessonId = Lesson.LessonId',
-//            )
+            'foreignKey' => false,
+            'conditions' => array(
+                'StudentHistory.LessonId = Lesson.LessonId',
+            )
         )
     );
     function getStudentTransactionHistory($userId, $month, $year) {
