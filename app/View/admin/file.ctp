@@ -86,8 +86,7 @@
 							<?php echo $file['File']['FileId']?>
 						</td>
 						<td>
-							<!-- <a href="/elearning/admin/file/<?php echo $file['File']['FileId']?>"><?php echo $file['File']['FileName']?></a> -->
-							<?php echo $file['File']['FileName']?>
+							<a class="popup-file" href="/elearning/admin/viewFile/<?php echo $file['File']['FileId']?>"><?php echo $file['File']['FileName']?></a>
 						</td>
 						<td>
 							<?php echo $file['File']['FileLink']?>
@@ -118,6 +117,29 @@
 </div>
 
 <script>
+	$(".popup-file").fancybox({
+	    width  : 900,
+	    height : 500,
+	    type   :'iframe',
+        'enableEscapeButton': false,
+        'overlayShow': true,
+        'overlayOpacity': 0,
+        'hideOnOverlayClick': false,
+        'fitToView': false,
+        'autoSize': false,
+        'helpers'         : {
+	        'overlay'     : {
+	            'css'     : {
+	                // 'background-color' : '#fff',
+	            }
+	        }
+	    },
+       	'onComplete' : function() {
+       		$(document).scrollTop(0);
+          	$("#fancybox-wrap").css({'top':'150px', 'bottom':'auto'});
+		},
+	});
+
 
 	$(function() {
 		$("table").tablesorter({debug: true});
@@ -212,9 +234,9 @@
 		$(this).prop("checked", !$(this).prop("checked"));
 	});
 
-	$("tbody tr").on("click", function(){
-		checkbox = $(this).find("input");
-		$(this).find("input").prop("checked", !checkbox.prop("checked"));
+	$("tbody tr td:not(:nth-child(3))").on("click", function(){
+		checkbox = $(this).closest("tr").find("input");
+		$(this).closest("tr").find("input").prop("checked", !checkbox.prop("checked"));
 	})
 
 	function checkAll(checkbox, e) {

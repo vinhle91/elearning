@@ -368,6 +368,24 @@ class AdminController extends AppController {
 		$this->set(compact('all_files'));
 	}
 
+	public function viewFile($param=null) {
+		$this->set('sidebar', array('file'));
+		$pageTitle = "ファイルビュー";
+		$this->set(compact('pageTitle'));
+
+		$this->layout = null;
+
+		$fileId = $param;
+		$file = $this->File->find("first", array(
+			'conditions' => array(
+				'FileId' => $fileId,
+				)
+			));
+		$this->log($file);
+		
+		$this->set(compact('file'));
+	}
+
 	public function student($username = null) {
 		$this->set('sidebar', array('user', 'student'));
 
