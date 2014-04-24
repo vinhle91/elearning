@@ -22,7 +22,7 @@
 	<script type="text/javascript"> 
 	 	function disableContextMenu()
 	   	{
-	     	window.frames["fraDisabled"].document.oncontextmenu = function(){alert("No way!"); return false;};   
+	     	window.frames["fraDisabled"].document.oncontextmenu = function(){alert("右クリックは許可されていません"); return false;};   
 		}
 	</script>
 	<style type="text/css"> @media print { body { display:none } } </style>

@@ -1,4 +1,5 @@
-<div id="contents">
+<div id="contents" style="margin-left:220px">
+<?php echo $this->Element('cat_menu');?>
     <div id="content">
         <?php
         $error = $this->Session->flash();

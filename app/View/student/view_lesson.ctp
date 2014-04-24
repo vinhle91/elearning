@@ -33,7 +33,7 @@
                             <?php foreach ($lesson['File'] as $key => $value): ?>
                                 <?php if ($value['Extension'] == 'pdf'): ?>
                                     <div class="<?php echo 'file' . $key ?> file_l">
-                                        <iframe id="fraDisabled" width='945' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?> "></iframe>
+                                        <iframe id="fraDisabled" width='945' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?>#toolbar=0" ></iframe>
                                     </div>
                                 <?php endif; ?>
                                 <?php if ($value['Extension'] == 'gif'|| $value['Extension'] == 'jpg'||$value['Extension'] == 'png'): ?>
@@ -206,16 +206,16 @@
         </div>
     </div>
 </div>
-// <script type="text/javascript">
-//     $(function () {
-//       $(document).bind("contextmenu",function(e){
-//         e.preventDefault();
-//         alert("Right Click is not allowed");
-//       });
+<script type="text/javascript">
+    $(function () {
+      $(document).bind("contextmenu",function(e){
+        e.preventDefault();
+        alert("右クリックは許可されていません");
+      });
 
-//       /*$('.dvOne').bind("contextmenu",function(e){
-//         e.preventDefault();
-//         alert("Right Click is not allowed on div");
-//       });*/
-//     });
-// </script>
+      /*$('.dvOne').bind("contextmenu",function(e){
+        e.preventDefault();
+        alert("Right Click is not allowed on div");
+      });*/
+    });
+</script>
