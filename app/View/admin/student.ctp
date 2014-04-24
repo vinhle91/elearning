@@ -12,7 +12,7 @@
                 <div class="col-md-6">
                     <div class="portlet">
                         <div class="portlet-title">
-                            <div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
+                            <div class="caption"><i class="fa fa-user"></i>新しい学生</div>
                         </div>
                         <?php if (isset($new_students) && $new_students['Total'] != 0) { ?>
                             <div class="portlet-body">
@@ -166,12 +166,6 @@
 											<a class="reset-pw" href="">
 											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
                                                 <span class="inline-block">パスワードをリセット</span>
-											</a>
-										</li>
-										<li>  
-											<a class="reset-ver-cod" href="">
-											<span class="label label-sm label-icon label-success inline-block pull-left margin-right-3"><i class="fa fa-refresh"></i></span>
-                                                <span class="inline-block">verifycodeをリセット<span>
 											</a>
 										</li>
 										<?php if ($studentInfo['Username'] != $this->Session->read('User.Username')) { ?>

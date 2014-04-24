@@ -12,7 +12,7 @@
 				<div class="col-md-6">
 					<div class="portlet">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-user"></i>今月中新しい学生</div>
+							<div class="caption"><i class="fa fa-user"></i>新しい先生</div>
 						</div>
 						<?php if (isset($new_teachers) && $new_teachers['Total'] != 0) { ?>
 						<div class="portlet-body">

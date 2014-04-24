@@ -24,6 +24,12 @@
                                         ファイルをアクティブ
 									</a>
 								</li>
+								<li>  
+                                    <a link="" onclick="report_file(event)">
+                                        <span class="label label-sm label-icon label-danger"><i class="fa fa-bell-o"></i></span>
+                                        授業をレポート
+                                    </a>
+                                </li>
 							</ul>
 						</li>
 					</ul>
@@ -80,22 +86,23 @@
 							<?php echo $file['File']['FileId']?>
 						</td>
 						<td>
-							<a href="/elearning/admin/file/<?php echo $file['File']['FileId']?>"><?php echo $file['File']['FileName']?></a>
+							<!-- <a href="/elearning/admin/file/<?php echo $file['File']['FileId']?>"><?php echo $file['File']['FileName']?></a> -->
+							<?php echo $file['File']['FileName']?>
 						</td>
 						<td>
-							 <?php echo $file['File']['FileLink']?>
+							<?php echo $file['File']['FileLink']?>
 						</td>
 						<td>
-							 <?php echo $file['File']['Extension']?>
+							<?php echo $file['File']['Extension']?>
 						</td>
 						<td>
-							 NULL
+							<a href="/elearning/admin/teacher/<?php echo $file['Lesson']['Author']['Username'] ?>"><?php echo $file['Lesson']['Author']['Username'] ?></a>
 						</td>
 						<td>
-							 <?php echo $file['File']['created']?>
+							<?php echo $file['File']['created']?>
 						</td>
 						<td>
-							 <?php echo $file['File']['modified']?>
+							<?php echo $file['File']['modified']?>
 						</td>
 						<td>
 							<label class="label label-sm label-<?php echo $status_label[$file['File']['IsBlocked'] == 1 ? 3 : 1]?> line-8" ><?php echo $status[$file['File']['IsBlocked'] == 1 ? 3 : 1]?></label>
@@ -178,6 +185,28 @@
        	});
 
 	}
+
+    function report_file(e) {
+        e = $.event.fix(e);
+        e.preventDefault();
+        var buff = [];
+        var submit_data = [];
+        $("#file-table tbody tr").each(function() {
+            if ($(this).find("input").is(":checked")) {
+                submit_data.push(parseInt($(this).find("td:eq(1)").html()));
+            }
+        });
+        console.log(submit_data);
+        $.ajax({
+            type: "POST",
+            url: '/elearning/admin/updateFile/report',
+            data: {'data': submit_data},
+            success: function(data)
+            {
+                alert("レポート成功した！");
+            }
+        });
+    }
 
 	$("input[type='checkbox']").on("click", function(){
 		$(this).prop("checked", !$(this).prop("checked"));

@@ -1,7 +1,5 @@
 <?php
-/**
-*@copyright Copyright (c) 2013 mrhieusd
-*/
+
 App::uses('AuthComponent', 'Controller/Component');
 class AdminController extends AppController {
 	
@@ -114,22 +112,23 @@ class AdminController extends AppController {
 		//title cho trang
 		$pageTitle = 'ホーム';
 		$this->set(compact('pageTitle'));
-
 		//sidebar
 		$this->set('sidebar', array('home'));
 
 		$this->getPaymentInfo();
-		$this->getNewStudentInfo();
-        $this->getNewTeacherInfo();
+		$this->getNewUser();
 	}
 
-	public function getNewStudentInfo() {
-		$new_students = array(
+	public function getNewUser() {
+		$new_users = array(
 			'Total' => $this->User->find("count", array(
 				'conditions' => array(
 					'AND' => array(
 						'created >' => date('Y-m-d',strtotime("-1 months")),
-						'UserType' => '1'						
+						'UserType' => array(
+							'1', 
+							'2',
+							)
 					),
 					'NOT' => array(
 						'Status' => '0',
@@ -140,13 +139,39 @@ class AdminController extends AppController {
 				'conditions' => array(
 					'AND' => array(
 						'created >' => date('Y-m-d',strtotime("-1 months")),
-						'UserType' => '1'
+						'UserType' => array(
+							'1',
+							'2',
+							),
 						)
 					)
 				))
 			);
+		$this->set(compact('new_users'));
+	}
+
+	public function getNewStudentInfo() {
+		$new_students = array(
+			'Total' => $this->User->find("count", array(
+				'conditions' => array(
+					'AND' => array(
+						'created >' => date('Y-m-d',strtotime("-1 months")),
+						'UserType' => '1',
+						'User.Status <>' => '0'
+					),
+				),
+			)),
+			'Data' => $this->User->find("all", array(
+				'conditions' => array(
+					'AND' => array(
+						'created >' => date('Y-m-d',strtotime("-1 months")),
+						'UserType' => '1',
+                        'User.Status <>' => '0'
+						)
+					),
+			)),
+		);
 		$this->set(compact('new_students'));
-		// $this->log($new_students);
 	}
 
     public function getNewTeacherInfo() {
@@ -155,23 +180,23 @@ class AdminController extends AppController {
                     'conditions' => array(
                         'AND' => array(
                             'created >' => date('Y-m-d',strtotime("-1 months")),
-                            'UserType' => '2'
+                            'UserType' => '2',
+                            'User.Status <>' => '0'
                         ),
-                        'NOT' => array(
-                            'Status' => '0',
-                        )
                     )
                 )),
             'Data' => $this->User->find("all", array(
                     'conditions' => array(
                         'AND' => array(
                             'created >' => date('Y-m-d',strtotime("-1 months")),
-                            'UserType' => '2'
-                        )
+                            'UserType' => '2',
+                            'User.Status <>' => '0'
+                        ),
                     )
-                ))
+                )),
         );
         $this->set(compact('new_teachers'));
+        $this->log($new_teachers);
     }
 
 	public function payment($param = null) {
@@ -323,7 +348,8 @@ class AdminController extends AppController {
 					),
 				)),
 			'Data' => $this->File->find('all', array(
-				'limit' => 10,
+				// 'limit' => 10,
+				'recursive' => '2',
 				'conditions' => array(
 					),
 				))
@@ -365,9 +391,7 @@ class AdminController extends AppController {
 				);
 			$this->set(compact('all_students'));
 
-			//lay du lieu tu database cho bang new students
 			$this->getNewStudentInfo();
-
 		} else {
 			$studentInfo = $this->User->getUserInfo($username);
 			//title cho trang
@@ -419,26 +443,7 @@ class AdminController extends AppController {
 				);
 			$this->set(compact('all_teachers'));
 
-			//lay du lieu tu database cho bang new teacher
-			$new_teachers = array(
-				'Total' => $this->User->find("count", array(
-					'conditions' => array(
-						'AND' => array(
-							'created >' => date('Y-m-d',strtotime("-1 days")),
-							'UserType' => '2'
-							)
-						)
-					)),
-				'Data' => $this->User->find("all", array(
-					'conditions' => array(
-						'AND' => array(
-							'created >' => date('Y-m-d',strtotime("-1 days")),
-							'UserType' => '2'
-							)
-						)
-					))
-				);
-			$this->set(compact('new_teachers'));
+			$this->getNewTeacherInfo();
 
 		} else {
 			$teacherInfo = $this->User->getUserInfo($username);
@@ -789,8 +794,9 @@ class AdminController extends AppController {
 												                'Lesson.LessonId' => $lesson,
 												            ),
 												        ));
+		            $this->log($lesson_info);
 		            $submit_data = array();
-		            $submit_data['Content'] = "Lesson ".$lesson_info['Title']." has been reported!";
+		            $submit_data['Content'] = "授業「".$lesson_info['Lesson']['Title']."」がレポートされる!";
 		            $submit_data['UserId'] = $lesson_info['Author']['UserId'];
 		            $submit_data['MsgType'] = 2;
 		            $submit_data['IsReaded'] = 0;
@@ -825,6 +831,28 @@ class AdminController extends AppController {
 			}
 
 			
+			if ($param == "report") {
+				foreach ($data as $key => $file) {
+		            $file_info = $this->File->find(	'first', array(
+												            'recursive' => '2',
+												            'conditions' => array(
+												                'File.FileId' => $file,
+												            ),
+												        ));
+		            $this->log("file_info");
+		            $this->log($file_info);
+		            $submit_data = array();
+		            $submit_data['Content'] = "ファイル「".$file_info['File']['FileName']."」がレポートされる!";
+		            $submit_data['UserId'] = $file_info['Lesson']['Author']['UserId'];
+		            $submit_data['MsgType'] = 2;
+		            $submit_data['IsReaded'] = 0;
+		            $this->log($submit_data);
+		            $this->Msg->create();
+		            $this->Msg->save($submit_data);
+		        }
+			}
+
+
 			// $log = $this->User->getDataSource()->getLog(false, false);       
 			// $this->log($log);
 			echo json_encode($ret);

@@ -42,7 +42,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <input type="checkbox" class="checkbox all" onclick="checkAll(this, event)">
+                            <!-- <input type="checkbox" class="checkbox all" onclick="checkAll(this, event)"> -->
                         </th>
                         <th scope="col">
                             <a link>ID</a>
@@ -141,7 +141,7 @@
             }
         });
         if (submit_data.length == 0) {
-            alert("No selected!");
+            alert("選択がない！");
         } else {
             $.ajax({
                 type: "POST",
@@ -152,7 +152,7 @@
                     data = $.parseJSON(data);
                     $("#lesson-table tbody tr").each(function() {
                         if ($(this).find("input").is(":checked")) {
-                            $(this).find("td:last").html("<label class='label label-sm label-warning line-8' >Blocked</label>");
+                            $(this).find("td:last").html("<label class='label label-sm label-warning line-8' >ブロック</label>");
                         }
                     });
                 }
@@ -180,7 +180,7 @@
                 data = $.parseJSON(data);
                 $("#lesson-table tbody tr").each(function() {
                     if ($(this).find("input").is(":checked")) {
-                        $(this).find("td:last").html("<label class='label label-sm label-success line-8' >Active</label>");
+                        $(this).find("td:last").html("<label class='label label-sm label-success line-8' >アクティブ</label>");
                     }
                 });
 
@@ -205,7 +205,7 @@
             data: {'data': submit_data},
             success: function(data)
             {
-                alert("Report lessons successful!")
+                alert("レポート成功した！");
             }
         });
     }
