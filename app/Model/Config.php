@@ -11,7 +11,8 @@ class Config extends AppModel {
         'log' => 4,
         'lesson_fee' => 5,
         'study_limit' => 6,
-        'sharing_rate' => 7
+        'sharing_rate' => 7,
+        'lesson_time' => 8,
     );
 
     public function getConfig($param) {
@@ -39,6 +40,15 @@ class Config extends AppModel {
         $rate = $this->find('first', array(
             'conditions' => array(
                 'ConfigId =' => $this->configName['lesson_fee']
+            ),
+            'fields' => 'ConfigValue'
+        ));
+        return $rate['Config']['ConfigValue'];
+    }
+    public function getLessonTime() {
+        $rate = $this->find('first', array(
+            'conditions' => array(
+                'ConfigId =' => $this->configName['lesson_time']
             ),
             'fields' => 'ConfigValue'
         ));

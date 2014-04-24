@@ -672,6 +672,7 @@ class StudentController extends AppController {
             if (!$isStudying) {
                 $config = $this->Config->find('first', array('conditions' => array('Config.ConfigName' => 'CourseFee')));
                 $fee =  $this->Config->getLessonFee();
+                $lesson_time = $this->Config->getLessonTime();
                 if (!is_numeric($fee)) {
                     $this->Session->setFlash(__('このレッスンを表示するには許可されていません'));
                     $this->redirect(array('controller' => 'Student', 'action' => 'index'));
@@ -709,7 +710,7 @@ class StudentController extends AppController {
                         $data['StudentHistory']['UserId'] = $userId;
                         $data['StudentHistory']['LessonId'] = $lessonId;
                         $data['StudentHistory']['StartDate'] = $today->format('Y-m-d H:i:s');
-                        $data['StudentHistory']['ExpiryDate'] = date('Y-m-d H:i:s', strtotime("+1 week"));
+                        $data['StudentHistory']['ExpiryDate'] = date('Y-m-d H:i:s', strtotime("+".$lesson_time." day"));
                         $data['StudentHistory']['CourseFee'] = $fee;
                         if ($this->StudentHistory->save($data)) {
                             $this->Lesson->updateAll(array("ViewNumber" => $updateViewNumber), array('Lesson.LessonId' => $lessonId));
