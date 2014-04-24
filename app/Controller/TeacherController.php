@@ -787,22 +787,6 @@ class TeacherController extends AppController
 	                    $num_file = 0;
 	                    foreach ($data['File'] as $key => $value) {
 	                        if (!empty($value['path']['name'])) {
-	                            //check duplicate file name
-	                            // $options['conditions'] = array(
-	                            //     'File.FileName' => $value['path']['name'],
-	                            //     'File.IsDeleted' => '0',
-	                            //     'File.FileType' => '1',
-	                            //     'Lesson.IsDeleted' => '0',
-	                            //     'Lesson.UserId' => $userId,
-	                            // );
-	                            // $options['fields'] = array('Lesson.UserId', 'File.*');
-	                            // $file_name = $this->File->find('all', $options);
-	                            // // debug($file_name);
-	                            // // die;
-	                            // if (!empty($file_name)) {
-	                            //     $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
-	                            //     $this->redirect(array('controller' => 'teacher', 'action' => 'edit_lesson', $lesson_id));
-	                            // }
 	                            $data['File'][$key]['path']['old_name'] = $value['path']['name'];
 	                            $num_file++;
 	                            $type = explode(".", $value['path']['name']);
@@ -822,7 +806,26 @@ class TeacherController extends AppController
 	                            $param1['File']['FileName'] = $value['path']['old_name'];
 	                            // debug($param1);
 	                            if ($this->File->save($param1)) {
-	                               
+	                                $options['conditions'] = array(
+                                        'File.FileName' => $value['path']['old_name'],
+                                        'File.LessonId' =>$lesson_id,
+                                        'File.IsDeleted' => '0',
+                                        'File.FileType' => '1',
+                                        'Lesson.IsDeleted' => '0',
+                                    );
+                                    $options['order'] = array(
+                                        'File.FileId' => 'Asc',
+                                    );
+                                    $options['fields'] = array('Lesson.UserId', 'File.*');
+                                    $file_n = $this->File->find('all', $options);
+                                    // debug($file_n);
+                                    $l =0;
+                                    foreach ($file_n as $key1 => $value1) {
+                                        $l++;
+                                    }
+                                    if ($l>1) {
+                                        $this->File->deleteAll(array('File.FileId' =>$file_n['0']['File']['FileId']));
+                                    }
 	                            } else {
 	                            	$error_msg = $this->File->validationErrors['File'];
 	                            	$this->set(compact('error_msg'));
