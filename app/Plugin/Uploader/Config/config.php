@@ -81,7 +81,7 @@ $config['Uploader']['mimeTypes'] = array(
 		'rpm' 	=> 'audio/x-pn-realaudio-plugin',
 		'snd' 	=> 'audio/basic',
 		'tsi' 	=> 'audio/TSP-audio',
-		'wav' 	=> 'audio/x-wav',
+		'wav' 	=> array('audio/x-wav', 'audio/wav'),
 		'wma'	=> 'audio/x-ms-wma'
 	),
 	'video' => array(

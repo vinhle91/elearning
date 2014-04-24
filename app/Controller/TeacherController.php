@@ -257,7 +257,7 @@ class TeacherController extends AppController
         }
     }
 
-    public function make_lesson($userId = null)
+     public function make_lesson($userId = null)
     {
         $this->pageTitle = 'Make Lesson';
         // Check UserId
@@ -373,8 +373,8 @@ class TeacherController extends AppController
                                     $file_id = $File['File']['FileId'];
                                 }
                             } else {
-                            	$error_msg = $this->File->validationErrors['File'];
-                            	$this->set(compact('error_msg'));
+                                $error_msg = $this->File->validationErrors['File'];
+                                $this->set(compact('error_msg'));
                                 $this->Lesson->delete($lesson_id);
                                 $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                                 $this->Session->setFlash(__('ファイルは保存できませんでした。 、もう一度お試しください。'));
@@ -388,7 +388,7 @@ class TeacherController extends AppController
                         $this->Session->setFlash(__('あなたはまだアップロードするファイルを選択していない'));
                         return;
                     }
-                    // Save test of lesson
+                    // // Save test of lesson
                     $num_test = 0;
                     foreach ($data['TestFile'] as $key => $value) {
                         if (!empty($value['path']['name'])) {
@@ -402,7 +402,7 @@ class TeacherController extends AppController
                             // $options['fields'] = array('Lesson.UserId', 'File.*');
                             // $file_name = $this->File->find('all', $options);
                             // if (!empty($file_name)) {
-                            // 	$this->Lesson->delete($lesson_id);
+                            //  $this->Lesson->delete($lesson_id);
                             //     $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                             //     $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
                             //     $this->Session->setFlash(__('このファイルはすでに存在しています。あなたがアップロードすることはできません。'));
@@ -438,10 +438,23 @@ class TeacherController extends AppController
                                 $quest = array();
                                 $answer = array();
                                 $Answer = array();
-                                $test['Test']['Title'] = $this->Readtsv->getCell(1, 2);
-                                $test['Test']['SubTitle'] = $this->Readtsv->getCell(2, 2);
+                                $i = 1;
+                                while (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                    $i++;
+                                }
+                                $test['Test']['Title'] = $this->Readtsv->getCell($i, 2);
+                                $i++;
+                                while (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                    $i++;
+                                }
+                                $test['Test']['SubTitle'] = $this->Readtsv->getCell($i, 2);
+                                $i++;
+                                while (strcmp($this->Readtsv->getCell($i, 1), '#') == 0||strcmp($this->Readtsv->getCell($i, 1), '') == 0) {
+                                    $i++;
+                                }
                                 $test['Test']['LessonId'] = $lesson_id;
                                 $test['Test']['FileId'] = $test_tmp['File']['FileId'] ;
+                                // Check format file TSV
                                 $check = $this->Readtsv->getColumn(1);
                                 $k=0;
                                 foreach ($check as $key => $value) {
@@ -456,6 +469,55 @@ class TeacherController extends AppController
                                     $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
                                     return;
                                 }
+                                $h = 0;
+                                $num = 1;
+                                $Answer[$num]['Num'] = 0;
+                                while (strcmp($this->Readtsv->getCell($i, 1), 'End') != 0) {
+                                    if (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
+                                        $i++;
+                                        continue;
+                                    }
+                                    if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] == 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
+                                        if(strcmp($this->Readtsv->getCell($i, 2), 'QS')!=0){
+                                            $h++;
+                                            break;
+                                        }
+                                        $Answer[$num]['Start'] = $i;
+                                        $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                        $i++;
+                                        continue;
+                                    } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
+                                        $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                        $i++;
+                                        continue;
+                                    } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') != 0) {
+                                        if(strcmp($this->Readtsv->getCell($i, 2), 'KS')!=0){
+                                            $h++;
+                                            break;
+                                        }
+                                        $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
+                                        $num = $num + 1;
+                                        $Answer[$num]['Num'] = 0;
+                                        $i++;
+                                        continue;
+                                    }else{
+                                        if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') != 0&&strcmp($this->Readtsv->getCell($i, 1), '') != 0 ) {
+                                            $h++;
+                                            break;
+                                        }
+                                        $i++;
+                                        continue;
+                                    }
+                                }
+                                // debug($h);
+                                if($h!=0){
+                                    $this->Lesson->delete($lesson_id);
+                                    $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
+                                    $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
+                                    $this->Session->setFlash(__('ファイルの構造が正しくありません。'));
+                                    return;
+                                }
+                                // debug($Answer);
                                 // die;
                                 if ($this->Test->save($test)) {
                                     $Test = $this->Test->find('first', array(
@@ -465,35 +527,6 @@ class TeacherController extends AppController
                                         'contain' => False,
                                     ));
                                     $test_id = $Test['Test']['TestId'];
-                                    $i = 3;
-                                    $num = 1;
-                                    $Answer[$num]['Num'] = 0;
-                                    while (strcmp($this->Readtsv->getCell($i, 1), 'End') != 0) {
-
-                                        if (strcmp($this->Readtsv->getCell($i, 1), '#') == 0) {
-                                            $i++;
-                                            continue;
-                                        }
-                                        if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] == 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
-                                            $Answer[$num]['Start'] = $i;
-                                            $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
-                                            $i++;
-                                            continue;
-                                        } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') == 0) {
-                                            $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
-                                            $i++;
-                                            continue;
-                                        } else if (strcmp($this->Readtsv->getCell($i, 1), 'Q(' . $num . ')') == 0 && $Answer[$num]['Num'] != 0 && strcmp($this->Readtsv->getCell($i + 1, 1), 'Q(' . $num . ')') != 0) {
-                                            $Answer[$num]['Num'] = $Answer[$num]['Num'] + 1;
-                                            $num = $num + 1;
-                                            $Answer[$num]['Num'] = 0;
-                                            $i++;
-                                            continue;
-                                        } else {
-                                            $i++;
-                                            continue;
-                                        }
-                                    }
                                     foreach ($Answer as $key => $value) {
                                         if ($value['Num'] != 0) {
                                             $quest['Question']['TestId'] = $test_id;
@@ -548,8 +581,8 @@ class TeacherController extends AppController
 
                                 }
                             } else {
-                            	$error_msg = $this->File->validationErrors['File'];
-                            	$this->set(compact('error_msg'));
+                                $error_msg = $this->File->validationErrors['File'];
+                                $this->set(compact('error_msg'));
                                 $this->Lesson->delete($lesson_id);
                                 $this->Tag->deleteAll(array('Tag.LessonId' => $lesson_id), false);
                                 $this->File->deleteAll(array('File.LessonId' => $lesson_id), false);
@@ -570,6 +603,7 @@ class TeacherController extends AppController
             }
         }
     }
+
 
     public function view_test($lesson_id = null, $test_id = null)
     {

@@ -7,6 +7,14 @@ class AdminController extends AppController {
 
 	function beforeFilter() {
 		$this->disableCache();
+		$UserType = $this->Auth->user('UserType');
+        if ($UserType == 1) {
+            $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+        } else if ($UserType == 2) {
+            $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
+        } else {
+
+        }
 		$this->Auth->authenticate = array(
 			'Form' => array(
 				'userModel' => 'User',
