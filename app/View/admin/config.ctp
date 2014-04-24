@@ -64,6 +64,7 @@
 					<div class="padding-right-5 pull-right">
 			            <input type="button" class="btn btn-info btn-xs button-save" data-icon="check" value="バックアップ" onclick="confirm_alert_backup(this)"></input>
 			        </div>
+
 				</div>
 				<div class="portlet-body" id="config-info">
 					<div class="table-responsive">

@@ -917,6 +917,8 @@ class AdminController extends AppController {
         $filename = $dbname.'_backup.sql';
         $command = 'mysqldump.exe '.$dbname.' --password= --user=root --host=localhost --single-transaction > ./backups/'.$filename;
         $result=exec($command, $output);
+
+        $this->recurse_copy('uploads', 'backups');
     }
 
     public function restore() {
@@ -926,6 +928,24 @@ class AdminController extends AppController {
         $filename = $dbname.'_backup.sql';
         $command = 'mysql.exe '.$dbname.' --password= --user=root --host=localhost --single-transaction < ./backups/'.$filename;
         $result=exec($command, $output);
+
+        $this->recurse_copy('backups', 'uploads');
     }
+
+    function recurse_copy($src,$dst) { 
+	    $dir = opendir($src); 
+	    @mkdir($dst); 
+	    while(false !== ( $file = readdir($dir)) ) { 
+	        if (( $file != '.' ) && ( $file != '..' )) { 
+	            if ( is_dir($src . '/' . $file) ) { 
+	                $this->recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+	            } 
+	            else { 
+	                copy($src . '/' . $file,$dst . '/' . $file); 
+	            } 
+	        } 
+	    } 
+	    closedir($dir); 
+	} 
 }	
 ?>
