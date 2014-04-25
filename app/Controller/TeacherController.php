@@ -276,6 +276,14 @@ class TeacherController extends AppController
             $tmp = $tmp.'"'.$value['Tag']['TagContent'].'"'.',';
         }
         $this->set(compact('tmp'));
+          // Get list category 
+        $params = array(
+            'conditions' => array('Category.IsDeleted' => '0'),
+            'fields' => array('CatId', 'CatName'),
+            'order' => array('Category.CatId' => 'Asc'),
+        );
+        $cat = $this->Category->find('all', $params);
+        $this->set(compact('cat'));
         if ($this->request->is('post')) {
             $data = $this->request->data;
             // debug($data);
@@ -684,6 +692,15 @@ class TeacherController extends AppController
             $tmp = $tmp.'"'.$value['Tag']['TagContent'].'"'.',';
         }
         $this->set(compact('tmp'));
+          // Get list category 
+        $params = array(
+            'conditions' => array('Category.IsDeleted' => '0'),
+            'fields' => array('CatId', 'CatName'),
+            'order' => array('Category.CatId' => 'Asc'),
+        );
+        $cat = $this->Category->find('all', $params);
+        
+        $this->set(compact('cat'));
         if (!isset($lesson_id) || empty($lesson_id)) {
             $this->Session->setFlash(__('エラーが発生しました。もう一度やり直してください'));
             $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
@@ -737,6 +754,7 @@ class TeacherController extends AppController
 	                //update lesson
 	                 $updateData = array(
 	                    'Title' => "'" . $data['Lesson']['Title'] . "'",
+                        'Category' => "'" . $data['Lesson']['Category'] . "'",
 	                    'Abstract' => "'" . $data['Lesson']['Abstract'] . "'",
 	                );
 	              	if($this->Lesson->updateAll($updateData, array('Lesson.LessonId' =>  $lesson_id)))

@@ -27,9 +27,9 @@
 	</script>
 	<style type="text/css"> @media print { body { display:none } } </style>
 </head>
-<body onload="disableContextMenu()" >
+<body>
 <!-- <?php echo $this->element('sql_dump'); ?>  -->
-	<div id="body">
+	<div id="body" onload="disableContextMenu();">
 		<!--Start header-->
 		<?php echo $this->Element('header');?>
 		<!--End	header-->		

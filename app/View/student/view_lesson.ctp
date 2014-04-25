@@ -33,7 +33,8 @@
                             <?php foreach ($lesson['File'] as $key => $value): ?>
                                 <?php if ($value['Extension'] == 'pdf'): ?>
                                     <div class="<?php echo 'file' . $key ?> file_l">
-                                        <iframe id="fraDisabled" width='945' height='704' src="<?php echo '/elearning' . $value['FileLink'] ?>" ></iframe>
+                                        <object data="<?php echo '/elearning' . $value['FileLink'] ?>" type="application/pdf" width='945' height='704'></object>
+
                                     </div>
                                 <?php endif; ?>
                                 <?php if ($value['Extension'] == 'gif'|| $value['Extension'] == 'jpg'||$value['Extension'] == 'png'): ?>
@@ -219,3 +220,32 @@
       });*/
     });
 </script>
+// <script language='JavaScript' type='text/JavaScript'> 
+//     // http://htmlgenerator.weebly.com 
+//     var tenth = ''; 
+ 
+//     function ninth() { 
+//         if (document.all) { 
+//             (tenth); 
+//             alert("Right Click Disable"); 
+//             return false; 
+//         } 
+//     } 
+ 
+//     function twelfth(e) { 
+//         if (document.layers || (document.getElementById && !document.all)) { 
+//             if (e.which == 2 || e.which == 3) { 
+//                 (tenth); 
+//                 return false; 
+//             } 
+//         } 
+//     } 
+//     if (document.layers) { 
+//         document.captureEvents(Event.MOUSEDOWN); 
+//         document.onmousedown = twelfth; 
+//     } else { 
+//         document.onmouseup = twelfth; 
+//         document.oncontextmenu = ninth; 
+//     } 
+//     document.oncontextmenu = new Function('alert("右クリックは許可されていません"); return false') 
+// </script> 

@@ -29,7 +29,7 @@
                                         <?php echo $this->Form->input('Title', array('class'=>'input','type'=>'text','label'=>false,'div'=>false,'value'=>$lessons['Lesson']['Title']));?>
                                     </td>
                                 </tr>
-                               <!--  <tr>
+                               <tr>
                                     <td> <div class="td_text">カテゴリィ<span style="color:red">*</span></div></td>
                                     <td>
                                         <select  name="data[Lesson][Category]">
@@ -40,7 +40,7 @@
                                         <?php endforeach;?>
                                         </select>        
                                     </td>
-                                </tr> -->
+                                </tr>
                                 <tr>
                                     <td>
                                         <div class="td_text">記述<span style="color:red">*</span></div>
