@@ -1394,11 +1394,11 @@ class TeacherController extends AppController
 
                 if ($this->Msg->save($data)) {
                     $this->Session->setFlash(__('ご協力ありがとうございます'));
-                    $this->redirect(array('controller' => 'Student', 'action' => 'index'));
+                    $this->redirect(array('controller' => 'Teacher', 'action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('エラーが発生しました。ちょっと待ってください'));
                 }
-                debug($data);
+                //debug($data);
             }
         }
     }
