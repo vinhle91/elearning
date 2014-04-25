@@ -165,6 +165,8 @@
                 <?php echo $this->Html->link('Like', array('controller' => 'Student', 'action' => 'index', "?" => array('sortBy' => 'like', 'direction' => $direction))); ?>
                 <span>-</span>
                 <?php echo $this->Html->link('見る事', array('controller' => 'Student', 'action' => 'index', "?" => array('sortBy' => 'view', 'direction' => $direction))); ?>
+                <span>-</span>
+                <?php echo $this->Html->link('タイトル', array('controller' => 'Student', 'action' => 'index', "?" => array('sortBy' => 'title', 'direction' => $direction))); ?>
             </div>
             <div class="top">
                 <table border = "1" align = "center" id = "mylesson">
