@@ -62,7 +62,7 @@ class File extends AppModel {
             $this->id = $fileId;
             $this->saveField('IsBlocked', '0');
         }
-    }
+    }   
 }
 
 ?>

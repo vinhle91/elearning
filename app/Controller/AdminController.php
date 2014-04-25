@@ -620,14 +620,13 @@ class AdminController extends AppController {
 			}
 
 			if ($param == "remove") {
-				$this->log($data);
 				$user = $this->User->getUserByUsername($data);
 				$userId = $user['User']['UserId'];
 				if ($this->User->delete($userId) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
-				}				
+				}	
 			}
 
 			if ($param == "delete") {
@@ -855,6 +854,7 @@ class AdminController extends AppController {
 			$this->layout = null;
 			$data = $this->request->data;
 			$ret = array();
+			$this->log("request data");
 			$this->log($data);
 
 			if ($param == "block") {
@@ -865,6 +865,14 @@ class AdminController extends AppController {
 			if ($param == "active") {
 				$this->File->activeFile($data);
 				$ret['result'] = "Success";
+			}
+
+			if ($param == "delete") {
+				if ($this->File->delete($data) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}			
 			}
 
 			
