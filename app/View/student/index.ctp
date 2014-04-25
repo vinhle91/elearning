@@ -174,7 +174,7 @@
                         <tr style="font-size:18px; color:blue; font-weight:800;text-align:center">
                             <td width = "5%" style = "background-color: #eee;">番号</td>
                             <td width = "25%" style = "background-color: #eee;"><?php echo 'タイトル'; ?></td>
-                            <td width = "8%" style = "background-color: #eee;"><?php echo '先生'; ?></td>
+                            <!-- <td width = "8%" style = "background-color: #eee;"><?php echo '先生'; ?></td> -->
                             <td width = "5%" style = "background-color: #eee;"><?php echo 'いいね'; ?></td>
                             <td width = "5%" style = "background-color: #eee;"><?php echo 'ビュー'; ?></td>
                             <td width = "19%" style = "background-color: #eee;"><?php echo '始め時間'; ?></td>
@@ -189,7 +189,7 @@
                             <tr style="text-align:center">
                                 <td><?php echo $i; ?></td>
                                 <td><?php echo $this->Html->link($item['Lesson']['Title'], array('controller' => 'student', 'action' => 'view_lesson', $item['Lesson']['LessonId'], $item['FileId'])); ?></td>
-                                <td><?php echo $item['User']['Username']; ?></td>
+                                <!-- <td><?php echo $item['User']['Username']; ?></td> -->
                                 <td><?php echo $item['Lesson']['LikeNumber']; ?></td>
                                 <td><?php echo $item['Lesson']['ViewNumber']; ?></td>
                                 <td><?php echo $item['StudentHistory']['StartDate']; ?></td>
