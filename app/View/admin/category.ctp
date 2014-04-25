@@ -178,13 +178,13 @@
         } 
     }
 
-    $(".ipaddr").live("mouseover", function(e){
-        $(this).find(".editIp").removeClass("display-none");
-    });
+    // $(".ipaddr").live("mouseover", function(e){
+    //     $(this).find(".editIp").removeClass("display-none");
+    // });
 
-    $(".ipaddr").live("mouseout", function(e){
-        $(this).find(".editIp").addClass("display-none");
-    });
+    // $(".ipaddr").live("mouseout", function(e){
+    //     $(this).find(".editIp").addClass("display-none");
+    // });
 
     function editIp(e) {
         e = $.event.fix(e);
@@ -393,5 +393,10 @@
         }
 
         
+    });
+
+$(function() {
+        $("table").tablesorter({debug: true});
+        $("thead th:first").removeClass("header");
     });
 </script>
