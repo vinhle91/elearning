@@ -1008,8 +1008,11 @@ class AdminController extends AppController {
 
     public function autobackup() {
         $this->layout = null;
-        system('schtasks /delete /TN elearning_autobackup /F');
-        system('schtasks /create /SC HOURLY /MO 1 /TN elearning_autobackup /TR ' . WWW_ROOT . 'backupSQL.bat');
+        system('schtasks /delete /TN elearning_autobackup_file /F');
+        system('schtasks /delete /TN elearning_autobackup_db /F');
+        system('schtasks /create /SC minute /MO 1 /TN elearning_autobackup_db /TR ' . WWW_ROOT . 'backupSQL.bat');
+        system('schtasks /create /SC minute /MO 1 /TN elearning_autobackup_file /TR ' . WWW_ROOT . 'backupfile.bat');
+
     }
 
     function recurse_copy($src,$dst) { 

@@ -10,4 +10,4 @@ For /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%c-%%a-%%b)
 
 set backuptime=%mydate%_%hr%-%min%
 
-C:\xampp\mysql\bin\mysqldump --add-drop-table --host=localhost --user=root --result-file="C:\xampp\htdocs\elearning\app\webroot\backups\db-backup_%backuptime%.sql" e-learning
+C:\xampp\mysql\bin\mysqldump --add-drop-table --host=localhost --user=root --result-file="C:\xampp\htdocs\elearning\app\webroot\backups_db\db-backup_%backuptime%.sql" e-learning
