@@ -14,7 +14,7 @@
 							<ul class="dropdown-menu-list no-space no-list-style">
 								<li>  
 									<a link onclick="block_file(this, event)">
-									<span class="label label-sm label-icon label-warning"><i class="fa fa-ban"></i></span>
+									<span class="label label-sm label-icon label-warning"><i class="fa fa-bolt"></i></span>
                                         ファイルをブロック
 									</a>
 								</li>
@@ -27,7 +27,13 @@
 								<li>  
                                     <a link="" onclick="report_file(event)">
                                         <span class="label label-sm label-icon label-danger"><i class="fa fa-bell-o"></i></span>
-                                        授業をレポート
+                                        レポート
+                                    </a>
+                                </li>
+                                <li>  
+                                    <a link="" onclick="delete_file(event)">
+                                        <span class="label label-sm label-icon label-default"><i class="fa fa-ban"></i></span>
+                                        削除
                                     </a>
                                 </li>
 							</ul>
@@ -62,6 +68,9 @@
                             <a link>ファイル種類</a>
 						</th>
 						<th scope="col">
+                            <a link>授業</a>
+						</th>
+						<th scope="col">
 							<a link>アップロードユーザ</a>
 						</th>
 						<th scope="col">
@@ -76,6 +85,7 @@
 					</tr>
 				</thead>
 				<tbody>
+				<?php $this->log($all_files) ?>
 				<?php if (isset($all_files) && $all_files['Total'] != 0) { ?>
 					<?php foreach ($all_files['Data'] as $key => $file) { ?>
 					<tr>
@@ -93,6 +103,9 @@
 						</td>
 						<td>
 							<?php echo $file['File']['Extension']?>
+						</td>
+						<td>
+							<?php echo $file['Lesson']['Title']?>
 						</td>
 						<td>
 							<a href="/elearning/admin/teacher/<?php echo $file['Lesson']['Author']['Username'] ?>"><?php echo $file['Lesson']['Author']['Username'] ?></a>
@@ -226,6 +239,33 @@
             success: function(data)
             {
                 alert("レポート成功した！");
+            }
+        });
+    }
+
+    function delete_file(e) {
+        e = $.event.fix(e);
+        e.preventDefault();
+        var buff = [];
+        var submit_data = [];
+        $("#file-table tbody tr").each(function() {
+            if ($(this).find("input").is(":checked")) {
+                submit_data.push(parseInt($(this).find("td:eq(1)").html()));
+            }
+        });
+        console.log(submit_data);
+        $.ajax({
+            type: "POST",
+            url: '/elearning/admin/updateFile/delete',
+            data: {'data': submit_data},
+            success: function(data)
+            {
+                alert("レポート成功した！");
+                $("#file-table tbody tr").each(function(){
+					if ($(this).find("input").is(":checked")) {
+						$(this).remove();
+					}
+				});
             }
         });
     }
