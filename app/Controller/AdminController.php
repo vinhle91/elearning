@@ -1006,6 +1006,12 @@ class AdminController extends AppController {
         $this->recurse_copy('backups', 'uploads');
     }
 
+    public function autobackup() {
+        $this->layout = null;
+        system('schtasks /delete /TN elearning_autobackup /F');
+        system('schtasks /create /SC HOURLY /MO 1 /TN elearning_autobackup /TR ' . WWW_ROOT . 'backupSQL.bat');
+    }
+
     function recurse_copy($src,$dst) { 
 	    $dir = opendir($src); 
 	    @mkdir($dst); 
