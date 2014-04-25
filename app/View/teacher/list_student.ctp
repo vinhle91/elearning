@@ -79,7 +79,7 @@
 <script type="text/javascript">
 
 function confirm_alert(node, a, b) {
-    if (confirm('Are you sure you want to block this student?')) {
+    if (confirm('あなたは、この生徒をブロックしてもよろしいですか？')) {
         var url = ".././block_student/"+a+"/"+b;    
         $(location).attr('href',url);    
     } else {

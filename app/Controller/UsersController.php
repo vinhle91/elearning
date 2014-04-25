@@ -24,7 +24,8 @@ class UsersController extends AppController
         'Msg',
         'StudentHistory',
         'File',
-        'Test'
+        'Test',
+        'Tag'
     );
 
     public function beforeFilter()
@@ -613,28 +614,26 @@ class UsersController extends AppController
                                 $lessonId = $lesson['Lesson']['LessonId'];
                                 $this->File->deleteAll(array('File.LessonId' => $lessonId));
                                 $this->Test->deleteAll(array('Test.LessonId' => $lessonId));
-                                $this->File->deleteAll(array('File.LessonId' => $lessonId));
+                                $this->Tag->deleteAll(array('Tag.LessonId' => $lessonId));
                                 //$this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lessonId));
                                 //$this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lessonId));
-                                $test = $this->Test->find('all',array(
-                                    'conditions' => array('Test.LessonId' => $lessonId),
-                                    'contain' => false,
-                                    )
-                                );
-                                if(!empty($test)){
-                                    foreach ($test as $key => $value) {
-                                        $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
-                                    }
-                                }
+                                // $test = $this->Test->find('all',array(
+                                //     'conditions' => array('Test.LessonId' => $lessonId),
+                                //     'contain' => false,
+                                //     )
+                                // );
+                                // if(!empty($test)){
+                                //     foreach ($test as $key => $value) {
+                                //         $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
+                                //     }
+                                // }
                                 $this->Lesson->delete($lessonId, true);
                             }
-                            $this->User->delete($id, true);
+                            // $this->User->delete($id, true);
+                            echo 'dfsfsdf';
                             $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
-//                            return $this->redirect(array('action' => 'index'));
-
                         }
-//                            $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                     }
                 }
             }
