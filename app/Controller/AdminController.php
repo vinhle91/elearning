@@ -34,7 +34,7 @@ class AdminController extends AppController {
         $status = array('削除', 'アクティブ', 'ペンディング', 'ブロック', '拒否');
 		$status_label = array('default', 'success', 'info', 'warning', 'danger');
 		$fa_label = array('1' => 'plus', '2' => 'bell-o');
-		$msg_link = array('1' => '/elearning/admin/student', '2' => '/elearning/admin/lesson/');
+		$msg_link = array('2' => '/elearning/admin/student', '1' => '/elearning/admin/lesson/');
 		$this->set(compact('status'));
 		$this->set(compact('status_label'));
 		$this->set(compact('fa_label'));

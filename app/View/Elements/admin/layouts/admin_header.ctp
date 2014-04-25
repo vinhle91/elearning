@@ -63,7 +63,8 @@ function time_elapsed_string($ptime)
 							<li>
 								<a href="<?php echo $msg_link[$notif['Msg']['MsgType']]?>" class='<?php if ($notif['Msg']['IsReaded']  == 0) echo "not-read"?>' msgId = "<?php echo $notif['Msg']['MsgId']?>" onclick="confirmReaded(this, event)">
 									<span class="label label-sm label-icon label-<?php echo $status_label[$notif['Msg']['MsgType']]?>"><i class="fa fa-<?php echo $fa_label[$notif['Msg']['MsgType']]?>"></i></span>
-										<a href="/elearning/admin/lesson"><?php echo $notif['Msg']['Content'] ?></a>
+									<?php echo $notif['Msg']['Content'] ?>
+									<div class="clear-fix"></div>
 									<span class="time pull-right"><?php echo time_elapsed_string($notif['Msg']['created'])?></span>
 								</a>
 							</li>		

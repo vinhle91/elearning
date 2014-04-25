@@ -155,7 +155,7 @@
                 順序を決める : 
                 <?php echo $this->Html->link('時間', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'time', 'direction' => $direction))); ?>
                 <span>-</span>
-                <?php echo $this->Html->link('Like', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'like', 'direction' => $direction))); ?>
+                <?php echo $this->Html->link('いいね', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'like', 'direction' => $direction))); ?>
                 <span>-</span>
                 <?php echo $this->Html->link('見る事', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'view', 'direction' => $direction))); ?>
                 <span>-</span>
