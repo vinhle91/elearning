@@ -84,10 +84,15 @@ class StudentController extends AppController {
             'conditions' => array(
                 'StudentHistory.UserId' => $userId,
                 'Blocked' => 0,
+                'Lesson.LessonId <>'=>0,
                 'CURDATE() BETWEEN DATE(StudentHistory.StartDate) AND DATE(StudentHistory.ExpiryDate)'
             ),
             'order' => $order,
         ));
+        // debug($histories);
+        foreach ($histories as $key => $value) {
+            
+        }
         foreach ($histories as $key => $value) {
             $test = $this->Test->find('first', array(
                 'conditions' => array(

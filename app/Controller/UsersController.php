@@ -629,8 +629,8 @@ class UsersController extends AppController
                                 // }
                                 $this->Lesson->delete($lessonId, true);
                             }
-                            // $this->User->delete($id, true);
-                            echo 'dfsfsdf';
+                            $this->User->delete($id, true);
+                            // echo 'dfsfsdf';
                             $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
                         }
