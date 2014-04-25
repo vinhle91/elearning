@@ -22,7 +22,7 @@
             <?php echo $error; ?>
         </div>
         <?php endif;?>
-        <div class="title" style="width:400px"><h3>退会する前にあなたは本物だか確認する</h3></div>    
+        <div class="title" style="width:400px"><h3>脱退する前にあなたは本物だか確認する</h3></div>    
         <div class="box" style="min-height:350px">
             <form action="" method="post" onsubmit="return validatePassword();" name="myForm">
                 <div class="input_error"></div>
@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input class="flat_btn" data-act_as="submit" type="submit" value="退会する"></td>
+                        <td><input class="flat_btn" data-act_as="submit" type="submit" value="脱退する"></td>
                     </tr>
                     </tbody>
                 </table>

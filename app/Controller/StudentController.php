@@ -23,7 +23,6 @@ class StudentController extends AppController {
         'Answer',
         'Config',
         'File',
-        'Report'
     );
 
     function beforeFilter() {
@@ -45,6 +44,9 @@ class StudentController extends AppController {
         $this->pageTitle = '学生';
         $userId = $this->Auth->user('UserId');
         $today = new DateTime();
+        $course_fee = $this->Config->getLessonFee();
+        //debug($coure_fee);
+        $this->set(compact('course_fee'));
         //Get history of student
         if (isset($this->request->query['sortBy']) && isset($this->request->query['direction'])) {
             $sortBy = $this->request->query['sortBy'];

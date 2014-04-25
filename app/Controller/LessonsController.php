@@ -20,7 +20,6 @@ class LessonsController extends AppController
         'Answer',
         'Comment',
         'StudentBlock',
-        'Report'
     );
 
     function beforeFilter()

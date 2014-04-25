@@ -43,7 +43,7 @@ class AdminController extends AppController {
 		$msg = $this->Msg->find("all", array(
 			'conditions' => array(
 				'OR' => array(
-					'Msg.UserId' => '',
+					'Msg.UserId' => '0',
 					'User.UserType' => 3,
 					)
 				),
@@ -53,7 +53,7 @@ class AdminController extends AppController {
 			'conditions' => array(
 				'OR' => array(
 					'User.UserType' => 3,
-					'Msg.UserId' => ''
+					'Msg.UserId' => '0'
 					),
 				'Msg.IsReaded' => 0,
 				
@@ -314,6 +314,7 @@ class AdminController extends AppController {
 						),
 					))
 				);
+			$this->log($all_lessons);
 			$this->set(compact('all_lessons'));
 
 		} else {
@@ -620,14 +621,13 @@ class AdminController extends AppController {
 			}
 
 			if ($param == "remove") {
-				$this->log($data);
 				$user = $this->User->getUserByUsername($data);
 				$userId = $user['User']['UserId'];
 				if ($this->User->delete($userId) == 1) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
-				}				
+				}	
 			}
 
 			if ($param == "delete") {
@@ -855,6 +855,7 @@ class AdminController extends AppController {
 			$this->layout = null;
 			$data = $this->request->data;
 			$ret = array();
+			$this->log("request data");
 			$this->log($data);
 
 			if ($param == "block") {
@@ -865,6 +866,14 @@ class AdminController extends AppController {
 			if ($param == "active") {
 				$this->File->activeFile($data);
 				$ret['result'] = "Success";
+			}
+
+			if ($param == "delete") {
+				if ($this->File->delete($data) == 1) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}			
 			}
 
 			

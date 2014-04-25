@@ -25,8 +25,7 @@ class TeacherController extends AppController
         'Comment',
         'StudentBlock',
         'StudentTest',
-        'Report',
-        'msg'
+        'Msg'
     );
 
     public function beforeFilter()
@@ -1166,18 +1165,18 @@ class TeacherController extends AppController
                         if ($lesson['Lesson']['UserId'] == $userId) {
                             if ($lesson['Author']['Status'] == 1) {
                                 if($this->Lesson->delete($lesson_id, true)){
-                                    $this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lesson_id));
-                                    $this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lesson_id));
-                                    $test = $this->Test->find('all',array(
-                                        'conditions' => array('Test.LessonId' => $lesson_id),
-                                        'contain' => false,
-                                        )
-                                    );
-                                    if(!empty($test)){
-                                        foreach ($test as $key => $value) {
-                                            $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
-                                        }
-                                    }
+                                    // $this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lesson_id));
+                                    //$this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lesson_id));
+                                    // $test = $this->Test->find('all',array(
+                                    //     'conditions' => array('Test.LessonId' => $lesson_id),
+                                    //     'contain' => false,
+                                    //     )
+                                    // );
+                                    // if(!empty($test)){
+                                    //     foreach ($test as $key => $value) {
+                                    //         $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
+                                    //     }
+                                    // }
                                     $this->Session->setFlash('授業削除できました');
                                 } else {
                                     $this->Session->setFlash('エラーが発生された、授業削除できなかった。もう一度やってみてください');
@@ -1386,8 +1385,14 @@ class TeacherController extends AppController
 
             if ($this->request->is('post')) {
                 $data = $this->request->data;
-                $this->Report->create();
-                if ($this->Report->save($data)) {
+                $this->log($data);
+                $this->Msg->create();
+                $lesson = $this->Lesson->find("first", array(
+                    'Lesson.LessonId' => $lessonId,
+                    ));
+                $data['Msg']['Content'] = "「" . $lesson['Lesson']['Title'] . "」(" . $lessonId . ") " . $data['Msg']['Content'];
+
+                if ($this->Msg->save($data)) {
                     $this->Session->setFlash(__('ご協力ありがとうございます'));
                     $this->redirect(array('controller' => 'Student', 'action' => 'index'));
                 } else {

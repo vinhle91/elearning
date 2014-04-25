@@ -45,7 +45,7 @@ class Lesson extends AppModel {
             'dependent' => true
         ),
         'Report' => array(
-            'className' => 'Report',
+            'className' => 'Msg',
             'foreignKey' => 'LessonId',
             'order' => 'Report.created DESC',
             'dependent' => true

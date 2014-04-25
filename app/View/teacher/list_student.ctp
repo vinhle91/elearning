@@ -29,7 +29,8 @@
                             <td width="9%" style="background-color: #eee;">テスト</td>
                             <td width="19%" style="background-color: #eee;"> スタート時点</td>
                             <td width="19%" style="background-color: #eee;">終わる時点</td>
-                            <td width="15%"style="background-color: #eee;">終わる時点</td>
+                            <td width="15%"style="background-color: #eee;">料金</td>
+                            <td width="9%" style="background-color: #eee;">状態</td>
                         </tr >
                         <?php $i = 0; ?>
                         <?php foreach ($studentHistories as $studentHistory): ?>
@@ -46,6 +47,7 @@
                             </td>
                             <td><?php echo ($studentHistory['StudentHistory']['StartDate']);?></td>
                             <td><?php echo ($studentHistory['StudentHistory']['ExpiryDate']);?></td>
+                            <td><?php echo ($studentHistory['StudentHistory']['CourseFee']);?></td>
                             <td width="6%">
                                 <?php if ($studentHistory['StudentHistory']['Blocked'] == '1') {?>
                                 ブロックされた
