@@ -27,7 +27,6 @@
                             <td width="8%" style="background-color: #eee;">ID</td>
                             <td width="15%" style="background-color: #eee;">学生</td>
                             <td width="9%" style="background-color: #eee;">テスト</td>
-                            <td width="9%" style="background-color: #eee;">テスト結果</td>
                             <td width="19%" style="background-color: #eee;"> スタート時点</td>
                             <td width="19%" style="background-color: #eee;">終わる時点</td>
                             <td width="15%"style="background-color: #eee;">終わる時点</td>
@@ -37,8 +36,14 @@
                         <tr style="text-align:center">                            
                             <td><?php echo(++$i);?></td>
                             <td><a href="#"><?php echo ($studentHistory['User']['FullName']);?></a></td>
-                            <td>Test 1</td>
-                            <td>4/5</td>
+                            <td>
+                                <?php if(isset($studentHistory['Test'])):?>
+                                    <?php foreach ($studentHistory['Test'] as $key => $value) {
+                                        $i =$key +1;
+                                        echo $this->Html->link('テスト'.$i, array('controller' => 'teacher', 'action' => 'view_result', $studentHistory['StudentHistory']['LessonId'], $value, $studentHistory['StudentHistory']['UserId']));
+                                    }?>
+                                <?php endif;?>
+                            </td>
                             <td><?php echo ($studentHistory['StudentHistory']['StartDate']);?></td>
                             <td><?php echo ($studentHistory['StudentHistory']['ExpiryDate']);?></td>
                             <td width="6%">
