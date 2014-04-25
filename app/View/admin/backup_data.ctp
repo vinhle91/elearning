@@ -7,6 +7,10 @@
 					<div class="padding-right-5 pull-left">
 			            <input type="button" class="btn btn-info btn-xs button-save" data-icon="check" value="バックアップ" onclick="confirm_alert_backup(this)"></input>
 			        </div>
+        <div class="padding-5 align-right">
+            <input type="button" class="btn btn-info btn-xs button-save" data-icon="check" value="自動バックアップ"
+                   onclick="confirm_alert_autobackup(this)"></input>
+        </div>
 	</div>
 </div>
 
@@ -19,6 +23,15 @@
 // Do nothing!
         }
 }
+
+    function confirm_alert_autobackup(node) {
+        if (confirm('Autobackup database?')) {
+            var url = "./autobackup";
+            $(location).attr('href',url);
+        } else {
+// Do nothing!
+        }
+    }
 
 function confirm_alert_restore(node) {
     if (confirm('データベースを復元しますか？')) {
