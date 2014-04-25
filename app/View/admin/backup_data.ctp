@@ -25,7 +25,7 @@
 }
 
     function confirm_alert_autobackup(node) {
-        if (confirm('Autobackup database?')) {
+        if (confirm('自動提供にバックアップしますか？')) {
             var url = "./autobackup";
             $(location).attr('href',url);
         } else {
