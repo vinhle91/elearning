@@ -207,8 +207,9 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        var fee = <?php echo $course_fee ?>;
         $(".buy_bt").click(function() {
-            var r = confirm("このレッスンを購入してもよろしいですか？");
+            var r = confirm("このレッスンを購入してもよろしいですか"+fee+"VNDかかります");
             if (r == true)
             {
                 window.location.pathname($(this).attr("href"));
