@@ -23,7 +23,6 @@ class StudentController extends AppController {
         'Answer',
         'Config',
         'File',
-        'Report'
     );
 
     function beforeFilter() {

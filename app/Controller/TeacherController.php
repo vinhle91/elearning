@@ -25,8 +25,7 @@ class TeacherController extends AppController
         'Comment',
         'StudentBlock',
         'StudentTest',
-        'Report',
-        'msg'
+        'Msg'
     );
 
     public function beforeFilter()

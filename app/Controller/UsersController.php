@@ -20,6 +20,9 @@ class UsersController extends AppController
         'Config',
         'Comment',
         'StudentTest',
+        'StudentBlock',
+        'Msg',
+        'StudentHistory',
         'File',
         'Test'
     );
@@ -256,7 +259,6 @@ class UsersController extends AppController
                             
                         }
                     }
-            ///////////// Student
                 } else {
 
                     // debug($remainBlockTime);
@@ -587,52 +589,51 @@ class UsersController extends AppController
 //                    $answer = Security::hash($userName . trim($this->request->data['答え']), 'sha1', true);
                     if ($currentPassword != $userData['User']['Password']) {
                         $this->Session->setFlash(__("使用中のパスワードが正しくない"));
-                    } else {
-                        if ($this->User->updateAll(array('Status' => 0), array('UserId' => $id))) {
-                            //check if user is a student
-                            if ($UserType == 1) {
-                                //delete related information : comment, lesson,
-                                if ($this->Comment->updateAll(array("IsDeleted" => 1), array('Comment.UserId' => $id)) &&
-                                    $this->Lesson->updateAll(array("IsDeleted" => 1), array('Lesson.UserId' => $id)) &&
-                                    $this->StudentTest->updateAll(array("IsDeleted" => 1), array('StudentTest.UserId' => $id))
-                                ) {
-                                    $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
-                                    UsersController::logout();
-//                            return $this->redirect(array('action' => 'index'));
-                                } else {
-                                    $this->Session->setFlash(__("エラーがあるので、あなたのアカウントが削除されていません"));
-                                }
-
-                            } //user is a teacher
-                            else if ($UserType == 2) {
-                                if ($this->Comment->updateAll(array("IsDeleted" => 1), array('Comment.UserId' => $id))) {
-
-                                    $this->Lesson->updateAll(array("IsDeleted" => 1), array('Lesson.UserId' => $id));
-                                    $lessons = $this->Lesson->find('all', array(
-                                        'conditions' => array('Lesson.UserId' => $id)
-                                    ));
-                                    foreach ($lessons as $lesson) {
-                                        //get the Id of the lesson then delete related files and tests
-                                        $lessonId = $lesson['Lesson']['LessonId'];
-                                        $this->File->updateAll(array("IsDeleted" => 1), array('File.LessonId' => $lessonId));
-                                        $this->Test->updateAll(array("IsDeleted" => 1), array('Test.LessonId' => $lessonId));
+                    } else {                        
+                        //check if user is a student
+                        if ($UserType == 1) {
+                            //delete related information : comment, lesson,
+                            $this->Comment->deleteAll(array("Comment.UserId"=>$id));
+                            $this->StudentHistory->deleteAll(array('StudentHistory.UserId'=>$id));
+                            $this->StudentBlock->deleteAll(array('StudentBlock.UserId'=>$id));
+                            $this->StudentTest->deleteAll(array('StudentTest.UserId'=>$id));
+                            $this->Msgs->deleteAll(array('Msgs.UserId'=>$id));
+                            $this->User->delete($id);        
+                            $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
+                            UsersController::logout();
+                        } //user is a teacher
+                        else if ($UserType == 2) {
+                            $lessons = $this->Lesson->find('all', array(
+                                'conditions' => array('Lesson.UserId' => $id)
+                            ));
+                            $this->Comment->deleteAll(array("Comment.UserId"=>$id));
+                            $this->Msgs->deleteAll(array('Msgs.UserId'=>$id));
+                            foreach ($lessons as $lesson) {
+                                //get the Id of the lesson then delete related files and tests
+                                $lessonId = $lesson['Lesson']['LessonId'];
+                                $this->File->deleteAll(array('File.LessonId' => $lessonId));
+                                $this->Test->deleteAll(array('Test.LessonId' => $lessonId));
+                                $this->File->deleteAll(array('Tag.LessonId' => $lessonId));
+                                $this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lesson_id));
+                                $this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lesson_id));
+                                $test = $this->Test->find('all',array(
+                                    'conditions' => array('Test.LessonId' => $lesson_id),
+                                    'contain' => false,
+                                    )
+                                );
+                                if(!empty($test)){
+                                    foreach ($test as $key => $value) {
+                                        $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
                                     }
-
-                                }else {
-                                    $this->Session->setFlash(__("エラーがあるので、あなたのアカウントが削除されていません"));
                                 }
-
-                                $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
-                                UsersController::logout();
+                                $this->Lesson->delete($lesson_id, true);
+                            }
+                            $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
+                            UsersController::logout();
 //                            return $this->redirect(array('action' => 'index'));
 
-                            }
-//                            $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
-//                            UsersController::logout();
-
-                        } else {
-                            $this->Session->setFlash(__("エラーがあるので、あなたのアカウントが削除されていません"));
                         }
+//                            $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                     }
                 }
             }
