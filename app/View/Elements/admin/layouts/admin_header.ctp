@@ -58,12 +58,12 @@ function time_elapsed_string($ptime)
 						<p class="notification-header"><?php echo $nmsg?> 新しいお知らせ</p>
 					</li>
 					<li>
-						<ul class="dropdown-menu-list scroller" style="height: 165px; overflow: hidden; width: auto;">
+						<ul class="dropdown-menu-list scroller" style="height: 195px; overflow: hidden; width: auto;">
 							<?php foreach ($notifs as $notif) : ?>
 							<li>
 								<a href="<?php echo $msg_link[$notif['Msg']['MsgType']]?>" class='<?php if ($notif['Msg']['IsReaded']  == 0) echo "not-read"?>' msgId = "<?php echo $notif['Msg']['MsgId']?>" onclick="confirmReaded(this, event)">
 									<span class="label label-sm label-icon label-<?php echo $status_label[$notif['Msg']['MsgType']]?>"><i class="fa fa-<?php echo $fa_label[$notif['Msg']['MsgType']]?>"></i></span>
-										<?php echo $notif['Msg']['Content'] ?>
+										<a href="/elearning/admin/lesson"><?php echo $notif['Msg']['Content'] ?></a>
 									<span class="time pull-right"><?php echo time_elapsed_string($notif['Msg']['created'])?></span>
 								</a>
 							</li>		
@@ -111,7 +111,7 @@ function time_elapsed_string($ptime)
 
 <script>
 	$(".dropdown-menu-list").slimScroll({
-        height: '250px'
+        height: '350px'
     });
 	function confirmReaded(target, e) {
 		submit_data = {msgId: $(target).attr("msgId")};
