@@ -1385,8 +1385,14 @@ class TeacherController extends AppController
 
             if ($this->request->is('post')) {
                 $data = $this->request->data;
-                $this->Report->create();
-                if ($this->Report->save($data)) {
+                $this->log($data);
+                $this->Msg->create();
+                $lesson = $this->Lesson->find("first", array(
+                    'Lesson.LessonId' => $lessonId,
+                    ));
+                $data['Msg']['Content'] = "「" . $lesson['Lesson']['Title'] . "」(" . $lessonId . ") " . $data['Msg']['Content'];
+
+                if ($this->Msg->save($data)) {
                     $this->Session->setFlash(__('ご協力ありがとうございます'));
                     $this->redirect(array('controller' => 'Student', 'action' => 'index'));
                 } else {

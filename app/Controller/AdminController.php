@@ -43,7 +43,7 @@ class AdminController extends AppController {
 		$msg = $this->Msg->find("all", array(
 			'conditions' => array(
 				'OR' => array(
-					'Msg.UserId' => '',
+					'Msg.UserId' => '0',
 					'User.UserType' => 3,
 					)
 				),
@@ -53,7 +53,7 @@ class AdminController extends AppController {
 			'conditions' => array(
 				'OR' => array(
 					'User.UserType' => 3,
-					'Msg.UserId' => ''
+					'Msg.UserId' => '0'
 					),
 				'Msg.IsReaded' => 0,
 				
@@ -314,6 +314,7 @@ class AdminController extends AppController {
 						),
 					))
 				);
+			$this->log($all_lessons);
 			$this->set(compact('all_lessons'));
 
 		} else {

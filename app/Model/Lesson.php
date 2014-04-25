@@ -44,6 +44,12 @@ class Lesson extends AppModel {
             'order' => 'Tag.created DESC',
             'dependent' => true
         ),
+        'Report' => array(
+            'className' => 'Msg',
+            'foreignKey' => 'LessonId',
+            'order' => 'Report.created DESC',
+            'dependent' => true
+        ),
     );
     public $belongsTo = array(
         'Author' => array(

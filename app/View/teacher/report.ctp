@@ -18,19 +18,19 @@
             </div>
         </div>
         <div class="box">
-        <?php echo $this->Form->create("Report"); ?>
+        <?php echo $this->Form->create("Msg"); ?>
             <table class="sign_up_tb">
                 <tr>
-                    <td><label for="radio1"><input name="data['Report']['Content']" id="radio1" value="Copyright 違反" type="radio" /> Copyright 違反</label>
+                    <td><label for="radio1"><input name="data[Msg][Content]" id="radio1" value="Copyright 違反" type="radio" /> Copyright 違反</label>
                    </td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td><label for="radio2"><input name="data['Report']['Content']" id="radio2" value="運用規約等に違反" type="radio" /> 運用規約等に違反</label></td>
+                    <td><label for="radio2"><input name="data[Msg][Content]" id="radio2" value="運用規約等に違反" type="radio" /> 運用規約等に違反</label></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td><label for="radio3"><input name="data['Report']['Content']" id="radio3" value="タイトルが不適です" type="radio" /> タイトルが不適です</label></td>
+                    <td><label for="radio3"><input name="data[Msg][Content]" id="radio3" value="タイトルが不適です" type="radio" /> タイトルが不適です</label></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <?php echo $this->Form->hidden('UserId', array('value' => $userId));
+                        <?php echo $this->Form->hidden('ReporterId', array('value' => $userId));
                         echo $this->Form->hidden('LessonId', array('value' => $lessonId));
                         echo $this->Form->hidden('IsDeleted', array('value' => 1)); ?>
                     </td>
