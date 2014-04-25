@@ -49,6 +49,13 @@
 			</ul>
 		</li>
 
+		<li class="category">
+			<a href="/elearning/admin/category">
+			<i class="fa fa-file-text"></i> 
+			<span class="title">カテゴリ</span>
+			</a>
+		</li>
+
 		<li class="file">
 			<a href="/elearning/admin/file">
 			<i class="fa fa-file-text"></i> 

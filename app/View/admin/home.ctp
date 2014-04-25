@@ -284,7 +284,7 @@ function fillData(data) {
 			"<td>" + value.Lesson.Title + "</td>" + 
 			"<td><a href='/elearning/admin/student/" + value.Student.Username + "'>" + value.Student.Username + "</a></td>" + 
 			"<td><a href='/elearning/admin/teacher/" + value.Lesson.Author.Username + "'>" + value.Lesson.Author.Username + "</a></td>" + 
-			"<td class='text-align-right'>" + value.Transaction.CourseFee + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + label['text'] + "</span></td>" + 
+			"<td class='text-align-right'>" + "<span class='margin-left-5 label label-" + label['style'] + " label-sm'>" + value.Transaction.CourseFee + "</span></td>" + 
 		"</tr>"
 
 		);

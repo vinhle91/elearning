@@ -3,7 +3,7 @@
 App::uses('AuthComponent', 'Controller/Component');
 class AdminController extends AppController {
 	
-	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg');
+	public $uses = array('User', 'Ip', 'Config', 'Transaction', 'Lesson', 'File', 'Msg', 'Tag');
 
 	function beforeFilter() {
 		$this->disableCache();
@@ -367,6 +367,34 @@ class AdminController extends AppController {
 			);
 
 		$this->set(compact('all_files'));
+	}
+
+	public function category() {
+		$this->set('sidebar', array('category'));
+		$pageTitle = "カテゴリ";
+		$this->set(compact('pageTitle'));
+
+		$all_category = array(
+			'Total' => $this->Category->find("count", array(
+				'conditions' => array(
+					),
+				)),
+			'Data' => $this->Category->find('all', array(
+				'recursive' => '2',
+				'conditions' => array(
+					),
+				))
+			);
+		$this->set(compact('all_category'));
+		$list_tag = $this->Tag->find("all", array(
+						'conditions' => array(
+														
+							),
+						'fields' => array(							
+							),
+						'order' => 'TagContent'
+						));
+		$this->set(compact('list_tag'));
 	}
 
 	public function viewFile($param=null) {
@@ -765,6 +793,16 @@ class AdminController extends AppController {
 				$this->Ip->create();
 				$data['UserId'] = $this->User->getUserByUsername($data['Username'])['User']['UserId'];
 				if ($this->Ip->save($data)) {
+					$ret['result'] = "Success";
+				} else {
+					$ret['result'] = "Fail";
+				}
+			}
+
+			if ($param == "category") {
+				$this->Category->create();
+				$submit_data['CatName'] = $data['Category'];
+				if ($this->Category->save($submit_data)) {
 					$ret['result'] = "Success";
 				} else {
 					$ret['result'] = "Fail";
