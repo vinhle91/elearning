@@ -1165,18 +1165,18 @@ class TeacherController extends AppController
                         if ($lesson['Lesson']['UserId'] == $userId) {
                             if ($lesson['Author']['Status'] == 1) {
                                 if($this->Lesson->delete($lesson_id, true)){
-                                    $this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lesson_id));
-                                    $this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lesson_id));
-                                    $test = $this->Test->find('all',array(
-                                        'conditions' => array('Test.LessonId' => $lesson_id),
-                                        'contain' => false,
-                                        )
-                                    );
-                                    if(!empty($test)){
-                                        foreach ($test as $key => $value) {
-                                            $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
-                                        }
-                                    }
+                                    // $this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lesson_id));
+                                    //$this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lesson_id));
+                                    // $test = $this->Test->find('all',array(
+                                    //     'conditions' => array('Test.LessonId' => $lesson_id),
+                                    //     'contain' => false,
+                                    //     )
+                                    // );
+                                    // if(!empty($test)){
+                                    //     foreach ($test as $key => $value) {
+                                    //         $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
+                                    //     }
+                                    // }
                                     $this->Session->setFlash('授業削除できました');
                                 } else {
                                     $this->Session->setFlash('エラーが発生された、授業削除できなかった。もう一度やってみてください');

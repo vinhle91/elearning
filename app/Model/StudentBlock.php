@@ -1,6 +1,7 @@
 <?php
 
 class StudentBlock extends AppModel {
+	// public $primaryKey = array('UserId','LessonId');
 
 	function getStudentBlockByUserIdAndLessonId($userId, $lessonId)
     {

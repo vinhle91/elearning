@@ -594,10 +594,10 @@ class UsersController extends AppController
                         if ($UserType == 1) {
                             //delete related information : comment, lesson,
                             $this->Comment->deleteAll(array("Comment.UserId"=>$id));
-                            $this->StudentHistory->deleteAll(array('StudentHistory.UserId'=>$id));
-                            $this->StudentBlock->deleteAll(array('StudentBlock.UserId'=>$id));
-                            $this->StudentTest->deleteAll(array('StudentTest.UserId'=>$id));
-                            $this->Msgs->deleteAll(array('Msgs.UserId'=>$id));
+                            // $this->StudentHistory->deleteAll(array('StudentHistory.UserId'=>$id));
+                            // $this->StudentBlock->deleteAll(array('StudentBlock.UserId'=>$id));
+                            // $this->StudentTest->deleteAll(array('StudentTest.UserId'=>$id));
+                            $this->Msg->deleteAll(array('Msg.UserId'=>$id));
                             $this->User->delete($id);        
                             $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
@@ -607,17 +607,17 @@ class UsersController extends AppController
                                 'conditions' => array('Lesson.UserId' => $id)
                             ));
                             $this->Comment->deleteAll(array("Comment.UserId"=>$id));
-                            $this->Msgs->deleteAll(array('Msgs.UserId'=>$id));
+                            $this->Msg->deleteAll(array('Msg.UserId'=>$id));
                             foreach ($lessons as $lesson) {
                                 //get the Id of the lesson then delete related files and tests
                                 $lessonId = $lesson['Lesson']['LessonId'];
                                 $this->File->deleteAll(array('File.LessonId' => $lessonId));
                                 $this->Test->deleteAll(array('Test.LessonId' => $lessonId));
-                                $this->File->deleteAll(array('Tag.LessonId' => $lessonId));
-                                $this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lesson_id));
-                                $this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lesson_id));
+                                $this->File->deleteAll(array('File.LessonId' => $lessonId));
+                                //$this->StudentHistory->deleteAll(array('StudentHistory.LessonId'=>$lessonId));
+                                //$this->StudentBlock->deleteAll(array('StudentBlock.LessonId'=>$lessonId));
                                 $test = $this->Test->find('all',array(
-                                    'conditions' => array('Test.LessonId' => $lesson_id),
+                                    'conditions' => array('Test.LessonId' => $lessonId),
                                     'contain' => false,
                                     )
                                 );
@@ -626,8 +626,9 @@ class UsersController extends AppController
                                         $this->StudentTest->deleteAll(array('StudentTest.TestId'=>$value['Test']['TestId']));
                                     }
                                 }
-                                $this->Lesson->delete($lesson_id, true);
+                                $this->Lesson->delete($lessonId, true);
                             }
+                            $this->User->delete($id, true);
                             $this->Session->setFlash(__("あなたのアカウントは削除されています。"));
                             UsersController::logout();
 //                            return $this->redirect(array('action' => 'index'));
