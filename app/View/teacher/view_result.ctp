@@ -61,7 +61,7 @@
                         <tr>
                             <td></td>
                             <td>
-                               <!--  <?php echo $this->Html->link('テスト',array('controller' => 'Student','action' => 'test',$lesson_id,$test_id),array('class'=>'flat_btn'));?>
+                               <!--  <?php echo $this->Html->link('テスト',array('controller' => 'Teacher','action' => 'test',$lesson_id,$test_id),array('class'=>'flat_btn'));?>
                                 <?php echo $this->Html->link('戻る',array('controller' => 'Student','action' => 'view_lesson',$lesson_id,$file['File']['FileId']),array('class'=>'btn_search','style'=>'float:none'));?> -->
                             </td>
                             <td></td>

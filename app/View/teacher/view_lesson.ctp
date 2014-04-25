@@ -61,6 +61,9 @@
                         <div class="lesson_nav">                                
                             <?php echo $this->Html->link('テストを見る',array('controller'=>'Teacher','action'=>'view_test',$lesson['Lesson']['LessonId'],$test_id));?>          
                         </div>
+                         <div class="lesson_nav">                                
+                            <?php echo $this->Html->link('テストをする',array('controller'=>'Teacher','action'=>'test',$lesson['Lesson']['LessonId'],$test_id));?>          
+                        </div>
                         <div class="lesson_nav">        
                             <?php echo $this->Html->link('修正',array('controller'=>'Teacher','action'=>'edit_lesson',$lesson['Lesson']['LessonId']));?>
                         </div>
