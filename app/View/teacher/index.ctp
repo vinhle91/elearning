@@ -151,6 +151,16 @@
         </div>
         <div class="title"><h3>自分の授業</h3></div>                  
         <div class="box">
+            <div class="order">
+                順序を決める : 
+                <?php echo $this->Html->link('時間', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'time', 'direction' => $direction))); ?>
+                <span>-</span>
+                <?php echo $this->Html->link('Like', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'like', 'direction' => $direction))); ?>
+                <span>-</span>
+                <?php echo $this->Html->link('見る事', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'view', 'direction' => $direction))); ?>
+                <span>-</span>
+                <?php echo $this->Html->link('タイトル', array('controller' => 'Teacher', 'action' => 'index', "?" => array('sortBy' => 'title', 'direction' => $direction))); ?>
+            </div>
             <div class="top">
                 <table border="1" align="center" id="mylesson">
                     <tbody>

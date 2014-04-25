@@ -55,7 +55,8 @@ class StudentController extends AppController {
         }
         $this->StudentHistory->virtualFields = array(
             'LikeNumber' => 'Lesson.LikeNumber',
-            'ViewNumber' => 'Lesson.ViewNumber'
+            'ViewNumber' => 'Lesson.ViewNumber',
+            'Title' => 'Lesson.Title',
         );
         switch ($sortBy) {
             case 'like':
@@ -63,6 +64,9 @@ class StudentController extends AppController {
                 break;
             case 'view':
                 $order = 'StudentHistory.ViewNumber ' . $direction;
+                break;
+            case 'title':
+                $order = 'StudentHistory.Title ' . $direction;
                 break;
             default:
                 $order = 'StudentHistory.ExpiryDate ' . $direction;

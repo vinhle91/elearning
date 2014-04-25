@@ -49,7 +49,40 @@ class TeacherController extends AppController
         $this->pageTitle = 'ホームページ';
         $userId = $this->Auth->user('UserId');
         $this->set(compact('userId'));
-        $lessons = $this->Lesson->getLessonsByTeacher($userId);
+         if (isset($this->request->query['sortBy']) && isset($this->request->query['direction'])) {
+            $sortBy = $this->request->query['sortBy'];
+            $direction = $this->request->query['direction'];
+        } else {
+            $sortBy = 'time';
+            $direction = 'DESC';
+        }
+        switch ($sortBy) {
+            case 'like':
+                $order = 'Lesson.LikeNumber ' . $direction;
+                break;
+            case 'view':
+                $order = 'Lesson.ViewNumber ' . $direction;
+                break;
+            case 'title':
+                $order = 'Lesson.Title ' . $direction;
+                break;
+            case 'time':
+                $order = 'Lesson.modified ' . $direction;
+                break;
+        }
+        if ($direction == 'DESC') {
+            $direction = 'ASC';
+        } else {
+            $direction = 'DESC';
+        }
+        $this->set('direction', $direction);
+        $lessons = $this->Lesson->find('all', array(
+            'conditions' => array(
+                'Lesson.UserId' => $userId,
+                'IsDeleted' => 0, 'IsBlocked'=>0,
+            ),
+            'order' => $order,
+        ));
         foreach ($lessons as $key => $value) {
             $file = $this->File->find('first', array(
                     'conditions' => array(
